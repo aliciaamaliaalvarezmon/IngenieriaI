@@ -48,13 +48,15 @@ I class
 	
 	^false.! !
 
-!I class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 15:30:49'!
+!I class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 18:30:37'!
 descripcionDeErrorDeNoSePuedeDividirPorUnNumeroMayor
 
-	! !
+	^'estas tratando de dividir por un numero mayor'.! !
 
-!I class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 15:41:22'!
-descripcionDeErrorDeNumerosNegativosNoSoportados! !
+!I class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 18:31:56'!
+descripcionDeErrorDeNumerosNegativosNoSoportados
+
+	^'no hay numeros negativos'! !
 
 !I class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 15:54:04'!
 esRestadoA: unNumeroDePeano
@@ -129,9 +131,10 @@ II class
 	^false.
 ! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 15:33:28'!
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 18:30:19'!
 descripcionDeErrorDeNoSePuedeDividirPorUnNumeroMayor
-! !
+
+^'estas tratando de dividir por un numero mayor'! !
 
 !II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 15:48:45'!
 esRestadoA: unNumeroDePeano
@@ -141,7 +144,7 @@ esRestadoA: unNumeroDePeano
 	
 	! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 16:47:12'!
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 18:53:26'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -244,9 +247,10 @@ III class
 	^false.
 ! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 15:49:21'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 18:29:34'!
 descripcionDeErrorDeNoSePuedeDividirPorUnNumeroMayor
-! !
+ 
+^'estas tratando de dividir por un numero mayor'! !
 
 !III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 15:49:21'!
 esRestadoA: unNumeroDePeano
@@ -256,7 +260,7 @@ esRestadoA: unNumeroDePeano
 	
 	! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 16:47:12'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 18:53:26'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -359,9 +363,10 @@ IIII class
 	^false.
 ! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 15:49:25'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 18:29:58'!
 descripcionDeErrorDeNoSePuedeDividirPorUnNumeroMayor
-! !
+
+^'estas tratando de dividir por un numero mayor'.! !
 
 !IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 15:49:25'!
 esRestadoA: unNumeroDePeano
@@ -371,7 +376,7 @@ esRestadoA: unNumeroDePeano
 	
 	! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 16:47:12'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 18:53:26'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
