@@ -48,15 +48,20 @@ I class
 	
 	^false.! !
 
-!I class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:36:13'!
+!I class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 12:39:30'!
 esRestadoA: unNumeroDePeano
 
-	^ unNumeroDePeano prev! !
+	^ unNumeroDePeano previous! !
 
 !I class methodsFor: 'as yet unclassified' stamp: 'ARM 9/6/2018 21:29:22'!
 next
 
 	^II! !
+
+!I class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:02:31'!
+vecesDivideA: unNumeroDePeano
+
+^unNumeroDePeano ! !
 
 
 !classDefinition: #II category: #'Quinta Actividad'!
@@ -72,15 +77,15 @@ DenotativeObject subclass: #II
 II class
 	instanceVariableNames: 'next prev'!
 
-!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/9/2018 19:14:18'!
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 12:56:26'!
 * unNumeroDePeano
 
-^ (self + ((unNumeroDePeano prev) * self ))! !
+^ unNumeroDePeano + (self previous * unNumeroDePeano )! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'ARM 9/6/2018 21:47:13'!
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 12:39:31'!
 + unNumeroDePeano
 
-	^self prev + unNumeroDePeano next! !
+	^self previous + unNumeroDePeano next! !
 
 !II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:37:26'!
 - unNumeroDePeano
@@ -93,38 +98,38 @@ II class
 	 
 	! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/10/2018 00:21:59'!
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 11:41:45'!
 / unNumeroDePeano
 
-	(unNumeroDePeano <= self) ifFalse:[self error: 'No se puede dividir por un numero mayor'  ].
-	^(unNumeroDePeano vecesDivideA: self).
+	unNumeroDePeano <= self ifFalse:[self error: 'No se puede dividir por un numero mayor'  ].
+	^unNumeroDePeano vecesDivideA: self.
 	! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/10/2018 00:15:45'!
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 12:39:31'!
 < unNumeroDePeano
 	
 	unNumeroDePeano = I ifTrue:[^false].
 	unNumeroDePeano = self ifTrue:[^false].	
-	^((self prev) < (unNumeroDePeano prev)).! !
+	^self previous < unNumeroDePeano previous! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/10/2018 00:11:07'!
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 11:44:41'!
 <= unNumeroDePeano
 
-	(unNumeroDePeano = self) ifTrue:[^true].
-	(self < unNumeroDePeano) ifTrue:[^true].
+	unNumeroDePeano = self ifTrue:[^true].
+	self < unNumeroDePeano ifTrue:[^true].
 	
 	^false.
 ! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:40:03'!
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 12:39:30'!
 esRestadoA: unNumeroDePeano
 
-	^ self prev esRestadoA: unNumeroDePeano prev
+	^ self previous esRestadoA: unNumeroDePeano previous
 	
 
 	! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:50:29'!
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:07:16'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -141,15 +146,15 @@ next
 	].
 	^next! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'ARM 9/6/2018 21:49:14'!
-prev
-
-	^prev! !
-
 !II class methodsFor: 'as yet unclassified' stamp: 'ARM 9/6/2018 21:48:32'!
 prev: unNumeroDePeano
 
 	prev _ unNumeroDePeano! !
+
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 12:39:30'!
+previous
+
+	^prev! !
 
 !II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/9/2018 22:15:25'!
 removeAllNext
@@ -162,12 +167,12 @@ removeAllNext
 	]
  ! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/10/2018 00:27:12'!
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 11:46:21'!
 vecesDivideA: unNumeroDePeano
 
 	unNumeroDePeano = self ifTrue:[^I].
-	((unNumeroDePeano - self) < self) ifTrue:[^I].	
-	^(I +(self vecesDivideA: (unNumeroDePeano - self))).! !
+	unNumeroDePeano - self < self ifTrue:[^I].	
+	^I +(self vecesDivideA: unNumeroDePeano - self).! !
 
 
 !classDefinition: #III category: #'Quinta Actividad'!
@@ -183,17 +188,17 @@ DenotativeObject subclass: #III
 III class
 	instanceVariableNames: 'next prev'!
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:01'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 * unNumeroDePeano
 
-^ (self + ((unNumeroDePeano prev) * self ))! !
+^ unNumeroDePeano + (self previous * unNumeroDePeano )! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:01'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 + unNumeroDePeano
 
-	^self prev + unNumeroDePeano next! !
+	^self previous + unNumeroDePeano next! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:01'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 - unNumeroDePeano
 
 	^ unNumeroDePeano esRestadoA: self.
@@ -204,45 +209,45 @@ III class
 	 
 	! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:01'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 / unNumeroDePeano
 
-	(unNumeroDePeano <= self) ifFalse:[self error: 'No se puede dividir por un numero mayor'  ].
-	^(unNumeroDePeano vecesDivideA: self).
+	unNumeroDePeano <= self ifFalse:[self error: 'No se puede dividir por un numero mayor'  ].
+	^unNumeroDePeano vecesDivideA: self.
 	! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:01'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 < unNumeroDePeano
 	
 	unNumeroDePeano = I ifTrue:[^false].
 	unNumeroDePeano = self ifTrue:[^false].	
-	^((self prev) < (unNumeroDePeano prev)).! !
+	^self previous < unNumeroDePeano previous! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:01'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 <= unNumeroDePeano
 
-	(unNumeroDePeano = self) ifTrue:[^true].
-	(self < unNumeroDePeano) ifTrue:[^true].
+	unNumeroDePeano = self ifTrue:[^true].
+	self < unNumeroDePeano ifTrue:[^true].
 	
 	^false.
 ! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:01'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 esRestadoA: unNumeroDePeano
 
-	^ self prev esRestadoA: unNumeroDePeano prev
+	^ self previous esRestadoA: unNumeroDePeano previous
 	
 
 	! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:50:29'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:07:16'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
 	next := IIII.
 	prev := II.! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:01'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 next
 	
 	next ifNil:
@@ -252,17 +257,17 @@ next
 	].
 	^next! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:01'!
-prev
-
-	^prev! !
-
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:01'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 prev: unNumeroDePeano
 
 	prev _ unNumeroDePeano! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:01'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
+previous
+
+	^prev! !
+
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 removeAllNext
 
 	next ifNotNil:
@@ -273,12 +278,12 @@ removeAllNext
 	]
  ! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:01'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 vecesDivideA: unNumeroDePeano
 
 	unNumeroDePeano = self ifTrue:[^I].
-	((unNumeroDePeano - self) < self) ifTrue:[^I].	
-	^(I +(self vecesDivideA: (unNumeroDePeano - self))).! !
+	unNumeroDePeano - self < self ifTrue:[^I].	
+	^I +(self vecesDivideA: unNumeroDePeano - self).! !
 
 
 !classDefinition: #IIII category: #'Quinta Actividad'!
@@ -294,17 +299,17 @@ DenotativeObject subclass: #IIII
 IIII class
 	instanceVariableNames: 'next prev'!
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:06'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 * unNumeroDePeano
 
-^ (self + ((unNumeroDePeano prev) * self ))! !
+^ unNumeroDePeano + (self previous * unNumeroDePeano )! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:06'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 + unNumeroDePeano
 
-	^self prev + unNumeroDePeano next! !
+	^self previous + unNumeroDePeano next! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:06'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 - unNumeroDePeano
 
 	^ unNumeroDePeano esRestadoA: self.
@@ -315,45 +320,45 @@ IIII class
 	 
 	! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:06'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 / unNumeroDePeano
 
-	(unNumeroDePeano <= self) ifFalse:[self error: 'No se puede dividir por un numero mayor'  ].
-	^(unNumeroDePeano vecesDivideA: self).
+	unNumeroDePeano <= self ifFalse:[self error: 'No se puede dividir por un numero mayor'  ].
+	^unNumeroDePeano vecesDivideA: self.
 	! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:06'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 < unNumeroDePeano
 	
 	unNumeroDePeano = I ifTrue:[^false].
 	unNumeroDePeano = self ifTrue:[^false].	
-	^((self prev) < (unNumeroDePeano prev)).! !
+	^self previous < unNumeroDePeano previous! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:06'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 <= unNumeroDePeano
 
-	(unNumeroDePeano = self) ifTrue:[^true].
-	(self < unNumeroDePeano) ifTrue:[^true].
+	unNumeroDePeano = self ifTrue:[^true].
+	self < unNumeroDePeano ifTrue:[^true].
 	
 	^false.
 ! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:06'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 esRestadoA: unNumeroDePeano
 
-	^ self prev esRestadoA: unNumeroDePeano prev
+	^ self previous esRestadoA: unNumeroDePeano previous
 	
 
 	! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:50:29'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:07:16'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
 	next := nil.
 	prev := III.! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:06'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 next
 	
 	next ifNil:
@@ -363,17 +368,17 @@ next
 	].
 	^next! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:06'!
-prev
-
-	^prev! !
-
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:06'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 prev: unNumeroDePeano
 
 	prev _ unNumeroDePeano! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:06'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
+previous
+
+	^prev! !
+
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 removeAllNext
 
 	next ifNotNil:
@@ -384,12 +389,12 @@ removeAllNext
 	]
  ! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 05:49:06'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 13:03:47'!
 vecesDivideA: unNumeroDePeano
 
 	unNumeroDePeano = self ifTrue:[^I].
-	((unNumeroDePeano - self) < self) ifTrue:[^I].	
-	^(I +(self vecesDivideA: (unNumeroDePeano - self))).! !
+	unNumeroDePeano - self < self ifTrue:[^I].	
+	^I +(self vecesDivideA: unNumeroDePeano - self).! !
 
 II initializeAfterFileIn!
 III initializeAfterFileIn!
