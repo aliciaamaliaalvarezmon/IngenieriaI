@@ -141,7 +141,7 @@ esRestadoA: unNumeroDePeano
 	
 	! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 15:57:03'!
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 16:47:12'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -256,7 +256,7 @@ esRestadoA: unNumeroDePeano
 	
 	! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 15:57:03'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 16:47:12'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -371,7 +371,7 @@ esRestadoA: unNumeroDePeano
 	
 	! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 15:57:03'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 16:47:12'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
