@@ -1,13 +1,13 @@
-!classDefinition: #I category: #'Quinta Actividad'!
+!classDefinition: #I category: #NumerosDePeano!
 DenotativeObject subclass: #I
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Quinta Actividad'!
+	category: 'NumerosDePeano'!
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'I class' category: #'Quinta Actividad'!
+!classDefinition: 'I class' category: #NumerosDePeano!
 I class
 	instanceVariableNames: ''!
 
@@ -74,16 +74,16 @@ vecesDivideA: unNumeroDePeano
 ^unNumeroDePeano ! !
 
 
-!classDefinition: #II category: #'Quinta Actividad'!
+!classDefinition: #II category: #NumerosDePeano!
 DenotativeObject subclass: #II
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Quinta Actividad'!
+	category: 'NumerosDePeano'!
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'II class' category: #'Quinta Actividad'!
+!classDefinition: 'II class' category: #NumerosDePeano!
 II class
 	instanceVariableNames: 'next prev'!
 
@@ -144,7 +144,7 @@ esRestadoA: unNumeroDePeano
 	
 	! !
 
-!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 18:53:26'!
+!II class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/17/2018 12:34:09'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -190,16 +190,16 @@ vecesDivideA: unNumeroDePeano
 	^I +(self vecesDivideA: unNumeroDePeano - self).! !
 
 
-!classDefinition: #III category: #'Quinta Actividad'!
+!classDefinition: #III category: #NumerosDePeano!
 DenotativeObject subclass: #III
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Quinta Actividad'!
+	category: 'NumerosDePeano'!
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'III class' category: #'Quinta Actividad'!
+!classDefinition: 'III class' category: #NumerosDePeano!
 III class
 	instanceVariableNames: 'next prev'!
 
@@ -260,7 +260,7 @@ esRestadoA: unNumeroDePeano
 	
 	! !
 
-!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 18:53:26'!
+!III class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/17/2018 12:34:09'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
@@ -306,16 +306,16 @@ vecesDivideA: unNumeroDePeano
 	^I +(self vecesDivideA: unNumeroDePeano - self).! !
 
 
-!classDefinition: #IIII category: #'Quinta Actividad'!
+!classDefinition: #IIII category: #NumerosDePeano!
 DenotativeObject subclass: #IIII
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Quinta Actividad'!
+	category: 'NumerosDePeano'!
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'IIII class' category: #'Quinta Actividad'!
+!classDefinition: 'IIII class' category: #NumerosDePeano!
 IIII class
 	instanceVariableNames: 'next prev'!
 
@@ -376,7 +376,7 @@ esRestadoA: unNumeroDePeano
 	
 	! !
 
-!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/15/2018 18:53:26'!
+!IIII class methodsFor: 'as yet unclassified' stamp: 'AAAM 9/17/2018 12:34:09'!
 initializeCollaboratorsFromFile
 	"Auto generated method for loading purposes - Do not modify it"
 
