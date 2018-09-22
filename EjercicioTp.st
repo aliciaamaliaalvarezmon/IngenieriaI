@@ -21,8 +21,8 @@ TestCase subclass: #CustomerBookTest
 	poolDictionaries: ''
 	category: 'CodigoRepetido-Ejercicio'!
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'n 9/22/2018 14:55:26'!
-inTheCustomerBook: anCustomerBook shouldNotPassThisState: aState
+!CustomerBookTest methodsFor: 'testing' stamp: 'AAAM 9/22/2018 18:05:12'!
+inTheCustomerBookWhitoutActiveClients: anCustomerBook shouldStateThisNumberOfCustomers: aState
 
 
 	self assert: 0 equals: anCustomerBook numberOfActiveCustomers.
@@ -100,7 +100,7 @@ test04CanNotRemoveAnInvalidCustomer
 			self assert: customerBook numberOfCustomers = 1.
 			self assert: (customerBook includesCustomerNamed: johnLennon)]! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'n 9/22/2018 14:55:48'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'AAAM 9/22/2018 18:05:30'!
 test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
 
 	| customerBook paulMcCartney|
@@ -111,14 +111,15 @@ test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
 	customerBook addCustomerNamed: paulMcCartney.
 	customerBook suspendCustomerNamed: paulMcCartney .
 	
-	self inTheCustomerBook: customerBook shouldNotPassThisState: 1.
+	self inTheCustomerBookWhitoutActiveClients: customerBook shouldStateThisNumberOfCustomers: 1.
+
 	self assert: (customerBook includesCustomerNamed: paulMcCartney).
 	
 
 	
 ! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'n 9/22/2018 14:56:04'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'AAAM 9/22/2018 18:05:47'!
 test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
 
 	| customerBook paulMcCartney|
@@ -130,7 +131,9 @@ test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
 	customerBook suspendCustomerNamed: paulMcCartney.
 	customerBook removeCustomerNamed: paulMcCartney.
 	
-	self inTheCustomerBook: customerBook shouldNotPassThisState: 0.
+	self inTheCustomerBookWhitoutActiveClients: customerBook shouldStateThisNumberOfCustomers: 0.
+
+	
 	self deny: (customerBook includesCustomerNamed: paulMcCartney).
 
 
@@ -161,16 +164,6 @@ test08CanNotSuspendAnAlreadySuspendedCustomer
 	
 	
 	self theSuspentionShouldFail: customerBook withCustomer: 'John Lennon'.! !
-
-!CustomerBookTest methodsFor: 'testing' stamp: 'n 9/22/2018 14:40:23'!
-theCustomerBook: anCustomerBook state: aBlock
-
-
-	self assert: 0 equals: anCustomerBook numberOfActiveCustomers.
-	self assert: aBlock equals: anCustomerBook numberOfSuspendedCustomers.
-	self assert: aBlock equals: anCustomerBook numberOfCustomers.
-	
-! !
 
 !CustomerBookTest methodsFor: 'testing' stamp: 'AAAM 9/22/2018 04:43:33'!
 theSuspentionShouldFail: anCustomerBook withCustomer: aName.
