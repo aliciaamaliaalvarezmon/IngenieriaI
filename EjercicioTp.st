@@ -21,6 +21,16 @@ TestCase subclass: #CustomerBookTest
 	poolDictionaries: ''
 	category: 'CodigoRepetido-Ejercicio'!
 
+!CustomerBookTest methodsFor: 'testing' stamp: 'n 9/22/2018 14:55:26'!
+inTheCustomerBook: anCustomerBook shouldNotPassThisState: aState
+
+
+	self assert: 0 equals: anCustomerBook numberOfActiveCustomers.
+	self assert: aState equals: anCustomerBook numberOfSuspendedCustomers.
+	self assert: aState equals: anCustomerBook numberOfCustomers.
+	
+! !
+
 !CustomerBookTest methodsFor: 'testing' stamp: 'na 9/20/2018 21:09:42'!
 should: aBlock notTakeMoreThanMiliseconds: aLimit  
 
@@ -90,7 +100,7 @@ test04CanNotRemoveAnInvalidCustomer
 			self assert: customerBook numberOfCustomers = 1.
 			self assert: (customerBook includesCustomerNamed: johnLennon)]! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'HAW 9/20/2018 09:21:59'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'n 9/22/2018 14:55:48'!
 test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
 
 	| customerBook paulMcCartney|
@@ -99,18 +109,16 @@ test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
 	paulMcCartney := 'Paul McCartney'.
 	
 	customerBook addCustomerNamed: paulMcCartney.
-	customerBook suspendCustomerNamed: paulMcCartney.
+	customerBook suspendCustomerNamed: paulMcCartney .
 	
-	self assert: 0 equals: customerBook numberOfActiveCustomers.
-	self assert: 1 equals: customerBook numberOfSuspendedCustomers.
-	self assert: 1 equals: customerBook numberOfCustomers.
+	self inTheCustomerBook: customerBook shouldNotPassThisState: 1.
 	self assert: (customerBook includesCustomerNamed: paulMcCartney).
 	
 
 	
 ! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'HAW 9/20/2018 09:23:02'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'n 9/22/2018 14:56:04'!
 test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
 
 	| customerBook paulMcCartney|
@@ -122,9 +130,7 @@ test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
 	customerBook suspendCustomerNamed: paulMcCartney.
 	customerBook removeCustomerNamed: paulMcCartney.
 	
-	self assert: 0 equals: customerBook numberOfActiveCustomers.
-	self assert: 0 equals: customerBook numberOfSuspendedCustomers.
-	self assert: 0 equals: customerBook numberOfCustomers.
+	self inTheCustomerBook: customerBook shouldNotPassThisState: 0.
 	self deny: (customerBook includesCustomerNamed: paulMcCartney).
 
 
@@ -156,13 +162,13 @@ test08CanNotSuspendAnAlreadySuspendedCustomer
 	
 	self theSuspentionShouldFail: customerBook withCustomer: 'John Lennon'.! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'AAAM 9/22/2018 03:51:53'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'n 9/22/2018 14:40:23'!
 theCustomerBook: anCustomerBook state: aBlock
 
 
-	self assert: aBlock first equals: anCustomerBook numberOfActiveCustomers.
-	self assert: aBlock second equals: anCustomerBook numberOfSuspendedCustomers.
-	self assert: aBlock third equals: anCustomerBook numberOfCustomers.
+	self assert: 0 equals: anCustomerBook numberOfActiveCustomers.
+	self assert: aBlock equals: anCustomerBook numberOfSuspendedCustomers.
+	self assert: aBlock equals: anCustomerBook numberOfCustomers.
 	
 ! !
 
