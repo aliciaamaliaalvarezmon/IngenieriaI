@@ -77,7 +77,7 @@ test03CanNotAddACustomerWithEmptyName
 			self assert: anError messageText = CustomerBook customerCanNotBeEmptyErrorMessage.
 			self assert: customerBook isEmpty ]! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'na 9/20/2018 21:33:57'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'AAAM 9/22/2018 01:08:43'!
 test04CanNotRemoveAnInvalidCustomer
 	
 	| customerBook johnLennon |
@@ -86,13 +86,9 @@ test04CanNotRemoveAnInvalidCustomer
 	johnLennon := 'John Lennon'.
 	customerBook addCustomerNamed: johnLennon.
 	
-	[ customerBook removeCustomerNamed: 'jkldfsaklj'.
-	self fail ]
-		on: NotFound 
-		do: [ :anError | 
+	self should: [ customerBook removeCustomerNamed: 'paul'.] throwsError: NotFound asserting:  [ :anError | 
 			self assert: customerBook numberOfCustomers = 1.
-			self assert: (customerBook includesCustomerNamed: johnLennon) ]
-! !
+			self assert: (customerBook includesCustomerNamed: johnLennon)]! !
 
 !CustomerBookTest methodsFor: 'testing' stamp: 'HAW 9/20/2018 09:21:59'!
 test05SuspendingACustomerShouldNotRemoveItFromCustomerBook
@@ -135,7 +131,7 @@ test06RemovingASuspendedCustomerShouldRemoveItFromCustomerBook
 	
 ! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'NR 9/19/2018 17:55:41'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'AAAM 9/22/2018 04:38:23'!
 test07CanNotSuspendAnInvalidCustomer
 	
 	| customerBook johnLennon |
@@ -144,15 +140,10 @@ test07CanNotSuspendAnInvalidCustomer
 	johnLennon := 'John Lennon'.
 	customerBook addCustomerNamed: johnLennon.
 	
-	[ customerBook suspendCustomerNamed: 'Paul McCartney'.
-	self fail ]
-		on: CantSuspend 
-		do: [ :anError | 
-			self assert: customerBook numberOfCustomers = 1.
-			self assert: (customerBook includesCustomerNamed: johnLennon) ]
+	self theSuspentionShouldFail: customerBook withCustomer: 'Paul McCartney'.
 ! !
 
-!CustomerBookTest methodsFor: 'testing' stamp: 'NR 9/19/2018 17:57:11'!
+!CustomerBookTest methodsFor: 'testing' stamp: 'AAAM 9/22/2018 04:43:07'!
 test08CanNotSuspendAnAlreadySuspendedCustomer
 	
 	| customerBook johnLennon |
@@ -162,12 +153,27 @@ test08CanNotSuspendAnAlreadySuspendedCustomer
 	customerBook addCustomerNamed: johnLennon.
 	customerBook suspendCustomerNamed: johnLennon.
 	
-	[ customerBook suspendCustomerNamed: johnLennon.
-	self fail ]
-		on: CantSuspend 
-		do: [ :anError | 
-			self assert: customerBook numberOfCustomers = 1.
-			self assert: (customerBook includesCustomerNamed: johnLennon) ]
+	
+	self theSuspentionShouldFail: customerBook withCustomer: 'John Lennon'.! !
+
+!CustomerBookTest methodsFor: 'testing' stamp: 'AAAM 9/22/2018 03:51:53'!
+theCustomerBook: anCustomerBook state: aBlock
+
+
+	self assert: aBlock first equals: anCustomerBook numberOfActiveCustomers.
+	self assert: aBlock second equals: anCustomerBook numberOfSuspendedCustomers.
+	self assert: aBlock third equals: anCustomerBook numberOfCustomers.
+	
+! !
+
+!CustomerBookTest methodsFor: 'testing' stamp: 'AAAM 9/22/2018 04:43:33'!
+theSuspentionShouldFail: anCustomerBook withCustomer: aName.
+
+	self should:[ anCustomerBook suspendCustomerNamed: aName. ]
+		throwsError: CantSuspend 
+		asserting: [ :anError | 
+			self assert: anCustomerBook numberOfCustomers = 1.
+			self assert: (anCustomerBook includesCustomerNamed: 'John Lennon') ]
 ! !
 
 
