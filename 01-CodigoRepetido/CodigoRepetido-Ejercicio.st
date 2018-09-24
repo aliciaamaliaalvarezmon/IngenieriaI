@@ -202,20 +202,6 @@ initialize
 	suspended:= OrderedCollection new.! !
 
 
-!CustomerBook methodsFor: 'customer management' stamp: 'n 9/22/2018 17:13:13'!
-Remove: aName from: aCategory
-
-
-1 to: aCategory size do: 
-	[ :index |
-		aName = (aCategory at: index)
-			ifTrue: [
-				aCategory removeAt: index.
-				^True 
-			] 
-	].
-! !
-
 !CustomerBook methodsFor: 'customer management' stamp: 'HAW 9/19/2018 08:41:11'!
 addCustomerNamed: aName
 
@@ -239,15 +225,14 @@ numberOfSuspendedCustomers
 	
 	^suspended size! !
 
-!CustomerBook methodsFor: 'customer management' stamp: 'n 9/22/2018 17:12:28'!
+!CustomerBook methodsFor: 'customer management' stamp: 'AAAM 9/24/2018 13:56:38'!
 removeCustomerNamed: aName 
  
 	| cantClientes |
 	
 	cantClientes := self numberOfCustomers.
-	
-	self Remove: aName from: customers.
-	self Remove: aName from: suspended .
+	customers remove: aName ifAbsent: [].
+	suspended remove: aName ifAbsent: [].
 	cantClientes = self numberOfCustomers ifFalse: [^aName].
 	
 	^NotFound signal.! !
