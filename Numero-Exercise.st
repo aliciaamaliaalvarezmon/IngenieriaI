@@ -84,8 +84,11 @@ test11EnteroAddsFraccionCorrectly
 
 	self assert: one + oneFifth equals: (Entero with: 6) / (Entero with: 5)! !
 
-!NumeroTest methodsFor: 'tests' stamp: 'HernanWilkinson 5/7/2016 21:07'!
+!NumeroTest methodsFor: 'tests' stamp: 'AAAM 9/26/2018 13:41:53'!
 test12FraccionAddsEnteroCorrectly
+"
+	Ahora empieza la diversion!!
+"
 
 	self assert: oneFifth + one equals: (Entero with: 6) / (Entero with: 5)! !
 
@@ -341,6 +344,7 @@ isZero
 	self subclassResponsibility ! !
 
 
+
 !Numero methodsFor: 'aritmetic op fraccion and entero' stamp: 'AAAM 9/26/2018 00:30:01'!
 sum: anEntero with: anFraccion
 
@@ -373,34 +377,35 @@ Numero subclass: #Entero
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 01:10:31'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 13:58:37'!
 * aMultiplier 
 	
-	aMultiplier class = Entero ifTrue: [ ^self class with: value * aMultiplier integerValue].	
+	^aMultiplier multiplyConEntero: self.
 	
-	^(self value * aMultiplier numerator)/ (aMultiplier denominator).
 	
 	! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 00:32:05'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 13:31:40'!
 + anAdder 
 	
-	 | |
-	
-	anAdder class = Entero ifTrue: [^self class with: value + anAdder integerValue.] .
-	
-	^self sum: self with: anAdder .! !
+	^anAdder sumaConEntero: self.
+! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 01:38:42'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 14:33:38'!
 - aSubtrahend 
 	
+	^aSubtrahend restaAEntero: self.
+	"
 	aSubtrahend class = Entero ifTrue:[^ self class with: value - aSubtrahend integerValue.].
-	^self value * aSubtrahend denominator - aSubtrahend numerator/aSubtrahend denominator! !
+	^self value * aSubtrahend denominator - aSubtrahend numerator/aSubtrahend denominator"! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 01:19:04'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 14:12:57'!
 / aDivisor 	
-	aDivisor class = Entero ifTrue:[^Fraccion with: self over: aDivisor].
-	^self * (Fraccion with: aDivisor denominator over: aDivisor numerator). ! !
+
+^aDivisor dividirAEntero: self.
+
+	"aDivisor class = Entero ifTrue:[^Fraccion with: self over: aDivisor].
+	^self * (Fraccion with: aDivisor denominator over: aDivisor numerator). "! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 21:55'!
 // aDivisor 
@@ -473,6 +478,63 @@ isZero
 	
 	^value = 0! !
 
+
+!Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:07:53'!
+dividirAEntero: anEnteroToDivide
+
+
+	^Fraccion with: anEnteroToDivide over: self.! !
+
+!Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:23:08'!
+dividirAFraccion: anFraccionToDivide
+
+^anFraccionToDivide numerator / (anFraccionToDivide denominator * self value).
+	! !
+
+!Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:56:33'!
+multiplyConEntero: anEnteroToMultiply
+
+
+	 ^self class with: value * anEnteroToMultiply integerValue.	
+	
+! !
+
+!Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:52:21'!
+multiplyConFraccion: anFraccionToMultiply
+
+	^( self value * anFraccionToMultiply numerator)/anFraccionToMultiply denominator.
+	
+	! !
+
+!Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:44:11'!
+restaAEntero: anEnteroToSubstract
+
+
+	^ anEnteroToSubstract class with: (anEnteroToSubstract integerValue - self integerValue).! !
+
+!Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:53:23'!
+restaAFraccion: anFraccionToSubstract
+	
+
+	
+	^anFraccionToSubstract  numerator - (self value * anFraccionToSubstract denominator)/anFraccionToSubstract denominator.
+
+! !
+
+!Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:24:16'!
+sumaConEntero: anEnteroToSum
+
+^self class with: value +anEnteroToSum integerValue.! !
+
+!Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:39:11'!
+sumaConFraccion: anFraccionToSum
+
+|nuevoNumerator nuevoDenominator|
+
+nuevoNumerator := self value * anFraccionToSum denominator + anFraccionToSum numerator.
+nuevoDenominator := anFraccionToSum denominator.
+^nuevoNumerator/ nuevoDenominator. 																				! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Entero class' category: #'Numero-Exercise'!
@@ -499,30 +561,84 @@ Numero subclass: #Fraccion
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 01:08:56'!
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:14:52'!
+dividirAEntero: anEnteroToDivide
+
+
+^anEnteroToDivide * (Fraccion with: self denominator over: self numerator).! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:20:46'!
+dividirAFraccion: anFraccionToDivide
+
+	^(anFraccionToDivide numerator * self denominator) / (anFraccionToDivide denominator * self numerator).! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:57:44'!
+multiplyConEntero: anEnteroToMultiply
+
+	
+	
+	^(anEnteroToMultiply value * self numerator)/ (self denominator).! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:50:47'!
+multiplyConFraccion: anFraccionToMultiply
+	
+	
+	^(numerator * anFraccionToMultiply numerator) / (denominator * anFraccionToMultiply denominator)! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:46:23'!
+restaAEntero: anEnteroToSubstract
+
+
+	^anEnteroToSubstract value * self denominator - self numerator/self denominator.! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:51:08'!
+restaAFraccion: anFraccionToSubstract
+	
+	| newNumerator newDenominator |	
+
+	newNumerator := (anFraccionToSubstract numerator * self denominator) - (anFraccionToSubstract denominator * self numerator).
+	newDenominator := anFraccionToSubstract denominator * self denominator.
+	
+	^newNumerator / newDenominator 
+! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:32:31'!
+sumaConEntero: enteroToSum
+
+
+
+^ enteroToSum value * self denominator + self numerator / self denominator. 																				! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:36:40'!
+sumaConFraccion: anFraccionToSum
+
+	
+	| newNumerator newDenominator |		
+
+	newNumerator := (numerator * anFraccionToSum denominator) + (denominator * anFraccionToSum numerator).
+	newDenominator := denominator * anFraccionToSum denominator.
+	^newNumerator / newDenominator ! !
+
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 13:48:56'!
 * aMultiplier 
 
-	 aMultiplier class = Entero ifTrue:[^( aMultiplier value * self numerator)/self denominator ].
-	
-	^(numerator * aMultiplier numerator) / (denominator * aMultiplier denominator)
-	! !
+	^aMultiplier multiplyConFraccion: self.
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 00:34:55'!
+! !
+
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 13:40:11'!
 + anAdder 
 	
 	
-	| newNumerator newDenominator |	
-	
-	anAdder class = Entero ifTrue: [^self sum: anAdder with: self].
-	
-	newNumerator := (numerator * anAdder denominator) + (denominator * anAdder numerator).
-	newDenominator := denominator * anAdder denominator.
-	^newNumerator / newDenominator 
-	! !
+	^anAdder sumaConFraccion: self.
+! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 01:42:38'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 14:47:42'!
 - aSubtrahend 
 	
+	^ aSubtrahend restaAFraccion: self.
+	"
 	| newNumerator newDenominator |
 	
 	aSubtrahend class = Entero ifTrue:[^self numerator - (aSubtrahend value * self denominator)/self denominator].
@@ -530,13 +646,15 @@ Numero subclass: #Fraccion
 	newDenominator := denominator * aSubtrahend denominator.
 	
 	^newNumerator / newDenominator 
-! !
+"! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 01:22:34'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 14:21:08'!
 / aDivisor 
 	
+	^aDivisor dividirAFraccion: self.
+	"
 	aDivisor class = Entero ifTrue:[^self numerator / (self denominator * aDivisor value) ].
-	^(numerator * aDivisor denominator) / (denominator * aDivisor numerator)! !
+	^(numerator * aDivisor denominator) / (denominator * aDivisor numerator)"! !
 
 
 !Fraccion methodsFor: 'comparing' stamp: 'HernanWilkinson 5/7/2016 20:42'!
