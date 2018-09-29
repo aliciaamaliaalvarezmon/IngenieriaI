@@ -385,10 +385,11 @@ Numero subclass: #Entero
 	
 	! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 13:31:40'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'AAAM 9/28/2018 21:40:54'!
 + anAdder 
 	
 	^anAdder sumaConEntero: self.
+	
 ! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 14:33:38'!
@@ -479,6 +480,7 @@ isZero
 	^value = 0! !
 
 
+
 !Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:07:53'!
 dividirAEntero: anEnteroToDivide
 
@@ -499,10 +501,11 @@ multiplyConEntero: anEnteroToMultiply
 	
 ! !
 
-!Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:52:21'!
+!Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/28/2018 21:52:31'!
 multiplyConFraccion: anFraccionToMultiply
 
-	^( self value * anFraccionToMultiply numerator)/anFraccionToMultiply denominator.
+^anFraccionToMultiply multiplyConEntero: self.
+"	^( self value * anFraccionToMultiply numerator)/anFraccionToMultiply denominator."
 	
 	! !
 
@@ -526,14 +529,17 @@ sumaConEntero: anEnteroToSum
 
 ^self class with: value +anEnteroToSum integerValue.! !
 
-!Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:39:11'!
+!Entero methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/28/2018 21:48:57'!
 sumaConFraccion: anFraccionToSum
 
+^ anFraccionToSum sumaConEntero: self. 
+
+"
 |nuevoNumerator nuevoDenominator|
 
 nuevoNumerator := self value * anFraccionToSum denominator + anFraccionToSum numerator.
 nuevoDenominator := anFraccionToSum denominator.
-^nuevoNumerator/ nuevoDenominator. 																				! !
+^nuevoNumerator/ nuevoDenominator. 																				"! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -560,65 +566,6 @@ Numero subclass: #Fraccion
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Numero-Exercise'!
-
-!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:14:52'!
-dividirAEntero: anEnteroToDivide
-
-
-^anEnteroToDivide * (Fraccion with: self denominator over: self numerator).! !
-
-!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:20:46'!
-dividirAFraccion: anFraccionToDivide
-
-	^(anFraccionToDivide numerator * self denominator) / (anFraccionToDivide denominator * self numerator).! !
-
-!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:57:44'!
-multiplyConEntero: anEnteroToMultiply
-
-	
-	
-	^(anEnteroToMultiply value * self numerator)/ (self denominator).! !
-
-!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:50:47'!
-multiplyConFraccion: anFraccionToMultiply
-	
-	
-	^(numerator * anFraccionToMultiply numerator) / (denominator * anFraccionToMultiply denominator)! !
-
-!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:46:23'!
-restaAEntero: anEnteroToSubstract
-
-
-	^anEnteroToSubstract value * self denominator - self numerator/self denominator.! !
-
-!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:51:08'!
-restaAFraccion: anFraccionToSubstract
-	
-	| newNumerator newDenominator |	
-
-	newNumerator := (anFraccionToSubstract numerator * self denominator) - (anFraccionToSubstract denominator * self numerator).
-	newDenominator := anFraccionToSubstract denominator * self denominator.
-	
-	^newNumerator / newDenominator 
-! !
-
-!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:32:31'!
-sumaConEntero: enteroToSum
-
-
-
-^ enteroToSum value * self denominator + self numerator / self denominator. 																				! !
-
-!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:36:40'!
-sumaConFraccion: anFraccionToSum
-
-	
-	| newNumerator newDenominator |		
-
-	newNumerator := (numerator * anFraccionToSum denominator) + (denominator * anFraccionToSum numerator).
-	newDenominator := denominator * anFraccionToSum denominator.
-	^newNumerator / newDenominator ! !
-
 
 !Fraccion methodsFor: 'arithmetic operations' stamp: 'AAAM 9/26/2018 13:48:56'!
 * aMultiplier 
@@ -713,6 +660,65 @@ printOn: aStream
 		print: numerator;
 		nextPut: $/;
 		print: denominator ! !
+
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:14:52'!
+dividirAEntero: anEnteroToDivide
+
+
+^anEnteroToDivide * (Fraccion with: self denominator over: self numerator).! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:20:46'!
+dividirAFraccion: anFraccionToDivide
+
+	^(anFraccionToDivide numerator * self denominator) / (anFraccionToDivide denominator * self numerator).! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:57:44'!
+multiplyConEntero: anEnteroToMultiply
+
+	
+	
+	^(anEnteroToMultiply value * self numerator)/ (self denominator).! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:50:47'!
+multiplyConFraccion: anFraccionToMultiply
+	
+	
+	^(numerator * anFraccionToMultiply numerator) / (denominator * anFraccionToMultiply denominator)! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 14:46:23'!
+restaAEntero: anEnteroToSubstract
+
+
+	^anEnteroToSubstract value * self denominator - self numerator/self denominator.! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/28/2018 22:14:29'!
+restaAFraccion: anFraccionToSubstract
+
+^ (anFraccionToSubstract numerator * self denominator) - (anFraccionToSubstract denominator * self numerator)/(anFraccionToSubstract denominator * self denominator).
+	
+"	| newNumerator newDenominator |	
+
+	newNumerator := (anFraccionToSubstract numerator * self denominator) - (anFraccionToSubstract denominator * self numerator).
+	newDenominator := anFraccionToSubstract denominator * self denominator.
+	
+	^newNumerator / newDenominator "
+! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/26/2018 13:32:31'!
+sumaConEntero: enteroToSum
+
+
+
+^ enteroToSum value * self denominator + self numerator / self denominator. 																				! !
+
+!Fraccion methodsFor: 'arithmetic auxiliares' stamp: 'AAAM 9/28/2018 22:13:35'!
+sumaConFraccion: anFraccionToSum
+
+	
+
+	^(numerator * anFraccionToSum denominator) + (denominator * anFraccionToSum numerator)/(denominator * anFraccionToSum denominator).
+! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
