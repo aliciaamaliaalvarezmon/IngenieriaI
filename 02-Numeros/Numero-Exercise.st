@@ -549,57 +549,13 @@ Entero class
 negativeFibonacciErrorDescription
 	^ ' Fibonacci no está definido aquí para enteros negativos'! !
 
-!Entero class methodsFor: 'instance creation' stamp: 'n 9/30/2018 17:23:04'!
+!Entero class methodsFor: 'instance creation' stamp: 'n 10/1/2018 14:47:10'!
 with: aValue 
 	
 	"Esta verificacion esta puesta por si se equivocan y quieren crear un Entero pasando otra cosa que un Integer - Hernan"
 	aValue isInteger ifFalse: [  self error: 'aValue debe ser anInteger' ].
 	
-	"aValue = 0 ifTrue: [^Cero new initalizeWith: 0].
-	aValue = 1 ifTrue: [^Uno new initalizeWith: 1]."
 	^self new initalizeWith: aValue! !
-
-
-!classDefinition: #Cero category: #'Numero-Exercise'!
-Entero subclass: #Cero
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Numero-Exercise'!
-
-!Cero methodsFor: 'initialization' stamp: 'n 9/30/2018 16:35:10'!
-initalizeWith: aValue
-
-	value := aValue.! !
-
-
-!Cero methodsFor: 'arithmetic operations' stamp: 'n 9/30/2018 16:37:22'!
-fibonacci
-
-	|one|
-	
-	one := Entero with: 1.
-	
-	^one.! !
-
-
-!classDefinition: #Uno category: #'Numero-Exercise'!
-Entero subclass: #Uno
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'Numero-Exercise'!
-
-!Uno methodsFor: 'initialization' stamp: 'n 9/30/2018 16:35:51'!
-initalizeWith: aValue
-
-	value := aValue.! !
-
-
-!Uno methodsFor: 'arithmetic operations' stamp: 'n 9/30/2018 17:12:46'!
-fibonacci
-
-	^self! !
 
 
 !classDefinition: #Fraccion category: #'Numero-Exercise'!
