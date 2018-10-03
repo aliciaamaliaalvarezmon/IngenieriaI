@@ -130,16 +130,16 @@ test10CanNotNextWhenThereAreNoObjectsInTheQueue
 
 !classDefinition: #Queue category: #'Queue-ExerciseAlice'!
 Object subclass: #Queue
-	instanceVariableNames: 'contents size'
+	instanceVariableNames: 'contents'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Queue-ExerciseAlice'!
 
-!Queue methodsFor: 'initialization' stamp: 'n 9/30/2018 13:08:45'!
+!Queue methodsFor: 'initialization' stamp: 'AAAM 10/3/2018 00:52:19'!
 inizialitation
 
 	contents := OrderedCollection new.
-	size := 0.
+	
 	
 	! !
 
@@ -149,25 +149,20 @@ content
 
  ^contents! !
 
-!Queue methodsFor: 'testing' stamp: 'AAAM 10/2/2018 23:48:59'!
-contents
-
- ^contents! !
-
-!Queue methodsFor: 'testing' stamp: 'n 9/30/2018 14:24:49'!
+!Queue methodsFor: 'testing' stamp: 'AAAM 10/3/2018 00:52:02'!
 isEmpty
 
-	^self size == 0.! !
+	^self size = 0.! !
 
 !Queue methodsFor: 'testing' stamp: 'n 9/30/2018 14:24:40'!
 isNotEmpty
 
 	^self size > 0.! !
 
-!Queue methodsFor: 'testing' stamp: 'n 9/30/2018 14:08:21'!
+!Queue methodsFor: 'testing' stamp: 'AAAM 10/3/2018 00:51:40'!
 size
 
-	^size.! !
+	^contents size.! !
 
 
 !Queue methodsFor: 'actions' stamp: 'AAAM 10/2/2018 23:46:14'!
@@ -175,11 +170,11 @@ dequeue
 
 	^ (DesencoladorDeQueues desencoladorPara: self) deQueue.! !
 
-!Queue methodsFor: 'actions' stamp: 'n 9/30/2018 13:10:12'!
+!Queue methodsFor: 'actions' stamp: 'AAAM 10/3/2018 00:52:30'!
 enqueue: anElement
 
 	contents add: anElement.
-	size := (size +1).! !
+	! !
 
 !Queue methodsFor: 'actions' stamp: 'AAAM 10/2/2018 23:55:11'!
 next
@@ -216,11 +211,11 @@ deQueue
 
 self subclassResponsibility ! !
 
-!DesencoladorDeQueues methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:49:52'!
+!DesencoladorDeQueues methodsFor: 'as yet unclassified' stamp: 'AAAM 10/3/2018 00:53:44'!
 initializePara: aQueue
 
 	contents := aQueue content.
-	size := aQueue size.! !
+	! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -255,14 +250,13 @@ DesencoladorDeQueues subclass: #DesencoladorDeQueuesConElementos
 	poolDictionaries: ''
 	category: 'Queue-ExerciseAlice'!
 
-!DesencoladorDeQueuesConElementos methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:41:57'!
+!DesencoladorDeQueuesConElementos methodsFor: 'as yet unclassified' stamp: 'AAAM 10/3/2018 00:53:50'!
 deQueue
 
 |firstElement|
 
 
 	firstElement := contents removeFirst.
-	size := (size -1).
 	
 	^firstElement.! !
 
