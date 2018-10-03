@@ -1,9 +1,9 @@
-!classDefinition: #QueueTest category: #'Queue-Exercise'!
+!classDefinition: #QueueTest category: #'Queue-ExerciseAlice'!
 TestCase subclass: #QueueTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Queue-Exercise'!
+	category: 'Queue-ExerciseAlice'!
 
 !QueueTest methodsFor: 'test' stamp: 'n 9/30/2018 12:55:01'!
 test01QueueShouldBeEmptyWhenCreated
@@ -128,69 +128,63 @@ test10CanNotNextWhenThereAreNoObjectsInTheQueue
 			self assert: anError messageText equals: Queue queueEmptyErrorDescription ].! !
 
 
-!classDefinition: #Queue category: #'Queue-Exercise'!
+!classDefinition: #Queue category: #'Queue-ExerciseAlice'!
 Object subclass: #Queue
-	instanceVariableNames: 'contents size'
+	instanceVariableNames: 'contents'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Queue-Exercise'!
+	category: 'Queue-ExerciseAlice'!
 
-!Queue methodsFor: 'initialization' stamp: 'n 9/30/2018 13:08:45'!
+!Queue methodsFor: 'initialization' stamp: 'AAAM 10/3/2018 00:52:19'!
 inizialitation
 
 	contents := OrderedCollection new.
-	size := 0.
+	
 	
 	! !
 
 
-!Queue methodsFor: 'testing' stamp: 'n 9/30/2018 14:24:49'!
+!Queue methodsFor: 'testing' stamp: 'AAAM 10/2/2018 23:49:38'!
+content
+
+ ^contents! !
+
+!Queue methodsFor: 'testing' stamp: 'AAAM 10/3/2018 00:52:02'!
 isEmpty
 
-	^self size == 0.! !
+	^self size = 0.! !
 
 !Queue methodsFor: 'testing' stamp: 'n 9/30/2018 14:24:40'!
 isNotEmpty
 
 	^self size > 0.! !
 
-!Queue methodsFor: 'testing' stamp: 'n 9/30/2018 14:58:54'!
-pilaVacia
-
-	^self error: 'Queue is empty'.! !
-
-!Queue methodsFor: 'testing' stamp: 'n 9/30/2018 14:08:21'!
+!Queue methodsFor: 'testing' stamp: 'AAAM 10/3/2018 00:51:40'!
 size
 
-	^size.! !
+	^contents size.! !
 
 
-!Queue methodsFor: 'actions' stamp: 'n 9/30/2018 15:13:27'!
+!Queue methodsFor: 'actions' stamp: 'AAAM 10/2/2018 23:46:14'!
 dequeue
 
-	|firstElement|
+	^ (DesencoladorDeQueues desencoladorPara: self) deQueue.! !
 
-	self isNotEmpty or: [self pilaVacia] .	
-	firstElement := contents removeFirst.
-	size := (size -1).
-	
-	^firstElement.! !
-
-!Queue methodsFor: 'actions' stamp: 'n 9/30/2018 13:10:12'!
+!Queue methodsFor: 'actions' stamp: 'AAAM 10/3/2018 00:52:30'!
 enqueue: anElement
 
 	contents add: anElement.
-	size := (size +1).! !
+	! !
 
-!Queue methodsFor: 'actions' stamp: 'n 9/30/2018 15:14:40'!
+!Queue methodsFor: 'actions' stamp: 'AAAM 10/2/2018 23:55:11'!
 next
 	
-	self isNotEmpty or: [self pilaVacia].
-	^contents at: 1! !
+	
+	^  (DesencoladorDeQueues desencoladorPara: self) next.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Queue class' category: #'Queue-Exercise'!
+!classDefinition: 'Queue class' category: #'Queue-ExerciseAlice'!
 Queue class
 	instanceVariableNames: ''!
 
@@ -203,3 +197,111 @@ queueEmptyErrorDescription
 new
 
 	^self basicNew inizialitation.! !
+
+
+!classDefinition: #DesencoladorDeQueues category: #'Queue-ExerciseAlice'!
+Queue subclass: #DesencoladorDeQueues
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Queue-ExerciseAlice'!
+
+!DesencoladorDeQueues methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:35:08'!
+deQueue
+
+self subclassResponsibility ! !
+
+!DesencoladorDeQueues methodsFor: 'as yet unclassified' stamp: 'AAAM 10/3/2018 00:53:44'!
+initializePara: aQueue
+
+	contents := aQueue content.
+	! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'DesencoladorDeQueues class' category: #'Queue-ExerciseAlice'!
+DesencoladorDeQueues class
+	instanceVariableNames: ''!
+
+!DesencoladorDeQueues class methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:36:42'!
+deQueue: unaQueue
+
+^self subclassResponsibility .! !
+
+!DesencoladorDeQueues class methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:38:17'!
+desencoladorPara: unaQueue
+	
+	| desencoladorClass |
+
+	desencoladorClass _ self subclasses detect: [ :unDesencoladorClass | unDesencoladorClass deQueue: unaQueue ].
+	
+	^ desencoladorClass para: unaQueue.! !
+
+!DesencoladorDeQueues class methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:36:06'!
+para: unaQueue
+
+^self new initializePara: unaQueue.! !
+
+
+!classDefinition: #DesencoladorDeQueuesConElementos category: #'Queue-ExerciseAlice'!
+DesencoladorDeQueues subclass: #DesencoladorDeQueuesConElementos
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Queue-ExerciseAlice'!
+
+!DesencoladorDeQueuesConElementos methodsFor: 'as yet unclassified' stamp: 'AAAM 10/3/2018 00:53:50'!
+deQueue
+
+|firstElement|
+
+
+	firstElement := contents removeFirst.
+	
+	^firstElement.! !
+
+!DesencoladorDeQueuesConElementos methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:54:58'!
+next
+
+	^contents at: 1! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'DesencoladorDeQueuesConElementos class' category: #'Queue-ExerciseAlice'!
+DesencoladorDeQueuesConElementos class
+	instanceVariableNames: ''!
+
+!DesencoladorDeQueuesConElementos class methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:39:43'!
+deQueue: unaQueue
+
+^ unaQueue isNotEmpty. ! !
+
+
+!classDefinition: #DesencoladorDeQueuesVacias category: #'Queue-ExerciseAlice'!
+DesencoladorDeQueues subclass: #DesencoladorDeQueuesVacias
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Queue-ExerciseAlice'!
+
+!DesencoladorDeQueuesVacias methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:43:03'!
+deQueue
+
+	self error: self class queueEmptyErrorDescription .	
+! !
+
+!DesencoladorDeQueuesVacias methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:43:08'!
+next
+
+self error: self class queueEmptyErrorDescription .	! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'DesencoladorDeQueuesVacias class' category: #'Queue-ExerciseAlice'!
+DesencoladorDeQueuesVacias class
+	instanceVariableNames: ''!
+
+!DesencoladorDeQueuesVacias class methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:40:32'!
+deQueue: unaQueue
+
+^ unaQueue isEmpty. ! !
