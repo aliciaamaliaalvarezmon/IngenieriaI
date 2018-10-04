@@ -223,11 +223,6 @@ initializePara: aQueue
 DesencoladorDeQueues class
 	instanceVariableNames: ''!
 
-!DesencoladorDeQueues class methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:36:42'!
-deQueue: unaQueue
-
-^self subclassResponsibility .! !
-
 !DesencoladorDeQueues class methodsFor: 'as yet unclassified' stamp: 'AAAM 10/2/2018 23:38:17'!
 desencoladorPara: unaQueue
 	
