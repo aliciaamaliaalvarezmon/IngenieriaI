@@ -1,9 +1,9 @@
-!classDefinition: #AccountTransaction category: #'Portfolio-Ejercicio'!
+!classDefinition: #AccountTransaction category: #'Portfolio-EjercicioSol'!
 Object subclass: #AccountTransaction
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Portfolio-Ejercicio'!
+	category: 'Portfolio-EjercicioSol'!
 
 !AccountTransaction methodsFor: 'value' stamp: 'HernanWilkinson 9/12/2011 12:25'!
 value 
@@ -12,7 +12,7 @@ value
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'AccountTransaction class' category: #'Portfolio-Ejercicio'!
+!classDefinition: 'AccountTransaction class' category: #'Portfolio-EjercicioSol'!
 AccountTransaction class
 	instanceVariableNames: ''!
 
@@ -27,12 +27,12 @@ register: aValue on: account
 	^ withdraw! !
 
 
-!classDefinition: #Deposit category: #'Portfolio-Ejercicio'!
+!classDefinition: #Deposit category: #'Portfolio-EjercicioSol'!
 AccountTransaction subclass: #Deposit
 	instanceVariableNames: 'value'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Portfolio-Ejercicio'!
+	category: 'Portfolio-EjercicioSol'!
 
 !Deposit methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:45'!
 initializeFor: aValue
@@ -45,9 +45,20 @@ value
 
 	^ value! !
 
+
+!Deposit methodsFor: 'as yet unclassified' stamp: 'AAAM 10/15/2018 21:12:56'!
+isRegisteredByAnReceptiveAccount: anReceptiveAccount
+
+^ anReceptiveAccount  registerADeposit: self.! !
+
+!Deposit methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 00:05:56'!
+valueForBalance
+
+^value! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Deposit class' category: #'Portfolio-Ejercicio'!
+!classDefinition: 'Deposit class' category: #'Portfolio-EjercicioSol'!
 Deposit class
 	instanceVariableNames: ''!
 
@@ -57,12 +68,12 @@ for: aValue
 	^ self new initializeFor: aValue ! !
 
 
-!classDefinition: #Withdraw category: #'Portfolio-Ejercicio'!
+!classDefinition: #Withdraw category: #'Portfolio-EjercicioSol'!
 AccountTransaction subclass: #Withdraw
 	instanceVariableNames: 'value'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Portfolio-Ejercicio'!
+	category: 'Portfolio-EjercicioSol'!
 
 !Withdraw methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:46'!
 initializeFor: aValue
@@ -75,9 +86,20 @@ value
 
 	^ value! !
 
+
+!Withdraw methodsFor: 'as yet unclassified' stamp: 'AAAM 10/15/2018 21:13:25'!
+isRegisteredByAnReceptiveAccount: anReceptiveAccount
+
+^ anReceptiveAccount  registerAWithdraw: self.! !
+
+!Withdraw methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 00:06:19'!
+valueForBalance
+
+^ value*-1! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Withdraw class' category: #'Portfolio-Ejercicio'!
+!classDefinition: 'Withdraw class' category: #'Portfolio-EjercicioSol'!
 Withdraw class
 	instanceVariableNames: ''!
 
@@ -87,12 +109,12 @@ for: aValue
 	^ self new initializeFor: aValue ! !
 
 
-!classDefinition: #SummarizingAccount category: #'Portfolio-Ejercicio'!
+!classDefinition: #SummarizingAccount category: #'Portfolio-EjercicioSol'!
 Object subclass: #SummarizingAccount
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Portfolio-Ejercicio'!
+	category: 'Portfolio-EjercicioSol'!
 
 !SummarizingAccount methodsFor: 'testing' stamp: 'HAW 10/11/2018 16:53:28'!
 doesManage: anAccount
@@ -117,17 +139,51 @@ balance
 	self subclassResponsibility ! !
 
 
-!classDefinition: #Portfolio category: #'Portfolio-Ejercicio'!
-SummarizingAccount subclass: #Portfolio
-	instanceVariableNames: ''
+!classDefinition: #AccountorPortfolio category: #'Portfolio-EjercicioSol'!
+SummarizingAccount subclass: #AccountorPortfolio
+	instanceVariableNames: 'receptiveAccountsorPorfolios'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Portfolio-Ejercicio'!
+	category: 'Portfolio-EjercicioSol'!
 
-!Portfolio methodsFor: 'balance' stamp: 'na 10/11/2018 20:53:13'!
+!AccountorPortfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/15/2018 23:01:21'!
 balance
 
-	^0! !
+ ^receptiveAccountsorPorfolios  balance.! !
+
+!AccountorPortfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 00:40:21'!
+hasRegistered: aTransiction
+
+^receptiveAccountsorPorfolios hasRegisteredInPortfolio: aTransiction.! !
+
+!AccountorPortfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/15/2018 23:00:27'!
+initializeWith: anAccountorPortfolio
+
+receptiveAccountsorPorfolios  := anAccountorPortfolio .! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'AccountorPortfolio class' category: #'Portfolio-EjercicioSol'!
+AccountorPortfolio class
+	instanceVariableNames: ''!
+
+!AccountorPortfolio class methodsFor: 'as yet unclassified' stamp: 'AAAM 10/15/2018 22:51:50'!
+with: anAcountorPortfolio
+
+ ^ self new initializeWith: anAcountorPortfolio .! !
+
+
+!classDefinition: #Portfolio category: #'Portfolio-EjercicioSol'!
+SummarizingAccount subclass: #Portfolio
+	instanceVariableNames: 'receptiveAccountsorPorfolios'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Portfolio-EjercicioSol'!
+
+!Portfolio methodsFor: 'balance' stamp: 'AAAM 10/15/2018 23:01:45'!
+balance
+
+	^ receptiveAccountsorPorfolios sum:[:atr| atr balance] ifEmpty:[^0]. "ifEmpty no deberia estar porque porfolio empieza con almenos dos cuentas."! !
 
 
 !Portfolio methodsFor: 'testing' stamp: 'HAW 10/11/2018 16:53:28'!
@@ -136,10 +192,15 @@ doesManage: anAccount
 	self shouldBeImplemented 
 ! !
 
-!Portfolio methodsFor: 'testing' stamp: 'HAW 10/11/2018 16:53:54'!
+!Portfolio methodsFor: 'testing' stamp: 'AAAM 10/16/2018 00:33:10'!
 hasRegistered: aTransaction
 
-	self shouldBeImplemented ! !
+
+
+receptiveAccountsorPorfolios detect:[: atr| atr hasRegistered: aTransaction] ifNone:[self error: self class  accountNotManagedMessageDescription].
+
+	
+^ true! !
 
 
 !Portfolio methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:39'!
@@ -152,16 +213,36 @@ transactionsOf: anAccount
 
 	self shouldBeImplemented ! !
 
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 00:43:24'!
+hasRegisteredInPortfolio: aTransiction.
+
+receptiveAccountsorPorfolios detect:[: atr| atr hasRegistered: aTransiction] ifNone:[^false].
+
+^true! !
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/15/2018 23:02:48'!
+initializeFor: leftAccount  and: rightAccount
+	
+	|leftobject rightobject|
+	receptiveAccountsorPorfolios := OrderedCollection new.
+	
+	leftobject := AccountorPortfolio with: leftAccount .	
+	rightobject := AccountorPortfolio with: rightAccount .
+	
+	receptiveAccountsorPorfolios add: leftobject .
+	receptiveAccountsorPorfolios add: rightobject .! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Portfolio class' category: #'Portfolio-Ejercicio'!
+!classDefinition: 'Portfolio class' category: #'Portfolio-EjercicioSol'!
 Portfolio class
 	instanceVariableNames: ''!
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'HAW 5/8/2018 16:10:00'!
+!Portfolio class methodsFor: 'instance creation' stamp: 'AAAM 10/15/2018 22:14:33'!
 with: leftAccount with: rightAccount
 
-	self shouldBeImplemented ! !
+ ^ self new initializeFor: leftAccount  and: rightAccount.! !
 
 !Portfolio class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:41'!
 withAll: aCollectionOfAccounts
@@ -180,12 +261,12 @@ accountNotManagedMessageDescription
 	^ 'Account not managed'! !
 
 
-!classDefinition: #ReceptiveAccount category: #'Portfolio-Ejercicio'!
+!classDefinition: #ReceptiveAccount category: #'Portfolio-EjercicioSol'!
 SummarizingAccount subclass: #ReceptiveAccount
 	instanceVariableNames: 'transactions'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'Portfolio-Ejercicio'!
+	category: 'Portfolio-EjercicioSol'!
 
 !ReceptiveAccount methodsFor: 'initialization' stamp: 'HernanWilkinson 7/13/2011 18:35'!
 initialize
@@ -194,11 +275,11 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
-!ReceptiveAccount methodsFor: 'transactions' stamp: 'na 10/11/2018 21:41:30'!
+!ReceptiveAccount methodsFor: 'transactions' stamp: 'AAAM 10/16/2018 00:03:37'!
 register: aTransaction
 
-	aTransaction class = Deposit ifTrue:[transactions add: aTransaction].
-	aTransaction class = Withdraw  ifTrue:[transactions  add: aTransaction value *-1].
+	aTransaction isRegisteredByAnReceptiveAccount: self ."class = Deposit ifTrue:[transactions add: aTransaction]."
+	 "class = Withdraw  ifTrue:[transactions  add: aTransaction value *-1]." "Vamos a redefinir los metodos en deposit/withdraw, pero tal vez no debería ser trabajo de la clase"
 	
 	 
 ! !
@@ -209,11 +290,11 @@ transactions
 	^ transactions copy! !
 
 
-!ReceptiveAccount methodsFor: 'balance' stamp: 'na 10/11/2018 21:38:13'!
+!ReceptiveAccount methodsFor: 'balance' stamp: 'AAAM 10/16/2018 00:05:26'!
 balance
 
 	"^transactions sum:[:atr| (atr isKindOf: Deposit) ifTrue:[atr value] ifFalse:[atr value *-1] ] ifEmpty:[^0]."
-	^ transactions sum:[:atr| atr value] ifEmpty:[^0].! !
+	^ transactions sum:[:atr| atr valueForBalance] ifEmpty:[^0].! !
 
 
 !ReceptiveAccount methodsFor: 'testing' stamp: 'HAW 10/11/2018 16:53:28'!
@@ -227,3 +308,19 @@ hasRegistered: aTtransaction
 
 	^ transactions includes: aTtransaction 
 ! !
+
+
+!ReceptiveAccount methodsFor: 'transactions-private' stamp: 'AAAM 10/16/2018 00:41:32'!
+hasRegisteredInPortfolio: aTransiction.
+
+^self hasRegistered: aTransiction.! !
+
+!ReceptiveAccount methodsFor: 'transactions-private' stamp: 'AAAM 10/15/2018 21:18:31'!
+registerADeposit: anDepositTransaction
+
+^transactions add: anDepositTransaction! !
+
+!ReceptiveAccount methodsFor: 'transactions-private' stamp: 'AAAM 10/16/2018 00:06:45'!
+registerAWithdraw: anWithdrawTransaction
+
+^transactions  add: anWithdrawTransaction ! !
