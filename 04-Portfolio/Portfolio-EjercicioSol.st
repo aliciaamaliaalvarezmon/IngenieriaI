@@ -146,20 +146,32 @@ SummarizingAccount subclass: #AccountorPortfolio
 	poolDictionaries: ''
 	category: 'Portfolio-EjercicioSol'!
 
+!AccountorPortfolio methodsFor: 'nil' stamp: 'AAAM 10/16/2018 00:40:21'!
+hasRegistered: aTransiction
+
+^receptiveAccountsorPorfolios hasRegisteredInPortfolio: aTransiction.! !
+
+!AccountorPortfolio methodsFor: 'nil' stamp: 'AAAM 10/15/2018 23:00:27'!
+initializeWith: anAccountorPortfolio
+
+receptiveAccountsorPorfolios  := anAccountorPortfolio .! !
+
+
 !AccountorPortfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/15/2018 23:01:21'!
 balance
 
  ^receptiveAccountsorPorfolios  balance.! !
 
-!AccountorPortfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 00:40:21'!
-hasRegistered: aTransiction
+!AccountorPortfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 15:41:56'!
+doesManage: anAccount
 
-^receptiveAccountsorPorfolios hasRegisteredInPortfolio: aTransiction.! !
+	
+^ receptiveAccountsorPorfolios doesManageInPortfolio: anAccount! !
 
-!AccountorPortfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/15/2018 23:00:27'!
-initializeWith: anAccountorPortfolio
+!AccountorPortfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 15:08:42'!
+transactions
 
-receptiveAccountsorPorfolios  := anAccountorPortfolio .! !
+^ receptiveAccountsorPorfolios transactions! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -186,42 +198,50 @@ balance
 	^ receptiveAccountsorPorfolios sum:[:atr| atr balance] ifEmpty:[^0]. "ifEmpty no deberia estar porque porfolio empieza con almenos dos cuentas."! !
 
 
-!Portfolio methodsFor: 'testing' stamp: 'HAW 10/11/2018 16:53:28'!
+!Portfolio methodsFor: 'testing' stamp: 'AAAM 10/16/2018 14:43:52'!
 doesManage: anAccount
 
-	self shouldBeImplemented 
+receptiveAccountsorPorfolios detect:[: atr| atr doesManage: anAccount] ifNone:[^false]."creo que no hay que tirar este error aca[self error: self class  accountNotManagedMessageDescription]."
+
+	
+^ true
 ! !
 
-!Portfolio methodsFor: 'testing' stamp: 'AAAM 10/16/2018 00:33:10'!
+!Portfolio methodsFor: 'testing' stamp: 'AAAM 10/16/2018 14:41:29'!
 hasRegistered: aTransaction
 
 
 
-receptiveAccountsorPorfolios detect:[: atr| atr hasRegistered: aTransaction] ifNone:[self error: self class  accountNotManagedMessageDescription].
+receptiveAccountsorPorfolios detect:[: atr| atr hasRegistered: aTransaction] ifNone:[^false]."creo que no hay que tirar este error aca[self error: self class  accountNotManagedMessageDescription]."
 
 	
 ^ true! !
 
 
-!Portfolio methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:39'!
+!Portfolio methodsFor: 'transactions' stamp: 'AAAM 10/16/2018 16:08:26'!
 transactions 
 
-	self shouldBeImplemented ! !
 
-!Portfolio methodsFor: 'transactions' stamp: 'HernanWilkinson 7/13/2011 18:40'!
+	^receptiveAccountsorPorfolios  collect:[:atr| atr transactions].
+
+"	^"
+	"|transactionscollector|
+	
+	transactionscollector := OrderedCollection new.
+	collect:
+	self shouldBeImplemented "! !
+
+!Portfolio methodsFor: 'transactions' stamp: 'AAAM 10/16/2018 15:26:25'!
 transactionsOf: anAccount 
 
-	self shouldBeImplemented ! !
+	|theAccount|
+	
+	theAccount := receptiveAccountsorPorfolios detect:[: atr| atr doesManage: anAccount] ifNone:[^self error: self class  accountNotManagedMessageDescription].
+	
+	^theAccount transactions. ! !
 
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 00:43:24'!
-hasRegisteredInPortfolio: aTransiction.
-
-receptiveAccountsorPorfolios detect:[: atr| atr hasRegistered: aTransiction] ifNone:[^false].
-
-^true! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/15/2018 23:02:48'!
+!Portfolio methodsFor: 'nil' stamp: 'AAAM 10/15/2018 23:02:48'!
 initializeFor: leftAccount  and: rightAccount
 	
 	|leftobject rightobject|
@@ -232,6 +252,19 @@ initializeFor: leftAccount  and: rightAccount
 	
 	receptiveAccountsorPorfolios add: leftobject .
 	receptiveAccountsorPorfolios add: rightobject .! !
+
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 15:44:37'!
+doesManageInPortfolio: anAccount
+
+^ (self = anAccount) or: [self doesManage: anAccount] ! !
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 00:43:24'!
+hasRegisteredInPortfolio: aTransiction.
+
+receptiveAccountsorPorfolios detect:[: atr| atr hasRegistered: aTransiction] ifNone:[^false].
+
+^true! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -324,3 +357,9 @@ registerADeposit: anDepositTransaction
 registerAWithdraw: anWithdrawTransaction
 
 ^transactions  add: anWithdrawTransaction ! !
+
+
+!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 15:45:48'!
+doesManageInPortfolio: anAccount
+
+^ self doesManage: anAccount.! !
