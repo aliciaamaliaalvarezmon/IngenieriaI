@@ -218,18 +218,18 @@ receptiveAccountsorPorfolios detect:[: atr| atr hasRegistered: aTransaction] ifN
 ^ true! !
 
 
-!Portfolio methodsFor: 'transactions' stamp: 'AAAM 10/16/2018 16:08:26'!
+!Portfolio methodsFor: 'transactions' stamp: 'AAAM 10/18/2018 11:08:57'!
 transactions 
 
+ |transactionsarray|
 
-	^receptiveAccountsorPorfolios  collect:[:atr| atr transactions].
+ transactionsarray := OrderedCollection new.
 
-"	^"
-	"|transactionscollector|
+receptiveAccountsorPorfolios  collect:[:atr| transactionsarray addAllFirst:atr transactions]."Aca me quedan los array de transacciones."
 	
-	transactionscollector := OrderedCollection new.
-	collect:
-	self shouldBeImplemented "! !
+	
+^transactionsarray 
+! !
 
 !Portfolio methodsFor: 'transactions' stamp: 'AAAM 10/16/2018 15:26:25'!
 transactionsOf: anAccount 
@@ -241,17 +241,17 @@ transactionsOf: anAccount
 	^theAccount transactions. ! !
 
 
-!Portfolio methodsFor: 'nil' stamp: 'AAAM 10/15/2018 23:02:48'!
-initializeFor: leftAccount  and: rightAccount
-	
-	|leftobject rightobject|
-	receptiveAccountsorPorfolios := OrderedCollection new.
-	
-	leftobject := AccountorPortfolio with: leftAccount .	
-	rightobject := AccountorPortfolio with: rightAccount .
-	
-	receptiveAccountsorPorfolios add: leftobject .
-	receptiveAccountsorPorfolios add: rightobject .! !
+!Portfolio methodsFor: 'initializing' stamp: 'AAAM 10/18/2018 12:19:31'!
+initializeFor: aCollectionOfAccounts 
+
+
+(self isValida: aCollectionOfAccounts )  ifTrue:[
+	receptiveAccountsorPorfolios := aCollectionOfAccounts collect:[:atr| AccountorPortfolio with: atr ].
+].
+(self isValida: aCollectionOfAccounts )  ifFalse:[
+	^self error: self class accountAlreadyManagedErrorMessage .
+]. 
+! !
 
 
 !Portfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 15:44:37'!
@@ -266,21 +266,43 @@ receptiveAccountsorPorfolios detect:[: atr| atr hasRegistered: aTransiction] ifN
 
 ^true! !
 
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/18/2018 12:26:11'!
+isValida: aCollectionOfAccounts
+
+
+|helpingCollection|
+
+helpingCollection:= aCollectionOfAccounts collect:[:atr|self noestaRepetido: atr enColleccion: aCollectionOfAccounts ].
+
+
+
+^ helpingCollection size= aCollectionOfAccounts  size. ! !
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/18/2018 12:26:24'!
+noestaRepetido: element enColleccion: aCollectionOfAccountsWithoutElement 
+
+|vecesQueSeRepite|
+vecesQueSeRepite := aCollectionOfAccountsWithoutElement  collect: [:atr| atr = element].  
+
+^ vecesQueSeRepite  size =1.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Portfolio class' category: #'Portfolio-EjercicioSol'!
 Portfolio class
 	instanceVariableNames: ''!
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'AAAM 10/15/2018 22:14:33'!
+!Portfolio class methodsFor: 'instance creation' stamp: 'AAAM 10/18/2018 12:02:18'!
 with: leftAccount with: rightAccount
 
- ^ self new initializeFor: leftAccount  and: rightAccount.! !
 
-!Portfolio class methodsFor: 'instance creation' stamp: 'HernanWilkinson 7/13/2011 18:41'!
+
+ ^ self withAll: (Array with: leftAccount with: rightAccount)! !
+
+!Portfolio class methodsFor: 'instance creation' stamp: 'AAAM 10/18/2018 10:41:42'!
 withAll: aCollectionOfAccounts
 
-	self shouldBeImplemented ! !
+ ^ self new initializeFor: aCollectionOfAccounts .! !
 
 
 !Portfolio class methodsFor: 'error messages' stamp: 'HAW 5/8/2018 16:08:43'!
