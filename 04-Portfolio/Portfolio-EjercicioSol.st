@@ -241,18 +241,6 @@ transactionsOf: anAccount
 	^theAccount transactions. ! !
 
 
-!Portfolio methodsFor: 'initializing' stamp: 'AAAM 10/18/2018 12:19:31'!
-initializeFor: aCollectionOfAccounts 
-
-
-(self isValida: aCollectionOfAccounts )  ifTrue:[
-	receptiveAccountsorPorfolios := aCollectionOfAccounts collect:[:atr| AccountorPortfolio with: atr ].
-].
-(self isValida: aCollectionOfAccounts )  ifFalse:[
-	^self error: self class accountAlreadyManagedErrorMessage .
-]. 
-! !
-
 
 !Portfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/16/2018 15:44:37'!
 doesManageInPortfolio: anAccount
@@ -266,25 +254,34 @@ receptiveAccountsorPorfolios detect:[: atr| atr hasRegistered: aTransiction] ifN
 
 ^true! !
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/18/2018 12:26:11'!
-isValida: aCollectionOfAccounts
+
+!Portfolio methodsFor: 'initializing' stamp: 'AAAM 10/18/2018 15:20:02'!
+initializeFor: aCollectionOfAccounts 
+
+receptiveAccountsorPorfolios := OrderedCollection  new.
+
+"receptiveAccountsorPorfolios add: (AccountorPortfolio with: (aCollectionOfAccounts at: 1))."
 
 
-|helpingCollection|
-
-helpingCollection:= aCollectionOfAccounts collect:[:atr|self noestaRepetido: atr enColleccion: aCollectionOfAccounts ].
+aCollectionOfAccounts do:[:atr|self noSeRepite: (AccountorPortfolio with: atr) ].	
 
 
 
-^ helpingCollection size= aCollectionOfAccounts  size. ! !
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'AAAM 10/18/2018 12:26:24'!
-noestaRepetido: element enColleccion: aCollectionOfAccountsWithoutElement 
+	
+! !
 
-|vecesQueSeRepite|
-vecesQueSeRepite := aCollectionOfAccountsWithoutElement  collect: [:atr| atr = element].  
+!Portfolio methodsFor: 'initializing' stamp: 'AAAM 10/18/2018 15:13:35'!
+noSeRepite: anAccountorPortfolio. 
 
-^ vecesQueSeRepite  size =1.! !
+receptiveAccountsorPorfolios  detect:[:atr| atr == anAccountorPortfolio ] ifNone:[receptiveAccountsorPorfolios add: anAccountorPortfolio . ^self].
+
+^self error: self class accountAlreadyManagedErrorMessage .
+
+
+
+	
+! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
