@@ -16,25 +16,10 @@ value
 	self subclassResponsibility ! !
 
 
-!AccountTransaction methodsFor: 'as yet unclassified' stamp: 'n 10/20/2018 17:20:51'!
-investmentEarnings
-
-^0.! !
-
-!AccountTransaction methodsFor: 'as yet unclassified' stamp: 'n 10/20/2018 17:20:37'!
-investmentNet
-
-^0! !
-
 !AccountTransaction methodsFor: 'as yet unclassified' stamp: 'AAAM 10/19/2018 23:32:36'!
 printTransaction
 
 ^ self subclassResponsibility ! !
-
-!AccountTransaction methodsFor: 'as yet unclassified' stamp: 'n 10/20/2018 17:17:49'!
-transferNet
-
-^0. ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -528,11 +513,13 @@ investmentEarnings
 
 ^transactions inject:0 into:[:parcialNet :movements| parcialNet + movements investmentEarnings].! !
 
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 01:56:58'!
+!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'n 10/20/2018 19:16:55'!
 investmentNet
+	|investments|
+	
+	investments := transactions select: [:anElement | anElement class = InvestmentDeposit ].
 
-
-^transactions inject:0 into:[:parcialNet :movements| parcialNet + movements investmentNet].! !
+	^investments inject:0 into:[:parcialNet :movements| parcialNet + movements investmentNet].! !
 
 !ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'AAAM 10/19/2018 22:06:11'!
 summaryLines
@@ -545,11 +532,13 @@ transactions do:[:anLIne  | Summary add: anLIne printTransaction.].
 
 ^Summary! !
 
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'n 10/20/2018 17:05:17'!
+!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'n 10/20/2018 19:15:11'!
 transferNet
-
-
-^transactions inject:0 into:[:parcialNet :movements| parcialNet + movements transferNet]. ! !
+	|transfers|
+	
+	transfers := transactions select: [:anElement | anElement class = TransferWithdraw or: anElement class = TransferDeposit ].
+	
+	^transfers inject:0 into:[:parcialNet :movements| parcialNet + movements transferNet]. ! !
 
 
 !classDefinition: #Transfer category: #'PortfolioTreePrinter-Ejercicio'!
