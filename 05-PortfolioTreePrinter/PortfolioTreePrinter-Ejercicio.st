@@ -16,20 +16,25 @@ value
 	self subclassResponsibility ! !
 
 
-!AccountTransaction methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 02:17:10'!
+!AccountTransaction methodsFor: 'as yet unclassified' stamp: 'n 10/20/2018 17:20:51'!
 investmentEarnings
 
-^ self subclassResponsibility ! !
+^0.! !
+
+!AccountTransaction methodsFor: 'as yet unclassified' stamp: 'n 10/20/2018 17:20:37'!
+investmentNet
+
+^0! !
 
 !AccountTransaction methodsFor: 'as yet unclassified' stamp: 'AAAM 10/19/2018 23:32:36'!
 printTransaction
 
 ^ self subclassResponsibility ! !
 
-!AccountTransaction methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 01:53:08'!
+!AccountTransaction methodsFor: 'as yet unclassified' stamp: 'n 10/20/2018 17:17:49'!
 transferNet
 
-^self subclassResponsibility ! !
+^0. ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -72,26 +77,11 @@ affectBalance: currentBalance
 
 	^currentBalance + self value! !
 
-!Deposit methodsFor: 'value' stamp: 'AAAM 10/19/2018 23:53:47'!
-transferNet
-
-	^ 0! !
-
 !Deposit methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:38'!
 value
 
 	^ value! !
 
-
-!Deposit methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 02:16:39'!
-investmentEarnings
-
-^ 0! !
-
-!Deposit methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 01:57:34'!
-investmentNet
-
-^0! !
 
 !Deposit methodsFor: 'as yet unclassified' stamp: 'AAAM 10/19/2018 23:32:46'!
 printTransaction
@@ -157,11 +147,6 @@ printTransaction
 
 ^'Plazo fijo por ',self value printString, ' durante ', self duration printString, ' dias a una tna de ', self interest printString,'%'. ! !
 
-!InvestmentDeposit methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 01:53:27'!
-transferNet
-
-^0! !
-
 !InvestmentDeposit methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 01:38:22'!
 value
 
@@ -204,20 +189,15 @@ value
 	^transfer value! !
 
 
-!TransferLeg methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 02:16:52'!
-investmentEarnings
+!TransferLeg methodsFor: 'as yet unclassified' stamp: 'n 10/20/2018 16:40:56'!
+printTransaction
 
-^ 0! !
+^'Transferencia por ',(self affectBalance: 0) printString.! !
 
-!TransferLeg methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 01:57:54'!
-investmentNet
-
-^0! !
-
-!TransferLeg methodsFor: 'as yet unclassified' stamp: 'AAAM 10/19/2018 23:54:13'!
+!TransferLeg methodsFor: 'as yet unclassified' stamp: 'n 10/20/2018 17:07:25'!
 transferNet
 
-^ self subclassResponsibility ! !
+	^(self affectBalance: 0).! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -244,16 +224,6 @@ affectBalance: currentBalance
 	^currentBalance + self value! !
 
 
-!TransferDeposit methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 00:03:06'!
-printTransaction
-
-^'Transferencia por ',self transferNet printString  ! !
-
-!TransferDeposit methodsFor: 'as yet unclassified' stamp: 'AAAM 10/19/2018 23:53:38'!
-transferNet
-
-^ self value! !
-
 
 !classDefinition: #TransferWithdraw category: #'PortfolioTreePrinter-Ejercicio'!
 TransferLeg subclass: #TransferWithdraw
@@ -267,16 +237,6 @@ affectBalance: currentBalance
 
 	^currentBalance - self value! !
 
-
-!TransferWithdraw methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 00:03:21'!
-printTransaction
-
-^'Transferencia por ',self transferNet printString  ! !
-
-!TransferWithdraw methodsFor: 'as yet unclassified' stamp: 'AAAM 10/19/2018 23:53:17'!
-transferNet
-
-^self value * -1! !
 
 
 !classDefinition: #Withdraw category: #'PortfolioTreePrinter-Ejercicio'!
@@ -303,25 +263,10 @@ value
 	^ value ! !
 
 
-!Withdraw methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 02:16:59'!
-investmentEarnings
-
-^ 0! !
-
-!Withdraw methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 01:58:51'!
-investmentNet
-
-^0! !
-
 !Withdraw methodsFor: 'as yet unclassified' stamp: 'AAAM 10/19/2018 23:33:05'!
 printTransaction
 
 ^'Extraccion por ',self value printString  ! !
-
-!Withdraw methodsFor: 'as yet unclassified' stamp: 'AAAM 10/19/2018 23:52:22'!
-transferNet
-
-^ 0! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -600,11 +545,11 @@ transactions do:[:anLIne  | Summary add: anLIne printTransaction.].
 
 ^Summary! !
 
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'AAAM 10/20/2018 01:57:05'!
+!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'n 10/20/2018 17:05:17'!
 transferNet
 
 
-^transactions inject:0 into:[:parcialNet :movements| parcialNet + movements transferNet].! !
+^transactions inject:0 into:[:parcialNet :movements| parcialNet + movements transferNet]. ! !
 
 
 !classDefinition: #Transfer category: #'PortfolioTreePrinter-Ejercicio'!
