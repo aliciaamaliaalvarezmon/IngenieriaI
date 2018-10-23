@@ -528,25 +528,25 @@ test29ReversePortfolioTreePrinterPrintsTheCompositeStartingFromTheLeaves
 	! !
 
 
-!PortfolioTest methodsFor: 'test support' stamp: 'AAAM 10/19/2018 22:07:11'!
+!PortfolioTest methodsFor: 'test support' stamp: 'na 10/22/2018 19:27:50'!
 accountSummaryLinesOf: aReceptiveAccount 
 	
-	^aReceptiveAccount summaryLines.! !
+	^(AccountSummaryLines for: aReceptiveAccount ) value.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'AAAM 10/20/2018 00:09:12'!
+!PortfolioTest methodsFor: 'test support' stamp: 'na 10/22/2018 19:49:27'!
 accountTransferNetOf: aReceptiveAccount 
 	
-	^aReceptiveAccount transferNet.! !
+	^(AccountTransferNet for: aReceptiveAccount ) value.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'AAAM 10/20/2018 02:09:34'!
+!PortfolioTest methodsFor: 'test support' stamp: 'na 10/22/2018 20:10:57'!
 investmentEarningsOf: aReceptiveAccount 
 	
-	^ aReceptiveAccount investmentEarnings ! !
+	^(AccountInvestmentEarnings for: aReceptiveAccount ) value.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'AAAM 10/20/2018 01:56:13'!
+!PortfolioTest methodsFor: 'test support' stamp: 'na 10/22/2018 19:52:57'!
 investmentNetOf: aReceptiveAccount 
 	
-	^aReceptiveAccount  investmentNet! !
+	^(AccountInvestmentNet for: aReceptiveAccount ) value.! !
 
 !PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
 portofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
@@ -563,7 +563,7 @@ registerTransferOf: anAmount from: fromAccount to: toAccount
 
 	^ Transfer register: anAmount from: fromAccount to: toAccount.! !
 
-!PortfolioTest methodsFor: 'test support' stamp: 'HernanWilkinson 9/6/2016 19:43'!
+!PortfolioTest methodsFor: 'test support' stamp: 'na 10/22/2018 20:23:44'!
 reversePortofolioTreeOf: aPortfolio namingAccountWith: aDictionary 
 	
-	self shouldBeImplemented ! !
+	^0! !
