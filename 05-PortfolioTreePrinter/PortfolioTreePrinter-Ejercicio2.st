@@ -173,7 +173,6 @@ value
 
 	^transfer value! !
 
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'TransferLeg class' category: #'PortfolioTreePrinter-Ejercicio2'!
@@ -512,18 +511,24 @@ visitAWithdraw: aWithdraw
 
 !classDefinition: #PortfolioTree category: #'PortfolioTreePrinter-Ejercicio2'!
 Object subclass: #PortfolioTree
-	instanceVariableNames: 'diccionario portfolio arbol'
+	instanceVariableNames: 'diccionario portfolio arbol altura'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'PortfolioTreePrinter-Ejercicio2'!
 
-!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'na 10/22/2018 20:26:32'!
+!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'n 10/23/2018 01:10:59'!
 initializeFor: aPortfolio with: aDictonary
 
 portfolio := aPortfolio .
 diccionario := aDictonary .
+altura := 0.
 
 ! !
+
+!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'n 10/23/2018 08:00:54'!
+reverseValue
+
+	^(self value) reverse .! !
 
 !PortfolioTree methodsFor: 'as yet unclassified' stamp: 'na 10/22/2018 21:08:25'!
 value
@@ -536,25 +541,49 @@ portfolio  unVisitador: self.
 
 ^arbol! !
 
-!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'na 10/22/2018 20:39:38'!
+!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'n 10/23/2018 07:33:15'!
 visitAPortfolio: aPortfolio
 
-	! !
+	altura := altura +1.
+	arbol add: ((String new: altura withAll: $ ) , (diccionario  at: aPortfolio)).
+	
+	aPortfolio unVisitador: self.
+	
+	altura := altura -1.
+	
+! !
 
-!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'na 10/22/2018 20:41:35'!
+!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'n 10/23/2018 07:32:42'!
 visitAReceiveAccount: aReceiveAccount
-	! !
+
+	arbol add: ((String new: (altura +1) withAll: $ ), (diccionario  at: aReceiveAccount) ).
+	
+
+		! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'PortfolioTree class' category: #'PortfolioTreePrinter-Ejercicio2'!
 PortfolioTree class
-	instanceVariableNames: ''!
+	instanceVariableNames: 'altura'!
 
 !PortfolioTree class methodsFor: 'as yet unclassified' stamp: 'na 10/22/2018 20:24:49'!
 for: aPortfolio with: aDictonary
 
 	^self new initializeFor: aPortfolio with: aDictonary .! !
+
+
+!classDefinition: #ReversePortfolioTree category: #'PortfolioTreePrinter-Ejercicio2'!
+PortfolioTree subclass: #ReversePortfolioTree
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'PortfolioTreePrinter-Ejercicio2'!
+
+!ReversePortfolioTree methodsFor: 'as yet unclassified' stamp: 'n 10/23/2018 08:05:12'!
+value
+
+	^super value reverse.! !
 
 
 !classDefinition: #SummarizingAccount category: #'PortfolioTreePrinter-Ejercicio2'!
@@ -638,12 +667,10 @@ initializeWithAll: aCollectionOfAccounts
 	accounts := aCollectionOfAccounts   ! !
 
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 'na 10/22/2018 21:08:57'!
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'n 10/23/2018 00:58:55'!
 accept: aVisitator
 
-	aVisitator visitAPortfolio: self.
-	
-	self unVisitador: aVisitator.! !
+	aVisitator visitAPortfolio: self.! !
 
 !Portfolio methodsFor: 'as yet unclassified' stamp: 'na 10/22/2018 21:08:34'!
 unVisitador: aVisitator
