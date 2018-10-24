@@ -530,6 +530,11 @@ reverseValue
 
 	^(self value) reverse .! !
 
+!PortfolioTree methodsFor: 'as yet unclassified' stamp: 'n 10/23/2018 23:14:50'!
+rvalue
+
+	^(self value) reverse.! !
+
 !PortfolioTree methodsFor: 'as yet unclassified' stamp: 'na 10/22/2018 21:08:25'!
 value
 
@@ -571,19 +576,6 @@ PortfolioTree class
 for: aPortfolio with: aDictonary
 
 	^self new initializeFor: aPortfolio with: aDictonary .! !
-
-
-!classDefinition: #ReversePortfolioTree category: #'PortfolioTreePrinter-Ejercicio2'!
-PortfolioTree subclass: #ReversePortfolioTree
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'PortfolioTreePrinter-Ejercicio2'!
-
-!ReversePortfolioTree methodsFor: 'as yet unclassified' stamp: 'n 10/23/2018 08:05:12'!
-value
-
-	^super value reverse.! !
 
 
 !classDefinition: #SummarizingAccount category: #'PortfolioTreePrinter-Ejercicio2'!
