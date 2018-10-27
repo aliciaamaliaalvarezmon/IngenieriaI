@@ -24,7 +24,6 @@ lines
 	
 	^(OperationParalizer paralizeThis: [(AccountSummaryWithInvestmentEarnings for: account) lines] and: ['Inversiones por ',  (InvestmentNetVisitor for: account) value printString]) value.! !
 
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'AccountSummaryWithAllInvestmentInformation class' category: #'PortfolioTimeConsuming-Ejercicio'!
@@ -50,7 +49,7 @@ initializeFor: aReceptiveAccount
 	account := aReceptiveAccount ! !
 
 
-!AccountSummaryWithInvestmentEarnings methodsFor: 'evaluating' stamp: 'n 10/27/2018 14:41:18'!
+!AccountSummaryWithInvestmentEarnings methodsFor: 'evaluating' stamp: 'AAAM 10/27/2018 19:46:10'!
 lines 
 
 	"| lines investmentEarnings |
@@ -62,7 +61,6 @@ lines
 	 ^ lines"
 	
 	^(OperationParalizer paralizeThis: [(AccountSummary for: account) lines] and: ['Ganancias por ', (InvestmentEarningVisitor for: account ) value printString]) value. ! !
-
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -685,13 +683,35 @@ Object subclass: #OperationParalizer
 	poolDictionaries: ''
 	category: 'PortfolioTimeConsuming-Ejercicio'!
 
-!OperationParalizer methodsFor: 'as yet unclassified' stamp: 'n 10/27/2018 14:38:26'!
+!OperationParalizer methodsFor: 'initialize' stamp: 'AAAM 10/27/2018 20:33:28'!
 initializeWith: aBlock and: anotherBlock
 
 	block1 := aBlock.
 	block2 := anotherBlock.! !
 
-!OperationParalizer methodsFor: 'as yet unclassified' stamp: 'n 10/27/2018 15:09:28'!
+
+!OperationParalizer methodsFor: 'evaluating' stamp: 'AAAM 10/27/2018 20:30:47'!
+raiseBlock1Signal: aSemaphore
+
+
+
+	^[block1 value] ensure: [aSemaphore signal ]! !
+
+!OperationParalizer methodsFor: 'evaluating' stamp: 'AAAM 10/27/2018 20:30:05'!
+raiseBlock2Signal: aSemaphore
+
+
+
+	^[block2 value] ensure: [aSemaphore signal ]! !
+
+!OperationParalizer methodsFor: 'evaluating' stamp: 'AAAM 10/27/2018 20:39:35'!
+raiseSignal: aSemaphore toBlock: aBlock
+
+
+
+	^[aBlock value] ensure: [aSemaphore signal ]! !
+
+!OperationParalizer methodsFor: 'evaluating' stamp: 'AAAM 10/27/2018 20:41:37'!
 value
 
 	|lines1 lines2 semaphore|
@@ -700,8 +720,8 @@ value
 	lines2 := OrderedCollection new.
 	semaphore := Semaphore new.
 	
-	[[lines2 add: block2 value] ensure: [semaphore signal ]] fork.
-	[[lines1 addAllFirst: block1 value] ensure: [semaphore signal]] fork. "Esto capaz esta mal y haya que cambiarlo"
+	 [lines2 add: (self raiseBlock2Signal: semaphore)] fork .
+	 [lines1 addAllLast:(self raiseBlock1Signal: semaphore)] fork. "Esto capaz esta mal y haya que cambiarlo"
 	
 	semaphore wait.
 	semaphore wait.
