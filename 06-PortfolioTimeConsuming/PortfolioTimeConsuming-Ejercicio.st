@@ -691,16 +691,20 @@ initializeWith: aBlock and: anotherBlock
 	block1 := aBlock.
 	block2 := anotherBlock.! !
 
-!OperationParalizer methodsFor: 'as yet unclassified' stamp: 'n 10/27/2018 14:51:47'!
+!OperationParalizer methodsFor: 'as yet unclassified' stamp: 'n 10/27/2018 15:09:28'!
 value
 
-	|lines1 lines2|
+	|lines1 lines2 semaphore|
 	
 	lines1 := OrderedCollection new.
 	lines2 := OrderedCollection new.
+	semaphore := Semaphore new.
 	
+	[[lines2 add: block2 value] ensure: [semaphore signal ]] fork.
+	[[lines1 addAllFirst: block1 value] ensure: [semaphore signal]] fork. "Esto capaz esta mal y haya que cambiarlo"
 	
-	[[lines2 add: block2 value] fork. lines1 addAllFirst: block1 value] forkAndWait. "Esto capaz esta mal y haya que cambiarlo"
+	semaphore wait.
+	semaphore wait.
 	
 	lines1 addAllLast: lines2.
 	
