@@ -11,16 +11,10 @@ initializeFor: aReceptiveAccount
 	account := aReceptiveAccount ! !
 
 
-!AccountSummaryWithAllInvestmentInformation methodsFor: 'evaluating' stamp: 'n 10/27/2018 14:44:45'!
+!AccountSummaryWithAllInvestmentInformation methodsFor: 'evaluating' stamp: 'AAAM 11/1/2018 16:43:37'!
 lines 
 
-	"| lines investmentEarnings |
 	
-	investmentEarnings := InvestmentNetVisitor for: account.
-	lines := (AccountSummaryWithInvestmentEarnings for: account) lines.
-	lines add: 'Inversiones por ', investmentEarnings value printString.
-	
-	 ^ lines"
 	
 	^(OperationParalizer paralizeThis: [(AccountSummaryWithInvestmentEarnings for: account) lines] and: ['Inversiones por ',  (InvestmentNetVisitor for: account) value printString]) value.! !
 
@@ -49,16 +43,10 @@ initializeFor: aReceptiveAccount
 	account := aReceptiveAccount ! !
 
 
-!AccountSummaryWithInvestmentEarnings methodsFor: 'evaluating' stamp: 'AAAM 10/27/2018 19:46:10'!
+!AccountSummaryWithInvestmentEarnings methodsFor: 'evaluating' stamp: 'AAAM 11/1/2018 16:43:25'!
 lines 
 
-	"| lines investmentEarnings |
-	
-	investmentEarnings := InvestmentEarningVisitor for: account.
-	lines := (AccountSummary for: account) lines.
-	lines add: 'Ganancias por ', investmentEarnings value printString.
-	
-	 ^ lines"
+
 	
 	^(OperationParalizer paralizeThis: [(AccountSummary for: account) lines] and: ['Ganancias por ', (InvestmentEarningVisitor for: account ) value printString]) value. ! !
 
@@ -711,17 +699,19 @@ raiseSignal: aSemaphore toBlock: aBlock
 
 	^[aBlock value] ensure: [aSemaphore signal ]! !
 
-!OperationParalizer methodsFor: 'evaluating' stamp: 'AAAM 10/27/2018 20:41:37'!
+!OperationParalizer methodsFor: 'evaluating' stamp: 'AAAM 11/1/2018 16:15:03'!
 value
 
-	|lines1 lines2 semaphore|
+	|lines1 lines2 semaphore |
+	
+	
 	
 	lines1 := OrderedCollection new.
 	lines2 := OrderedCollection new.
 	semaphore := Semaphore new.
 	
+	 [lines1 addAllLast:(self raiseBlock1Signal: semaphore)] fork. 	
 	 [lines2 add: (self raiseBlock2Signal: semaphore)] fork .
-	 [lines1 addAllLast:(self raiseBlock1Signal: semaphore)] fork. "Esto capaz esta mal y haya que cambiarlo"
 	
 	semaphore wait.
 	semaphore wait.
