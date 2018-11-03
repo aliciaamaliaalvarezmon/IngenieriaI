@@ -1,6 +1,6 @@
 !classDefinition: #TerniLapilli category: #'TerniLapilli-Ejercicio'!
 Object subclass: #TerniLapilli
-	instanceVariableNames: 'Ostones Xstones turn hasEnded winner'
+	instanceVariableNames: 'Ostones Xstones turn hasEnded'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
@@ -9,6 +9,49 @@ Object subclass: #TerniLapilli
 OStonesinPlay
 	
 	^ Ostones  size! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 19:40:32'!
+PlayerFormedACoulmnWithTheRocks: triadOfStones
+	
+	^(triadOfStones count: [:positions| positions x = (triadOfStones at: 1) x ]) = 3
+! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 19:45:55'!
+PlayerFormedADownDiagonalWithTheRocks: triadOfStones
+	
+^(triadOfStones count: [:positions| (positions = (1@3)) or:[positions = (2@2) or:[ positions = (3@1)]] ]) = 3
+	
+! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 19:40:05'!
+PlayerFormedAFileWithTheRocks: triadOfStones
+	
+	^(triadOfStones count: [:positions| positions y = (triadOfStones at: 1) y ]) = 3
+! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 19:43:18'!
+PlayerFormedAnUpDiagonalWithTheRocks: triadOfStones
+	
+	^(triadOfStones count: [:positions| positions x = positions y ]) = 3
+! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 20:08:08'!
+PlayerOHasNotWon
+
+	(self PlayerFormedAFileWithTheRocks: Ostones ) ifTrue:[  ^self playerWon: $O ].
+	(self PlayerFormedACoulmnWithTheRocks: Ostones ) ifTrue:[  ^self playerWon: $O ].
+	(self PlayerFormedAnUpDiagonalWithTheRocks: Ostones ) ifTrue:[ ^self playerWon: $O].
+	(self PlayerFormedADownDiagonalWithTheRocks: Ostones ) ifTrue:[  ^self playerWon: $O].	
+	^turn:= $X! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 20:08:04'!
+PlayerXHasNotWon
+
+	(self PlayerFormedAFileWithTheRocks: Xstones ) ifTrue:[  ^self playerWon: $O ].
+	(self PlayerFormedACoulmnWithTheRocks: Xstones ) ifTrue:[  ^self playerWon: $O ].
+	(self PlayerFormedAnUpDiagonalWithTheRocks: Xstones ) ifTrue:[ ^self playerWon: $O].
+	(self PlayerFormedADownDiagonalWithTheRocks: Xstones ) ifTrue:[  ^self playerWon: $O].	
+	^turn:= $O! !
 
 !TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 04:15:09'!
 ThereIsNotAnotherRockInThatPosition: aPoint 
@@ -56,40 +99,58 @@ Ostones := OrderedCollection  new.
 turn:= $X.
 hasEnded:= false.! !
 
-!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 05:23:52'!
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 20:24:01'!
 playStone0: aPoint 
 
+	hasEnded ifTrue:[^self error: self class CannotPlayIfGameHasEndedErrorMessage ].
 	self isMyTurn: $O.
 	self ThereIsNotAnotherRockInThatPosition: aPoint .
 	Ostones size < 3 ifFalse:[^self error: self class PlayerCannotPutMoreThanThreeStonesErrorMessage ].
 	Ostones  add: aPoint.
-	((Ostones count: [:positions| positions y = (Ostones at: 1) y ]) = 3) ifTrue:[ hasEnded := true. winner := $X].
 	
-	turn:= $X.! !
+	^self PlayerOHasNotWon.
 
-!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 05:23:22'!
+! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 20:22:43'!
 playStoneX: aPoint 
 	
+	hasEnded ifTrue:[^self error: self class CannotPlayIfGameHasEndedErrorMessage ].
 	self isMyTurn: $X.
 	self ThereIsNotAnotherRockInThatPosition: aPoint .
 	Xstones size < 3 ifFalse:[^self error: self class PlayerCannotPutMoreThanThreeStonesErrorMessage ].
 
 	Xstones add: aPoint.
 	
-	((Xstones count: [:positions| positions y = (Xstones at: 1) y ]) = 3) ifTrue:[ hasEnded := true. winner := $X].
-	
-	turn:= $O.! !
+	^ self PlayerXHasNotWon.
+! !
 
-!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 05:03:14'!
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 19:24:24'!
+playerWon: aPlayer
+
+	hasEnded := true. 
+	^turn
+! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 20:15:47'!
 winner
 
-^ winner ! !
+self hasAWinner ifFalse:[^self error: self class CannotAskForWinnerOnAnGameThatHasNotEndedErrorMessage ].
+^ turn! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'TerniLapilli class' category: #'TerniLapilli-Ejercicio'!
 TerniLapilli class
 	instanceVariableNames: ''!
+
+!TerniLapilli class methodsFor: 'error handling' stamp: 'AAAM 11/3/2018 20:14:56'!
+CannotAskForWinnerOnAnGameThatHasNotEndedErrorMessage
+	^ 'There is not winner because the game has not ended yet'! !
+
+!TerniLapilli class methodsFor: 'error handling' stamp: 'AAAM 11/3/2018 20:21:31'!
+CannotPlayIfGameHasEndedErrorMessage
+	^'This game has ended, so you cannot play'! !
 
 !TerniLapilli class methodsFor: 'error handling' stamp: 'AAAM 11/3/2018 01:44:57'!
 PlayerCannotPlayOutOfTurnErrorMessage

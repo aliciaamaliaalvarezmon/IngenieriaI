@@ -137,8 +137,8 @@ self shouldFail: [terni playStoneX: 3@2. ] withDescription: TerniLapilli  Player
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 04:46:00'!
-test09
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 18:47:36'!
+test09PlayerWInsWIthAFIle
 
 |terni|
 
@@ -154,6 +154,102 @@ terni playStoneX: 3@1.
 self assert: terni hasAWinner.
 self assert: terni winner = $X.
 
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 18:50:13'!
+test10PlayerWInsWIthAColunm
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni playStoneX: 1@1.
+terni playStone0: 2@1.
+terni playStoneX: 1@2.
+terni playStone0: 2@2.
+terni playStoneX: 1@3.
+
+
+self assert: terni hasAWinner.
+self assert: terni winner = $X.
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 18:54:55'!
+test11PlayerWInsWIthAnUpDiagonal
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni playStoneX: 1@1.
+terni playStone0: 2@1.
+terni playStoneX: 2@2.
+terni playStone0: 2@3.
+terni playStoneX: 3@3.
+
+
+self assert: terni hasAWinner.
+self assert: terni winner = $X.
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 18:56:13'!
+test12PlayerWInsWIthAnDownDiagonal
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni playStoneX: 3@1.
+terni playStone0: 2@1.
+terni playStoneX: 2@2.
+terni playStone0: 2@3.
+terni playStoneX: 1@3.
+
+
+self assert: terni hasAWinner.
+self assert: terni winner = $X.
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 20:12:22'!
+test13CannotAskWinnerIfGameHasNotEnded
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni playStoneX: 3@1.
+
+
+self deny: terni hasAWinner.
+self shouldFail: [terni winner ] withDescription: TerniLapilli  CannotAskForWinnerOnAnGameThatHasNotEndedErrorMessage. 
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 20:20:25'!
+test14CannotPlayIfGameHasEnded
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni playStoneX: 3@1.
+terni playStone0: 2@1.
+terni playStoneX: 2@2.
+terni playStone0: 2@3.
+terni playStoneX: 1@3.
+
+
+self assert: terni hasAWinner.
+self assert: terni winner = $X.
+self shouldFail: [terni playStone0: 1@1] withDescription: TerniLapilli  CannotPlayIfGameHasEndedErrorMessage. 
 
 ! !
 
