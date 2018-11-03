@@ -55,8 +55,8 @@ self assert: terni OStonesinPlay = 1.
 self assert: (terni ThereisAnXStoneIn: 1@1 ).
 self assert: (terni ThereisAn0StoneIn: 1@2 ).! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 01:49:34'!
-test04
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 03:31:02'!
+test04PlayerOShouldNotPlayOutsideTurn
 
 |terni|
 
@@ -67,6 +67,92 @@ terni playStone0: 1@2.
 
 
 self shouldFail: [terni playStone0: 1@3. ] withDescription: TerniLapilli  PlayerCannotPlayOutOfTurnErrorMessage. 
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 04:03:23'!
+test05PlayerXShouldNotPlayOutsideTurn
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni playStoneX: 1@1.
+
+
+
+self shouldFail: [terni playStoneX: 1@2. ] withDescription: TerniLapilli  PlayerCannotPlayOutOfTurnErrorMessage. 
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 04:21:04'!
+test06
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni playStoneX: 1@1.
+terni playStone0: 1@2.
+
+
+self shouldFail: [terni playStoneX: 1@2. ] withDescription: TerniLapilli  PlayerCannotPutAStoneWhereThereIsOneErrorMessage . 
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 04:14:21'!
+test07
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni playStoneX: 1@1.
+terni playStone0: 1@2.
+
+
+self shouldFail: [terni playStoneX: 1@1. ] withDescription: TerniLapilli  PlayerCannotPutAStoneWhereThereIsOneErrorMessage . 
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 04:20:35'!
+test08
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni playStoneX: 1@1.
+terni playStone0: 1@2.
+terni playStoneX: 1@3.
+terni playStone0: 2@2.
+terni playStoneX: 3@3.
+terni playStone0: 2@1.
+self shouldFail: [terni playStoneX: 3@2. ] withDescription: TerniLapilli  PlayerCannotPutMoreThanThreeStonesErrorMessage. 
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 04:46:00'!
+test09
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni playStoneX: 1@1.
+terni playStone0: 1@2.
+terni playStoneX: 2@1.
+terni playStone0: 2@2.
+terni playStoneX: 3@1.
+
+
+self assert: terni hasAWinner.
+self assert: terni winner = $X.
 
 
 ! !
