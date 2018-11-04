@@ -80,6 +80,10 @@ XStonesinPlay
 	
 	^Xstones size! !
 
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/4/2018 00:12:52'!
+XstonesHas: aPoint 
+	^ Xstones includes: aPoint .! !
+
 !TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 04:49:17'!
 hasAWinner
 	^ hasEnded.! !
@@ -90,6 +94,44 @@ isMyTurn: aString.
 	turn = aString ifFalse:[	^self error: self class PlayerCannotPlayOutOfTurnErrorMessage ].
 	! !
 
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 23:31:53'!
+isWithinBorders: aPoint.
+
+	
+	((aPoint x between:  1 and: 3) and: (aPoint y between: 1 and:3) )ifFalse:[^self error: self class PlayerCannotPlayOutOfBordersErrorMessage ].   
+	
+! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/4/2018 02:18:31'!
+moveStoneO: aPoint to: aPoint2 
+
+	hasEnded ifTrue:[^self error: self class CannotPlayIfGameHasEndedErrorMessage ].
+	Ostones size < 3 ifTrue:[^ self error: self class CannotMoveStoneUntilAllArePlayedErrorMessage ] .
+	(Ostones includes: aPoint) ifFalse:[^self error: self class PlayerCannotMoveFromInvalidPosition ].
+	((aPoint dist: aPoint2) = 1) ifFalse:[^self error: self  class PlayerCannotMoveToInvalidPosition ].
+	(Ostones includes: aPoint2) ifTrue:[^self error: self  class PlayerCannotMoveToInvalidPosition ].
+	(Xstones includes: aPoint2) ifTrue:[^self error: self  class PlayerCannotMoveToInvalidPosition ].
+	Ostones add: aPoint2.
+	Ostones remove: aPoint.
+	
+	^ self PlayerOHasNotWon.
+! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/4/2018 02:18:20'!
+moveStoneX: aPoint to: aPoint2 
+
+	hasEnded ifTrue:[^self error: self class CannotPlayIfGameHasEndedErrorMessage ].
+	Xstones size < 3 ifTrue:[^ self error: self class CannotMoveStoneUntilAllArePlayedErrorMessage ] .
+	(Xstones includes: aPoint) ifFalse:[^self error: self class PlayerCannotMoveFromInvalidPosition ].
+	((aPoint dist: aPoint2) = 1) ifFalse:[^self error: self  class PlayerCannotMoveToInvalidPosition ].
+	(Ostones includes: aPoint2) ifTrue:[^self error: self  class PlayerCannotMoveToInvalidPosition ].
+	(Xstones includes: aPoint2) ifTrue:[^self error: self  class PlayerCannotMoveToInvalidPosition ].
+	Xstones add: aPoint2.
+	Xstones remove: aPoint.
+	
+	^ self PlayerXHasNotWon.
+! !
+
 !TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 04:48:34'!
 newGame
 
@@ -99,11 +141,12 @@ Ostones := OrderedCollection  new.
 turn:= $X.
 hasEnded:= false.! !
 
-!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 20:24:01'!
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 23:32:30'!
 playStone0: aPoint 
 
 	hasEnded ifTrue:[^self error: self class CannotPlayIfGameHasEndedErrorMessage ].
 	self isMyTurn: $O.
+	self isWithinBorders: aPoint.
 	self ThereIsNotAnotherRockInThatPosition: aPoint .
 	Ostones size < 3 ifFalse:[^self error: self class PlayerCannotPutMoreThanThreeStonesErrorMessage ].
 	Ostones  add: aPoint.
@@ -112,11 +155,12 @@ playStone0: aPoint
 
 ! !
 
-!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 20:22:43'!
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/4/2018 02:17:30'!
 playStoneX: aPoint 
 	
 	hasEnded ifTrue:[^self error: self class CannotPlayIfGameHasEndedErrorMessage ].
-	self isMyTurn: $X.
+	self isMyTurn: $X.	
+	self isWithinBorders: aPoint.
 	self ThereIsNotAnotherRockInThatPosition: aPoint .
 	Xstones size < 3 ifFalse:[^self error: self class PlayerCannotPutMoreThanThreeStonesErrorMessage ].
 
@@ -148,9 +192,25 @@ TerniLapilli class
 CannotAskForWinnerOnAnGameThatHasNotEndedErrorMessage
 	^ 'There is not winner because the game has not ended yet'! !
 
+!TerniLapilli class methodsFor: 'error handling' stamp: 'AAAM 11/4/2018 00:17:46'!
+CannotMoveStoneUntilAllArePlayedErrorMessage
+	^'Cannot move stones until all are played in the board'! !
+
 !TerniLapilli class methodsFor: 'error handling' stamp: 'AAAM 11/3/2018 20:21:31'!
 CannotPlayIfGameHasEndedErrorMessage
 	^'This game has ended, so you cannot play'! !
+
+!TerniLapilli class methodsFor: 'error handling' stamp: 'AAAM 11/4/2018 00:52:31'!
+PlayerCannotMoveFromInvalidPosition
+	^'There is not a player stone in that position '! !
+
+!TerniLapilli class methodsFor: 'error handling' stamp: 'AAAM 11/4/2018 01:39:42'!
+PlayerCannotMoveToInvalidPosition
+	^'It is no a valid position to move this rock'! !
+
+!TerniLapilli class methodsFor: 'error handling' stamp: 'AAAM 11/3/2018 23:22:37'!
+PlayerCannotPlayOutOfBordersErrorMessage
+	^'Position out of borders'! !
 
 !TerniLapilli class methodsFor: 'error handling' stamp: 'AAAM 11/3/2018 01:44:57'!
 PlayerCannotPlayOutOfTurnErrorMessage
