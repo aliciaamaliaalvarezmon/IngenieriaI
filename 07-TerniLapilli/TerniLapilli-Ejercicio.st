@@ -220,6 +220,57 @@ turn
 
 	^turn.! !
 
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:47:02'!
+AskingForWinnerOnAnUnfinishedGame
+
+^self error: self class CannotAskForWinnerOnAnGameThatHasNotEndedErrorMessage! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:52:49'!
+OWon
+
+^$O! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:52:44'!
+XWon
+
+^$X! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:46:06'!
+movingStoneBeforePuttingThemAll
+
+^self error: self class CannotMoveStoneUntilAllArePlayedErrorMessage! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:45:20'!
+movingStoneOInXTurn
+
+^self error: self class PlayerCannotPlayOutOfTurnErrorMessage! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:42:07'!
+movingStoneXOnOTurn
+
+^self error: self class PlayerCannotPlayOutOfTurnErrorMessage! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:40:36'!
+playStoneOWhenIsXTurn
+
+^self error: self class PlayerCannotPlayOutOfTurnErrorMessage! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:40:28'!
+playStoneXWhenIsOTurn
+
+^self error: self class PlayerCannotPlayOutOfTurnErrorMessage! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:52:25'!
+playStonesAfterGameHasEnded
+
+self error: self class CannotPlayIfGameHasEndedErrorMessage ! !
+
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:48:42'!
+playStonesAfterPuttingThemAll
+
+^self error: self class PlayerCannotPutMoreThanThreeStonesErrorMessage! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'TerniLapilli class' category: #'TerniLapilli-Ejercicio'!
@@ -281,6 +332,31 @@ initializeFor: aTerni
 
 	terni := aTerni.! !
 
+!TerniLapilliStates methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:24:38'!
+moveStoneO: aPoint to: aPoint2 
+
+self subclassResponsibility.! !
+
+!TerniLapilliStates methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:24:41'!
+moveStoneX: aPoint to: aPoint2 
+
+self subclassResponsibility.! !
+
+!TerniLapilliStates methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:12:18'!
+playStoneO: aPoint
+
+	self subclassResponsibility .! !
+
+!TerniLapilliStates methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:20:26'!
+playStoneX: aPoint
+
+	self subclassResponsibility .! !
+
+!TerniLapilliStates methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:36:31'!
+winner
+
+self subclassResponsibility ! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'TerniLapilliStates class' category: #'TerniLapilli-Ejercicio'!
@@ -313,6 +389,31 @@ TerniLapilliStates subclass: #TerniAgregandoO
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
 
+!TerniAgregandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:25:39'!
+moveStoneO: aPoint to: aPoint2 
+
+^self movingStoneBeforePuttingThemAll! !
+
+!TerniAgregandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:25:34'!
+moveStoneX: aPoint to: aPoint2 
+
+^self movingStoneBeforePuttingThemAll! !
+
+!TerniAgregandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:23:14'!
+playStoneO: aPoint
+
+ ^terni playStoneO: aPoint! !
+
+!TerniAgregandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:23:47'!
+playStoneX: aPoint
+
+ ^terni playStoneXWhenIsOTurn! !
+
+!TerniAgregandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:37:00'!
+winner
+
+^terni AskingForWinnerOnAnUnfinishedGame! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'TerniAgregandoO class' category: #'TerniLapilli-Ejercicio'!
@@ -331,6 +432,31 @@ TerniLapilliStates subclass: #TerniAgregandoX
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
+
+!TerniAgregandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:47:23'!
+moveStoneO: aPoint to: aPoint2 
+
+^self movingStoneBeforePuttingThemAll! !
+
+!TerniAgregandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:47:20'!
+moveStoneX: aPoint to: aPoint2 
+
+^self movingStoneBeforePuttingThemAll! !
+
+!TerniAgregandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:23:34'!
+playStoneO: aPoint
+
+ ^terni playStoneOWhenIsXTurn! !
+
+!TerniAgregandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:22:50'!
+playStoneX: aPoint
+
+^terni playStoneX: aPoint! !
+
+!TerniAgregandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:37:11'!
+winner
+
+^terni AskingForWinnerOnAnUnfinishedGame! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -351,6 +477,31 @@ TerniLapilliStates subclass: #TerniJugandoO
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
 
+!TerniJugandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:34:27'!
+moveStoneO: aPoint to: aPoint2 
+
+ ^terni moveStoneO: aPoint to: aPoint2.! !
+
+!TerniJugandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:43:15'!
+moveStoneX: aPoint to: aPoint2 
+
+ ^terni movingStoneXOnOTurn! !
+
+!TerniJugandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:18:45'!
+playStoneO: aPoint
+
+ ^terni playStonesAfterPuttingThemAll! !
+
+!TerniJugandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:22:05'!
+playStoneX: aPoint
+
+ ^terni playStonesAfterPuttingThemAll! !
+
+!TerniJugandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:37:16'!
+winner
+
+^terni AskingForWinnerOnAnUnfinishedGame! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'TerniJugandoO class' category: #'TerniLapilli-Ejercicio'!
@@ -369,6 +520,31 @@ TerniLapilliStates subclass: #TerniJugandoX
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
+
+!TerniJugandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:44:22'!
+moveStoneO: aPoint to: aPoint2 
+
+ ^terni movingStoneOInXTurn! !
+
+!TerniJugandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:34:47'!
+moveStoneX: aPoint to: aPoint2 
+
+ ^terni moveStoneX: aPoint to: aPoint2.! !
+
+!TerniJugandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:18:56'!
+playStoneO: aPoint
+
+ ^terni playStonesAfterPuttingThemAll! !
+
+!TerniJugandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:22:10'!
+playStoneX: aPoint
+
+ ^terni playStonesAfterPuttingThemAll! !
+
+!TerniJugandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:37:22'!
+winner
+
+^terni AskingForWinnerOnAnUnfinishedGame! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -389,6 +565,43 @@ TerniLapilliStates subclass: #TerniTerminadoO
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
 
+!TerniTerminadoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:51:00'!
+moveStoneO: aPoint to: aPoint2 
+
+^self playStonesAfterGameHasEnded! !
+
+!TerniTerminadoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:50:39'!
+moveStoneX: aPoint to: aPoint2 
+
+^self playStonesAfterGameHasEnded! !
+
+!TerniTerminadoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:49:32'!
+playStoneO: aPoint
+
+ ^terni playStonesAfterGameHasEnded
+! !
+
+!TerniTerminadoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:49:40'!
+playStoneX: aPoint
+
+ ^terni playStonesAfterGameHasEnded! !
+
+!TerniTerminadoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:37:44'!
+winner
+
+^terni OWon! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TerniTerminadoO class' category: #'TerniLapilli-Ejercicio'!
+TerniTerminadoO class
+	instanceVariableNames: ''!
+
+!TerniTerminadoO class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:05:23'!
+isFor: aTerni
+
+	^((aTerni turn = $O) and: [aTerni not GameHasNotEnded ]) ! !
+
 
 !classDefinition: #TerniTerminadoX category: #'TerniLapilli-Ejercicio'!
 TerniLapilliStates subclass: #TerniTerminadoX
@@ -396,3 +609,39 @@ TerniLapilliStates subclass: #TerniTerminadoX
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
+
+!TerniTerminadoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:26:31'!
+moveStoneO: aPoint to: aPoint2 
+
+^self movingStoneAfterGameEnded! !
+
+!TerniTerminadoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:26:27'!
+moveStoneX: aPoint to: aPoint2 
+
+^self movingStoneAfterGameEnded! !
+
+!TerniTerminadoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:18:08'!
+playStoneO: aPoint
+
+ ^terni playStonesWhenGameFInished! !
+
+!TerniTerminadoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:21:18'!
+playStoneX: aPoint
+
+ ^terni playStonesWhenGameFInished! !
+
+!TerniTerminadoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:37:59'!
+winner
+
+^terni XWon ! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TerniTerminadoX class' category: #'TerniLapilli-Ejercicio'!
+TerniTerminadoX class
+	instanceVariableNames: ''!
+
+!TerniTerminadoX class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:05:40'!
+isFor: aTerni
+
+	^((aTerni turn = $X) and: [aTerni not GameHasNotEnded ]) ! !
