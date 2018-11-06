@@ -55,7 +55,7 @@ self assert: terni OStonesinPlay = 1.
 self assert: (terni ThereisAnXStoneIn: 1@1 ).
 self assert: (terni ThereisAn0StoneIn: 1@2 ).! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:05:07'!
 test04PlayerOShouldNotPlayOutsideTurn
 
 |terni|
@@ -67,11 +67,12 @@ terni playStoneO: 1@2.
 
 
 self shouldFail: [terni playStoneO: 1@3. ] withDescription: TerniLapilli  PlayerCannotPlayOutOfTurnErrorMessage. 
+self deny: (terni ThereisAn0StoneIn: 1@3).
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 04:03:23'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:05:39'!
 test05PlayerXShouldNotPlayOutsideTurn
 
 |terni|
@@ -83,11 +84,12 @@ terni playStoneX: 1@1.
 
 
 self shouldFail: [terni playStoneX: 1@2. ] withDescription: TerniLapilli  PlayerCannotPlayOutOfTurnErrorMessage. 
+self deny: (terni ThereisAnXStoneIn: 1@2).
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:05:52'!
 test06PlayersCannotPlayStonesWhereIsPlacedAnOpponentStone
 
 |terni|
@@ -99,11 +101,12 @@ terni playStoneO: 1@2.
 
 
 self shouldFail: [terni playStoneX: 1@2. ] withDescription: TerniLapilli  PlayerCannotPlayAStoneWhereThereIsOneErrorMessage . 
+self deny: (terni ThereisAnXStoneIn: 1@2).
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:07:26'!
 test07PlayersCannotPlayStonnesWhereTheyHadPlayedOtherStone
 
 |terni|
@@ -115,11 +118,12 @@ terni playStoneO: 1@2.
 
 
 self shouldFail: [terni playStoneX: 1@1. ] withDescription: TerniLapilli  PlayerCannotPlayAStoneWhereThereIsOneErrorMessage . 
+self assert: terni XStonesinPlay = 1.
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:08:05'!
 test08PlayerCannotPlayMoreThanThreeStones
 
 |terni|
@@ -132,13 +136,15 @@ terni playStoneX: 1@3.
 terni playStoneO: 2@2.
 terni playStoneX: 3@3.
 terni playStoneO: 2@1.
+
 self shouldFail: [terni playStoneX: 3@2. ] withDescription: TerniLapilli  PlayerCannotPutMoreThanThreeStonesErrorMessage. 
+self deny: (terni ThereisAnXStoneIn: 3@2).
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
-test09PlayerWInsWIthAFIle
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:08:24'!
+test09PlayerWInsWIthARow
 
 |terni|
 
@@ -487,11 +493,3 @@ self shouldFail: [terni moveStoneO: 3@3 to: 3@2] withDescription: TerniLapilli  
 
 
 ! !
-
-
-!classDefinition: #NameOfSubclass category: #'TerniLapilli-Tests'!
-Object subclass: #NameOfSubclass
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'TerniLapilli-Tests'!

@@ -28,8 +28,8 @@ PlayerFormedADownDiagonalWithTheRocks: triadOfStones
 	
 ! !
 
-!TerniLapilli methodsFor: 'formsToWin' stamp: 'AAAM 11/3/2018 19:40:05'!
-PlayerFormedAFileWithTheRocks: triadOfStones
+!TerniLapilli methodsFor: 'formsToWin' stamp: 'AAAM 11/5/2018 20:09:43'!
+PlayerFormedARowWithTheRocks: triadOfStones
 	
 	^(triadOfStones count: [:positions| positions y = (triadOfStones at: 1) y ]) = 3
 ! !
@@ -41,19 +41,19 @@ PlayerFormedAnUpDiagonalWithTheRocks: triadOfStones
 ! !
 
 
-!TerniLapilli methodsFor: 'checkingIfPlayerWon' stamp: 'AAAM 11/3/2018 20:08:08'!
+!TerniLapilli methodsFor: 'checkingIfPlayerWon' stamp: 'AAAM 11/5/2018 20:09:43'!
 PlayerOHasNotWon
 
-	(self PlayerFormedAFileWithTheRocks: Ostones ) ifTrue:[  ^self playerWon: $O ].
+	(self PlayerFormedARowWithTheRocks: Ostones ) ifTrue:[  ^self playerWon: $O ].
 	(self PlayerFormedACoulmnWithTheRocks: Ostones ) ifTrue:[  ^self playerWon: $O ].
 	(self PlayerFormedAnUpDiagonalWithTheRocks: Ostones ) ifTrue:[ ^self playerWon: $O].
 	(self PlayerFormedADownDiagonalWithTheRocks: Ostones ) ifTrue:[  ^self playerWon: $O].	
 	^turn:= $X! !
 
-!TerniLapilli methodsFor: 'checkingIfPlayerWon' stamp: 'AAAM 11/3/2018 20:08:04'!
+!TerniLapilli methodsFor: 'checkingIfPlayerWon' stamp: 'AAAM 11/5/2018 20:09:43'!
 PlayerXHasNotWon
 
-	(self PlayerFormedAFileWithTheRocks: Xstones ) ifTrue:[  ^self playerWon: $O ].
+	(self PlayerFormedARowWithTheRocks: Xstones ) ifTrue:[  ^self playerWon: $O ].
 	(self PlayerFormedACoulmnWithTheRocks: Xstones ) ifTrue:[  ^self playerWon: $O ].
 	(self PlayerFormedAnUpDiagonalWithTheRocks: Xstones ) ifTrue:[ ^self playerWon: $O].
 	(self PlayerFormedADownDiagonalWithTheRocks: Xstones ) ifTrue:[  ^self playerWon: $O].	
@@ -184,15 +184,17 @@ moveStoneX: aPoint to: aPoint2
 	^ self PlayerXHasNotWon.
 ! !
 
-!TerniLapilli methodsFor: 'playingStones' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilli methodsFor: 'playingStones' stamp: 'AAAM 11/5/2018 20:58:23'!
 playStoneO: aPoint 
 
-	self checksBeforePlayerOPlays: aPoint.
+	^self state putStoneO: aPoint.
+	
+	"self checksBeforePlayerOPlays: aPoint.
 	Ostones size < 3 ifFalse:[^self error: self class PlayerCannotPutMoreThanThreeStonesErrorMessage ].
 	
 	Ostones  add: aPoint.
 	
-	^self PlayerOHasNotWon.
+	^self PlayerOHasNotWon."
 
 ! !
 
@@ -206,6 +208,17 @@ playStoneX: aPoint
 	
 	^ self PlayerXHasNotWon.
 ! !
+
+
+!TerniLapilli methodsFor: 'testing' stamp: 'AAAM 11/5/2018 21:00:52'!
+state
+
+	^TerniLapilliStates for: self.! !
+
+!TerniLapilli methodsFor: 'testing' stamp: 'AAAM 11/5/2018 20:49:58'!
+turn
+
+	^turn.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -254,3 +267,132 @@ PlayerCannotPutMoreThanThreeStonesErrorMessage
 new
 
 ^ self basicNew newGame.! !
+
+
+!classDefinition: #TerniLapilliStates category: #'TerniLapilli-Ejercicio'!
+Object subclass: #TerniLapilliStates
+	instanceVariableNames: 'terni'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli-Ejercicio'!
+
+!TerniLapilliStates methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:37:29'!
+initializeFor: aTerni
+
+	terni := aTerni.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TerniLapilliStates class' category: #'TerniLapilli-Ejercicio'!
+TerniLapilliStates class
+	instanceVariableNames: ''!
+
+!TerniLapilliStates class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:35:45'!
+for: aTerni
+	
+	^ self subclasses 
+		detect: [:aStateClass | aStateClass isFor: aTerni ]
+		ifFound: [:aStateClass | aStateClass newFor: aTerni ]
+		ifNone: [ self error: 'No state for terni' ]! !
+
+!TerniLapilliStates class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:36:21'!
+isFor: aTerni
+
+	^self subclassResponsibility .! !
+
+!TerniLapilliStates class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:37:03'!
+newFor: aTerni
+	
+	^self new initializeFor: aTerni ! !
+
+
+!classDefinition: #TerniAgregandoO category: #'TerniLapilli-Ejercicio'!
+TerniLapilliStates subclass: #TerniAgregandoO
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli-Ejercicio'!
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TerniAgregandoO class' category: #'TerniLapilli-Ejercicio'!
+TerniAgregandoO class
+	instanceVariableNames: ''!
+
+!TerniAgregandoO class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:49:38'!
+isFor: aTerni
+
+	^((aTerni turn = $O) and: [aTerni GameHasNotEnded ]) and: [(aTerni OStonesinPlay + aTerni XStonesinPlay) < 6].! !
+
+
+!classDefinition: #TerniAgregandoX category: #'TerniLapilli-Ejercicio'!
+TerniLapilliStates subclass: #TerniAgregandoX
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli-Ejercicio'!
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TerniAgregandoX class' category: #'TerniLapilli-Ejercicio'!
+TerniAgregandoX class
+	instanceVariableNames: ''!
+
+!TerniAgregandoX class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:50:22'!
+isFor: aTerni
+
+	^((aTerni turn = $X) and: [aTerni GameHasNotEnded ]) and: [(aTerni OStonesinPlay + aTerni XStonesinPlay) < 6].! !
+
+
+!classDefinition: #TerniJugandoO category: #'TerniLapilli-Ejercicio'!
+TerniLapilliStates subclass: #TerniJugandoO
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli-Ejercicio'!
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TerniJugandoO class' category: #'TerniLapilli-Ejercicio'!
+TerniJugandoO class
+	instanceVariableNames: ''!
+
+!TerniJugandoO class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:50:37'!
+isFor: aTerni
+
+	^((aTerni turn = $O) and: [aTerni GameHasNotEnded ]) and: [(aTerni OStonesinPlay + aTerni XStonesinPlay) = 6].! !
+
+
+!classDefinition: #TerniJugandoX category: #'TerniLapilli-Ejercicio'!
+TerniLapilliStates subclass: #TerniJugandoX
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli-Ejercicio'!
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TerniJugandoX class' category: #'TerniLapilli-Ejercicio'!
+TerniJugandoX class
+	instanceVariableNames: ''!
+
+!TerniJugandoX class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:50:50'!
+isFor: aTerni
+
+	^((aTerni turn = $X) and: [aTerni GameHasNotEnded ]) and: [(aTerni OStonesinPlay + aTerni XStonesinPlay) = 6].! !
+
+
+!classDefinition: #TerniTerminadoO category: #'TerniLapilli-Ejercicio'!
+TerniLapilliStates subclass: #TerniTerminadoO
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli-Ejercicio'!
+
+
+!classDefinition: #TerniTerminadoX category: #'TerniLapilli-Ejercicio'!
+TerniLapilliStates subclass: #TerniTerminadoX
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli-Ejercicio'!
