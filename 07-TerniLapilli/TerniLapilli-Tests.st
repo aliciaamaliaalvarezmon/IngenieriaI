@@ -27,134 +27,134 @@ terni:= TerniLapilli new.
 self assert: terni XStonesinPlay = 0.
 self assert: terni OStonesinPlay = 0.! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 03:03:00'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:21'!
 test02PlayingAStonePutsItInTheBoard
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
+terni putStoneX: 1@1.
 
 self assert: terni XStonesinPlay = 1.
 self assert: terni OStonesinPlay = 0.
 self assert: (terni ThereisAnXStoneIn: 1@1 ).! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test03BothPlayersCanPlayStonesInTheBoard
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 1@2.
+terni putStoneX: 1@1.
+terni putStoneO: 1@2.
 
 self assert: terni XStonesinPlay = 1.
 self assert: terni OStonesinPlay = 1.
 self assert: (terni ThereisAnXStoneIn: 1@1 ).
 self assert: (terni ThereisAn0StoneIn: 1@2 ).! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:05:07'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test04PlayerOShouldNotPlayOutsideTurn
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 1@2.
+terni putStoneX: 1@1.
+terni putStoneO: 1@2.
 
 
-self shouldFail: [terni playStoneO: 1@3. ] withDescription: TerniLapilli  PlayerCannotPlayOutOfTurnErrorMessage. 
+self shouldFail: [terni putStoneO: 1@3. ] withDescription: TerniLapilli  PlayerCannotPlayOutOfTurnErrorMessage. 
 self deny: (terni ThereisAn0StoneIn: 1@3).
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:05:39'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:21'!
 test05PlayerXShouldNotPlayOutsideTurn
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
+terni putStoneX: 1@1.
 
 
 
-self shouldFail: [terni playStoneX: 1@2. ] withDescription: TerniLapilli  PlayerCannotPlayOutOfTurnErrorMessage. 
+self shouldFail: [terni putStoneX: 1@2. ] withDescription: TerniLapilli  PlayerCannotPlayOutOfTurnErrorMessage. 
 self deny: (terni ThereisAnXStoneIn: 1@2).
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:05:52'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test06PlayersCannotPlayStonesWhereIsPlacedAnOpponentStone
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 1@2.
+terni putStoneX: 1@1.
+terni putStoneO: 1@2.
 
 
-self shouldFail: [terni playStoneX: 1@2. ] withDescription: TerniLapilli  PlayerCannotPlayAStoneWhereThereIsOneErrorMessage . 
+self shouldFail: [terni putStoneX: 1@2. ] withDescription: TerniLapilli  PlayerCannotPlayAStoneWhereThereIsOneErrorMessage . 
 self deny: (terni ThereisAnXStoneIn: 1@2).
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:07:26'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test07PlayersCannotPlayStonnesWhereTheyHadPlayedOtherStone
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 1@2.
+terni putStoneX: 1@1.
+terni putStoneO: 1@2.
 
 
-self shouldFail: [terni playStoneX: 1@1. ] withDescription: TerniLapilli  PlayerCannotPlayAStoneWhereThereIsOneErrorMessage . 
+self shouldFail: [terni putStoneX: 1@1. ] withDescription: TerniLapilli  PlayerCannotPlayAStoneWhereThereIsOneErrorMessage . 
 self assert: terni XStonesinPlay = 1.
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:08:05'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test08PlayerCannotPlayMoreThanThreeStones
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 1@2.
-terni playStoneX: 1@3.
-terni playStoneO: 2@2.
-terni playStoneX: 3@3.
-terni playStoneO: 2@1.
+terni putStoneX: 1@1.
+terni putStoneO: 1@2.
+terni putStoneX: 1@3.
+terni putStoneO: 2@2.
+terni putStoneX: 3@3.
+terni putStoneO: 2@1.
 
-self shouldFail: [terni playStoneX: 3@2. ] withDescription: TerniLapilli  PlayerCannotPutMoreThanThreeStonesErrorMessage. 
+self shouldFail: [terni putStoneX: 3@2. ] withDescription: TerniLapilli  PlayerCannotPutMoreThanThreeStonesErrorMessage. 
 self deny: (terni ThereisAnXStoneIn: 3@2).
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 20:08:24'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test09PlayerWInsWIthARow
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 1@2.
-terni playStoneX: 2@1.
-terni playStoneO: 2@2.
-terni playStoneX: 3@1.
+terni putStoneX: 1@1.
+terni putStoneO: 1@2.
+terni putStoneX: 2@1.
+terni putStoneO: 2@2.
+terni putStoneX: 3@1.
 
 
 self assert: terni hasAWinner.
@@ -163,18 +163,18 @@ self assert: terni winner = $X.
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test10PlayerWInsWIthAColunm
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 2@1.
-terni playStoneX: 1@2.
-terni playStoneO: 2@2.
-terni playStoneX: 1@3.
+terni putStoneX: 1@1.
+terni putStoneO: 2@1.
+terni putStoneX: 1@2.
+terni putStoneO: 2@2.
+terni putStoneX: 1@3.
 
 
 self assert: terni hasAWinner.
@@ -183,18 +183,18 @@ self assert: terni winner = $X.
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test11PlayerWInsWIthAnUpDiagonal
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 2@1.
-terni playStoneX: 2@2.
-terni playStoneO: 2@3.
-terni playStoneX: 3@3.
+terni putStoneX: 1@1.
+terni putStoneO: 2@1.
+terni putStoneX: 2@2.
+terni putStoneO: 2@3.
+terni putStoneX: 3@3.
 
 
 self assert: terni hasAWinner.
@@ -203,18 +203,18 @@ self assert: terni winner = $X.
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test12PlayerWInsWIthAnDownDiagonal
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 3@1.
-terni playStoneO: 2@1.
-terni playStoneX: 2@2.
-terni playStoneO: 2@3.
-terni playStoneX: 1@3.
+terni putStoneX: 3@1.
+terni putStoneO: 2@1.
+terni putStoneX: 2@2.
+terni putStoneO: 2@3.
+terni putStoneX: 1@3.
 
 
 self assert: terni hasAWinner.
@@ -223,14 +223,14 @@ self assert: terni winner = $X.
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 20:12:22'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:21'!
 test13CannotAskWinnerIfGameHasNotEnded
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 3@1.
+terni putStoneX: 3@1.
 
 
 self deny: terni hasAWinner.
@@ -239,50 +239,50 @@ self shouldFail: [terni winner ] withDescription: TerniLapilli  CannotAskForWinn
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test14CannotPlayIfGameHasEnded
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 3@1.
-terni playStoneO: 2@1.
-terni playStoneX: 2@2.
-terni playStoneO: 2@3.
-terni playStoneX: 1@3.
+terni putStoneX: 3@1.
+terni putStoneO: 2@1.
+terni putStoneX: 2@2.
+terni putStoneO: 2@3.
+terni putStoneX: 1@3.
 
 
 self assert: terni hasAWinner.
 self assert: terni winner = $X.
-self shouldFail: [terni playStoneO: 1@1] withDescription: TerniLapilli  CannotPlayIfGameHasEndedErrorMessage. 
+self shouldFail: [terni putStoneO: 1@1] withDescription: TerniLapilli  CannotPlayIfGameHasEndedErrorMessage. 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/4/2018 02:05:16'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:21'!
 test14aCannotPlayOutofBorders
 
 |terni|
 
 terni:= TerniLapilli new.
 
-self shouldFail: [terni playStoneX: 3@4] withDescription: TerniLapilli  PlayerCannotPlayOutOfBordersErrorMessage. 
+self shouldFail: [terni putStoneX: 3@4] withDescription: TerniLapilli  PlayerCannotPlayOutOfBordersErrorMessage. 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test15MoveStonesDoesNotChangeTheNumerOfStonesInTheBoard
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 1@2.
-terni playStoneX: 1@3.
-terni playStoneO: 2@2.
-terni playStoneX: 3@3.
-terni playStoneO: 2@1.
+terni putStoneX: 1@1.
+terni putStoneO: 1@2.
+terni putStoneX: 1@3.
+terni putStoneO: 2@2.
+terni putStoneX: 3@3.
+terni putStoneO: 2@1.
 terni moveStoneX: 3@3 to: 3@2.
 
 self assert: terni  XStonesinPlay  = 3.
@@ -292,17 +292,17 @@ self deny: (terni ThereisAnXStoneIn: 3@3)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test16CannotMoveStonesUntilAllTheStonesArePlayed
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 1@2.
-terni playStoneX: 1@3.
-terni playStoneO: 2@2.
+terni putStoneX: 1@1.
+terni putStoneO: 1@2.
+terni putStoneX: 1@3.
+terni putStoneO: 2@2.
 
 self shouldFail:[terni moveStoneX: 1@3 to: 2@3.] withDescription: TerniLapilli CannotMoveStoneUntilAllArePlayedErrorMessage.
 
@@ -311,94 +311,94 @@ self shouldFail:[terni moveStoneX: 1@3 to: 2@3.] withDescription: TerniLapilli C
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test17PlayerCannotMoveFromPositionsWHereHeDoesNotHaveRocksPlaced
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 1@2.
-terni playStoneX: 1@3.
-terni playStoneO: 2@2.
-terni playStoneX: 3@3.
-terni playStoneO: 2@1.
+terni putStoneX: 1@1.
+terni putStoneO: 1@2.
+terni putStoneX: 1@3.
+terni putStoneO: 2@2.
+terni putStoneX: 3@3.
+terni putStoneO: 2@1.
 self shouldFail:[terni moveStoneX: 3@2 to: 3@1.] withDescription: TerniLapilli  PlayerCannotMoveFromInvalidPosition.
 
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test18PlayerCannotMoveRockMoreThanOneSpace
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 1@2.
-terni playStoneX: 1@3.
-terni playStoneO: 2@2.
-terni playStoneX: 3@3.
-terni playStoneO: 2@1.
+terni putStoneX: 1@1.
+terni putStoneO: 1@2.
+terni putStoneX: 1@3.
+terni putStoneO: 2@2.
+terni putStoneX: 3@3.
+terni putStoneO: 2@1.
 self shouldFail:[terni moveStoneX: 3@3 to: 3@1.] withDescription: TerniLapilli  PlayerCannotMoveToInvalidPosition.
 
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test19PlayerCannotMoveWhereThereIsAnRockFromAnotherPlayer
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 1@2.
-terni playStoneX: 1@3.
-terni playStoneO: 2@2.
-terni playStoneX: 3@3.
-terni playStoneO: 2@1.
+terni putStoneX: 1@1.
+terni putStoneO: 1@2.
+terni putStoneX: 1@3.
+terni putStoneO: 2@2.
+terni putStoneX: 3@3.
+terni putStoneO: 2@1.
 self shouldFail:[terni moveStoneX: 1@1 to: 1@2.] withDescription: TerniLapilli  PlayerCannotPlayAStoneWhereThereIsOneErrorMessage .
 
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test20PlayerCannotMoveWhereThereIsAnRockFromThePlayer
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 1@1.
-terni playStoneO: 1@3.
-terni playStoneX: 1@2.
-terni playStoneO: 2@2.
-terni playStoneX: 3@2.
-terni playStoneO: 2@1.
+terni putStoneX: 1@1.
+terni putStoneO: 1@3.
+terni putStoneX: 1@2.
+terni putStoneO: 2@2.
+terni putStoneX: 3@2.
+terni putStoneO: 2@1.
 self shouldFail:[terni moveStoneX: 1@1 to: 1@2.] withDescription: TerniLapilli  PlayerCannotPlayAStoneWhereThereIsOneErrorMessage.
 
 
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test21PlayerCannotMoveIfGameHasEnded
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 3@1.
-terni playStoneO: 2@1.
-terni playStoneX: 2@2.
-terni playStoneO: 2@3.
-terni playStoneX: 1@3.
+terni putStoneX: 3@1.
+terni putStoneO: 2@1.
+terni putStoneX: 2@2.
+terni putStoneO: 2@3.
+terni putStoneX: 1@3.
 
 
 self assert: terni hasAWinner.
@@ -408,18 +408,18 @@ self shouldFail: [terni moveStoneX: 1@3 to: 1@2] withDescription: TerniLapilli  
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test22WinnerPlayerCannotMoveIfGameHasEnded
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 3@1.
-terni playStoneO: 2@1.
-terni playStoneX: 2@2.
-terni playStoneO: 2@3.
-terni playStoneX: 1@3.
+terni putStoneX: 3@1.
+terni putStoneO: 2@1.
+terni putStoneX: 2@2.
+terni putStoneO: 2@3.
+terni putStoneX: 1@3.
 
 
 self assert: terni hasAWinner.
@@ -429,19 +429,19 @@ self shouldFail: [terni moveStoneX: 1@3 to: 1@2] withDescription: TerniLapilli  
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test23LoserPlayerCannotMoveIfGameHasEnded
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 3@1.
-terni playStoneO: 2@1.
-terni playStoneX: 2@2.
-terni playStoneO: 2@3.
-terni playStoneX: 1@2.
-terni playStoneO: 3@3.
+terni putStoneX: 3@1.
+terni putStoneO: 2@1.
+terni putStoneX: 2@2.
+terni putStoneO: 2@3.
+terni putStoneX: 1@2.
+terni putStoneO: 3@3.
 
 terni moveStoneX: 1@2  to: 1@3. 
 
@@ -452,19 +452,19 @@ self shouldFail: [terni moveStoneO: 3@3 to: 3@2] withDescription: TerniLapilli  
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test24PlayerMovesWithinBorders
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 3@1.
-terni playStoneO: 2@1.
-terni playStoneX: 2@2.
-terni playStoneO: 2@3.
-terni playStoneX: 1@2.
-terni playStoneO: 3@3.
+terni putStoneX: 3@1.
+terni putStoneO: 2@1.
+terni putStoneX: 2@2.
+terni putStoneO: 2@3.
+terni putStoneX: 1@2.
+terni putStoneO: 3@3.
 
 
 
@@ -473,19 +473,19 @@ self shouldFail: [terni moveStoneX: 3@1 to: 4@1] withDescription: TerniLapilli  
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/5/2018 04:15:09'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 test25PlayerMovesWithinTurn
 
 |terni|
 
 terni:= TerniLapilli new.
 
-terni playStoneX: 3@1.
-terni playStoneO: 2@1.
-terni playStoneX: 2@2.
-terni playStoneO: 2@3.
-terni playStoneX: 1@2.
-terni playStoneO: 3@3.
+terni putStoneX: 3@1.
+terni putStoneO: 2@1.
+terni putStoneX: 2@2.
+terni putStoneO: 2@3.
+terni putStoneX: 1@2.
+terni putStoneO: 3@3.
 
 
 
