@@ -17,15 +17,15 @@ shouldFail: aBlockClosure withDescription: aFailureDescription
 		
 	failedAsExpected ifFalse: [ Error signal: 'Expected to fail but did not fail' ]! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/2/2018 22:40:06'!
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:03:53'!
 test01ThereAreNotStonesInPlayAtTheStartOfTheGame
 
 |terni|
 
 terni:= TerniLapilli new.
 
-self assert: terni XStonesinPlay = 0.
-self assert: terni OStonesinPlay = 0.! !
+self assert: terni XStonesinPlay =0 .
+self assert: terni OStonesinPlay =0.! !
 
 !TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:21'!
 test02PlayingAStonePutsItInTheBoard
@@ -143,8 +143,8 @@ self deny: (terni ThereisAnXStoneIn: 3@2).
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
-test09PlayerWInsWIthARow
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:34:07'!
+test09aPlayerWInsWIthFirstRow
 
 |terni|
 
@@ -155,6 +155,46 @@ terni putStoneO: 1@2.
 terni putStoneX: 2@1.
 terni putStoneO: 2@2.
 terni putStoneX: 3@1.
+
+
+self assert: terni hasAWinner.
+self assert: terni winner = $X.
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:34:51'!
+test09bPlayerWInsWIthSecondRow
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni putStoneX: 1@2.
+terni putStoneO: 1@1.
+terni putStoneX: 2@2.
+terni putStoneO: 2@3.
+terni putStoneX: 3@2.
+
+
+self assert: terni hasAWinner.
+self assert: terni winner = $X.
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:35:28'!
+test09cPlayerWInsWIthThirdRow
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni putStoneX: 1@3.
+terni putStoneO: 1@1.
+terni putStoneX: 2@3.
+terni putStoneO: 2@2.
+terni putStoneX: 3@3.
 
 
 self assert: terni hasAWinner.
@@ -175,6 +215,66 @@ terni putStoneO: 2@1.
 terni putStoneX: 1@2.
 terni putStoneO: 2@2.
 terni putStoneX: 1@3.
+
+
+self assert: terni hasAWinner.
+self assert: terni winner = $X.
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:35:55'!
+test10aPlayerWInsWIthFirstColunm
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni putStoneX: 1@1.
+terni putStoneO: 2@1.
+terni putStoneX: 1@2.
+terni putStoneO: 2@2.
+terni putStoneX: 1@3.
+
+
+self assert: terni hasAWinner.
+self assert: terni winner = $X.
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:36:17'!
+test10bPlayerWInsWIthSecondColunm
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni putStoneX: 2@1.
+terni putStoneO: 1@1.
+terni putStoneX: 2@2.
+terni putStoneO: 3@2.
+terni putStoneX: 2@3.
+
+
+self assert: terni hasAWinner.
+self assert: terni winner = $X.
+
+
+! !
+
+!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:36:38'!
+test10cPlayerWInsWIthThirdColunm
+
+|terni|
+
+terni:= TerniLapilli new.
+
+terni putStoneX: 3@1.
+terni putStoneO: 1@1.
+terni putStoneX: 3@2.
+terni putStoneO: 2@2.
+terni putStoneX: 3@3.
 
 
 self assert: terni hasAWinner.

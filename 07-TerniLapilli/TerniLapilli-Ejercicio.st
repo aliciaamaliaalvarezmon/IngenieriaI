@@ -121,111 +121,6 @@ isWithinBorders: aPoint.
 ! !
 
 
-!TerniLapilli methodsFor: 'puttingStones' stamp: 'AAAM 11/7/2018 03:59:12'!
-isAValidPositionToPlayARock: aPoint
-
-			
-	^(self isWithinBorders: aPoint) and: (self ThereIsNotAnotherRockInThatPosition: aPoint).
-		! !
-
-!TerniLapilli methodsFor: 'puttingStones' stamp: 'AAAM 11/7/2018 03:18:27'!
-moveStoneO: aPoint to: aPoint2 
-
-	^self state moveStoneO: aPoint to: aPoint2.
-
-
-! !
-
-!TerniLapilli methodsFor: 'puttingStones' stamp: 'AAAM 11/7/2018 04:01:32'!
-moveStoneOInOTurn: aPoint to: aPoint2.
-
-	self isAValidPositionToPlayARock: aPoint2.
-	
-	(Ostones includes: aPoint) ifFalse:[^self error: self class PlayerCannotMoveFromInvalidPosition ].
-	((aPoint dist: aPoint2) = 1) ifFalse:[^self error: self  class PlayerCannotMoveToInvalidPosition ].
-	
-	Ostones add: aPoint2.
-	Ostones remove: aPoint.
-	
-	^ self PlayerOHasNotWon.! !
-
-!TerniLapilli methodsFor: 'puttingStones' stamp: 'AAAM 11/7/2018 03:18:13'!
-moveStoneX: aPoint to: aPoint2 
-
-	^self state moveStoneX: aPoint to: aPoint2.
-! !
-
-!TerniLapilli methodsFor: 'puttingStones' stamp: 'AAAM 11/7/2018 04:01:01'!
-moveStoneXInXTurn: aPoint to: aPoint2.
-
-	self isAValidPositionToPlayARock: aPoint2.
-	
-	(Xstones includes: aPoint) ifFalse:[^self error: self class PlayerCannotMoveFromInvalidPosition ].
-	((aPoint dist: aPoint2) = 1) ifFalse:[^self error: self  class PlayerCannotMoveToInvalidPosition ].
-	
-	Xstones add: aPoint2.
-	Xstones remove: aPoint.
-	
-	^ self PlayerXHasNotWon.
-	"self checksBeforePlayerXPlays: aPoint2.
-	Xstones size < 3 ifTrue:[^ self error: self class CannotMoveStoneUntilAllArePlayedErrorMessage ] .
-	(Xstones includes: aPoint) ifFalse:[^self error: self class PlayerCannotMoveFromInvalidPosition ].
-	((aPoint dist: aPoint2) = 1) ifFalse:[^self error: self  class PlayerCannotMoveToInvalidPosition ].
-	
-	Xstones add: aPoint2.
-	Xstones remove: aPoint.
-	
-	^ self PlayerXHasNotWon."
-! !
-
-!TerniLapilli methodsFor: 'puttingStones' stamp: 'AAAM 11/7/2018 03:57:17'!
-putStoneO: aPoint 
-
-
-
-	
-	^self state putStoneO: aPoint.
-	
-
-! !
-
-!TerniLapilli methodsFor: 'puttingStones' stamp: 'AAAM 11/7/2018 04:00:35'!
-putStoneOWhenIsOTurn: aPoint
-
-			
-	self isAValidPositionToPlayARock: aPoint.
-		
-	Ostones  add: aPoint.
-	
-	^self PlayerOHasNotWon.
-! !
-
-!TerniLapilli methodsFor: 'puttingStones' stamp: 'AAAM 11/7/2018 03:57:30'!
-putStoneX: aPoint 
-	
-
-
-	^self state putStoneO: aPoint.
-! !
-
-!TerniLapilli methodsFor: 'puttingStones' stamp: 'AAAM 11/7/2018 04:09:05'!
-putStoneXWhenIsXTurn: aPoint
-
-		
-	self isAValidPositionToPlayARock: aPoint.
-	
-	Xstones  add: aPoint.
-	
-	^self PlayerXHasNotWon.
-	"self  checksBeforePlayerXPlays: aPoint.
-	Xstones size < 3 ifFalse:[^self error: self class PlayerCannotPutMoreThanThreeStonesErrorMessage ].
-
-	Xstones add: aPoint.
-	
-	^ self PlayerXHasNotWon."
-! !
-
-
 !TerniLapilli methodsFor: 'testing' stamp: 'AAAM 11/5/2018 21:00:52'!
 state
 
@@ -276,6 +171,111 @@ putStoneXWhenIsOTurn
 putStonesAfterPuttingThemAll
 
 ^self error: self class PlayerCannotPutMoreThanThreeStonesErrorMessage! !
+
+
+!TerniLapilli methodsFor: 'playingStones' stamp: 'AAAM 11/7/2018 03:59:12'!
+isAValidPositionToPlayARock: aPoint
+
+			
+	^(self isWithinBorders: aPoint) and: (self ThereIsNotAnotherRockInThatPosition: aPoint).
+		! !
+
+!TerniLapilli methodsFor: 'playingStones' stamp: 'AAAM 11/7/2018 03:18:27'!
+moveStoneO: aPoint to: aPoint2 
+
+	^self state moveStoneO: aPoint to: aPoint2.
+
+
+! !
+
+!TerniLapilli methodsFor: 'playingStones' stamp: 'AAAM 11/7/2018 04:01:32'!
+moveStoneOInOTurn: aPoint to: aPoint2.
+
+	self isAValidPositionToPlayARock: aPoint2.
+	
+	(Ostones includes: aPoint) ifFalse:[^self error: self class PlayerCannotMoveFromInvalidPosition ].
+	((aPoint dist: aPoint2) = 1) ifFalse:[^self error: self  class PlayerCannotMoveToInvalidPosition ].
+	
+	Ostones add: aPoint2.
+	Ostones remove: aPoint.
+	
+	^ self PlayerOHasNotWon.! !
+
+!TerniLapilli methodsFor: 'playingStones' stamp: 'AAAM 11/7/2018 03:18:13'!
+moveStoneX: aPoint to: aPoint2 
+
+	^self state moveStoneX: aPoint to: aPoint2.
+! !
+
+!TerniLapilli methodsFor: 'playingStones' stamp: 'AAAM 11/7/2018 04:01:01'!
+moveStoneXInXTurn: aPoint to: aPoint2.
+
+	self isAValidPositionToPlayARock: aPoint2.
+	
+	(Xstones includes: aPoint) ifFalse:[^self error: self class PlayerCannotMoveFromInvalidPosition ].
+	((aPoint dist: aPoint2) = 1) ifFalse:[^self error: self  class PlayerCannotMoveToInvalidPosition ].
+	
+	Xstones add: aPoint2.
+	Xstones remove: aPoint.
+	
+	^ self PlayerXHasNotWon.
+	"self checksBeforePlayerXPlays: aPoint2.
+	Xstones size < 3 ifTrue:[^ self error: self class CannotMoveStoneUntilAllArePlayedErrorMessage ] .
+	(Xstones includes: aPoint) ifFalse:[^self error: self class PlayerCannotMoveFromInvalidPosition ].
+	((aPoint dist: aPoint2) = 1) ifFalse:[^self error: self  class PlayerCannotMoveToInvalidPosition ].
+	
+	Xstones add: aPoint2.
+	Xstones remove: aPoint.
+	
+	^ self PlayerXHasNotWon."
+! !
+
+!TerniLapilli methodsFor: 'playingStones' stamp: 'AAAM 11/7/2018 03:57:17'!
+putStoneO: aPoint 
+
+
+
+	
+	^self state putStoneO: aPoint.
+	
+
+! !
+
+!TerniLapilli methodsFor: 'playingStones' stamp: 'AAAM 11/7/2018 04:00:35'!
+putStoneOWhenIsOTurn: aPoint
+
+			
+	self isAValidPositionToPlayARock: aPoint.
+		
+	Ostones  add: aPoint.
+	
+	^self PlayerOHasNotWon.
+! !
+
+!TerniLapilli methodsFor: 'playingStones' stamp: 'AAAM 11/7/2018 15:06:39'!
+putStoneX: aPoint 
+	
+
+
+	^self state putStoneX: aPoint.
+! !
+
+!TerniLapilli methodsFor: 'playingStones' stamp: 'AAAM 11/7/2018 04:09:05'!
+putStoneXWhenIsXTurn: aPoint
+
+		
+	self isAValidPositionToPlayARock: aPoint.
+	
+	Xstones  add: aPoint.
+	
+	^self PlayerXHasNotWon.
+	"self  checksBeforePlayerXPlays: aPoint.
+	Xstones size < 3 ifFalse:[^self error: self class PlayerCannotPutMoreThanThreeStonesErrorMessage ].
+
+	Xstones add: aPoint.
+	
+	^ self PlayerXHasNotWon."
+! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -395,15 +395,15 @@ TerniLapilliStates subclass: #TerniAgregandoO
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
 
-!TerniAgregandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:25:39'!
+!TerniAgregandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:44:31'!
 moveStoneO: aPoint to: aPoint2 
 
-^self movingStoneBeforePuttingThemAll! !
+^terni movingStoneBeforePuttingThemAll! !
 
-!TerniAgregandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:25:34'!
+!TerniAgregandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:44:37'!
 moveStoneX: aPoint to: aPoint2 
 
-^self movingStoneBeforePuttingThemAll! !
+^terni movingStoneBeforePuttingThemAll! !
 
 !TerniAgregandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 03:07:34'!
 putStoneO: aPoint
@@ -426,10 +426,10 @@ winner
 TerniAgregandoO class
 	instanceVariableNames: ''!
 
-!TerniAgregandoO class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 03:52:15'!
+!TerniAgregandoO class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:05:12'!
 isFor: aTerni
 
-	^((aTerni turn = $O) and: [aTerni not hasAWinner ]) and: [(aTerni OStonesinPlay + aTerni XStonesinPlay) < 6].! !
+	^((aTerni turn = $O) and: [ aTerni hasAWinner not ]) and: [(aTerni OStonesinPlay + aTerni XStonesinPlay) < 6].! !
 
 
 !classDefinition: #TerniAgregandoX category: #'TerniLapilli-Ejercicio'!
@@ -439,15 +439,15 @@ TerniLapilliStates subclass: #TerniAgregandoX
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
 
-!TerniAgregandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:47:23'!
+!TerniAgregandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:44:25'!
 moveStoneO: aPoint to: aPoint2 
 
-^self movingStoneBeforePuttingThemAll! !
+^terni movingStoneBeforePuttingThemAll! !
 
-!TerniAgregandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:47:20'!
+!TerniAgregandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:44:20'!
 moveStoneX: aPoint to: aPoint2 
 
-^self movingStoneBeforePuttingThemAll! !
+^terni movingStoneBeforePuttingThemAll! !
 
 !TerniAgregandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 03:08:42'!
 putStoneO: aPoint
@@ -470,98 +470,98 @@ winner
 TerniAgregandoX class
 	instanceVariableNames: ''!
 
-!TerniAgregandoX class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 03:52:09'!
+!TerniAgregandoX class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:05:22'!
 isFor: aTerni
 
-	^((aTerni turn = $X) and: [aTerni not hasAWinner ]) and: [(aTerni OStonesinPlay + aTerni XStonesinPlay) < 6].! !
+	^((aTerni turn = $X) and: [aTerni hasAWinner not ]) and: [(aTerni OStonesinPlay + aTerni XStonesinPlay) < 6].! !
 
 
-!classDefinition: #TerniMoviendoO category: #'TerniLapilli-Ejercicio'!
-TerniLapilliStates subclass: #TerniMoviendoO
+!classDefinition: #TerniJugandoO category: #'TerniLapilli-Ejercicio'!
+TerniLapilliStates subclass: #TerniJugandoO
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
 
-!TerniMoviendoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:37:27'!
+!TerniJugandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:41:42'!
 moveStoneO: aPoint to: aPoint2 
 
  ^terni moveStoneOInOTurn: aPoint to: aPoint2.! !
 
-!TerniMoviendoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:36:47'!
+!TerniJugandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:43:58'!
 moveStoneX: aPoint to: aPoint2 
 
  ^terni movingStoneXInOTurn! !
 
-!TerniMoviendoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 03:06:52'!
+!TerniJugandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:40:33'!
 putStoneO: aPoint
 
  ^terni putStonesAfterPuttingThemAll! !
 
-!TerniMoviendoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 03:06:52'!
+!TerniJugandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:33:01'!
 putStoneX: aPoint
 
  ^terni putStonesAfterPuttingThemAll! !
 
-!TerniMoviendoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:37:16'!
+!TerniJugandoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:37:16'!
 winner
 
 ^terni AskingForWinnerOnAnUnfinishedGame! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'TerniMoviendoO class' category: #'TerniLapilli-Ejercicio'!
-TerniMoviendoO class
+!classDefinition: 'TerniJugandoO class' category: #'TerniLapilli-Ejercicio'!
+TerniJugandoO class
 	instanceVariableNames: ''!
 
-!TerniMoviendoO class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 03:51:49'!
+!TerniJugandoO class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:05:50'!
 isFor: aTerni
 
-	^((aTerni turn = $O) and: [aTerni not hasAWinner ]) and: [(aTerni OStonesinPlay + aTerni XStonesinPlay) = 6].! !
+	^((aTerni turn = $O) and: [aTerni hasAWinner not ]) and: [(aTerni OStonesinPlay + aTerni XStonesinPlay) = 6].! !
 
 
-!classDefinition: #TerniMoviendoX category: #'TerniLapilli-Ejercicio'!
-TerniLapilliStates subclass: #TerniMoviendoX
+!classDefinition: #TerniJugandoX category: #'TerniLapilli-Ejercicio'!
+TerniLapilliStates subclass: #TerniJugandoX
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
 
-!TerniMoviendoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:44:22'!
+!TerniJugandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:44:22'!
 moveStoneO: aPoint to: aPoint2 
 
  ^terni movingStoneOInXTurn! !
 
-!TerniMoviendoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:38:03'!
+!TerniJugandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:41:27'!
 moveStoneX: aPoint to: aPoint2 
 
  ^terni moveStoneXInXTurn: aPoint to: aPoint2.! !
 
-!TerniMoviendoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 03:06:53'!
+!TerniJugandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:40:26'!
 putStoneO: aPoint
 
  ^terni putStonesAfterPuttingThemAll! !
 
-!TerniMoviendoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 03:06:52'!
+!TerniJugandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:33:09'!
 putStoneX: aPoint
 
  ^terni putStonesAfterPuttingThemAll! !
 
-!TerniMoviendoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:37:22'!
+!TerniJugandoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:37:22'!
 winner
 
 ^terni AskingForWinnerOnAnUnfinishedGame! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'TerniMoviendoX class' category: #'TerniLapilli-Ejercicio'!
-TerniMoviendoX class
+!classDefinition: 'TerniJugandoX class' category: #'TerniLapilli-Ejercicio'!
+TerniJugandoX class
 	instanceVariableNames: ''!
 
-!TerniMoviendoX class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 03:52:02'!
+!TerniJugandoX class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:05:45'!
 isFor: aTerni
 
-	^((aTerni turn = $X) and: [aTerni not hasAWinner]) and: [(aTerni OStonesinPlay + aTerni XStonesinPlay) = 6].! !
+	^((aTerni turn = $X) and: [aTerni hasAWinner not ]) and: [(aTerni OStonesinPlay + aTerni XStonesinPlay) = 6].! !
 
 
 !classDefinition: #TerniTerminadoO category: #'TerniLapilli-Ejercicio'!
@@ -571,15 +571,15 @@ TerniLapilliStates subclass: #TerniTerminadoO
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
 
-!TerniTerminadoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:51:00'!
+!TerniTerminadoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:46:03'!
 moveStoneO: aPoint to: aPoint2 
 
-^self playStonesAfterGameHasEnded! !
+^terni playStonesAfterGameHasEnded! !
 
-!TerniTerminadoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/6/2018 16:50:39'!
+!TerniTerminadoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:46:09'!
 moveStoneX: aPoint to: aPoint2 
 
-^self playStonesAfterGameHasEnded! !
+^terni playStonesAfterGameHasEnded! !
 
 !TerniTerminadoO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:31:38'!
 putStoneO: aPoint
@@ -616,15 +616,15 @@ TerniLapilliStates subclass: #TerniTerminadoX
 	poolDictionaries: ''
 	category: 'TerniLapilli-Ejercicio'!
 
-!TerniTerminadoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:32:51'!
+!TerniTerminadoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:45:56'!
 moveStoneO: aPoint to: aPoint2 
 
-^self playStonesAfterGameHasEnded! !
+^terni playStonesAfterGameHasEnded! !
 
-!TerniTerminadoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:32:57'!
+!TerniTerminadoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 15:45:51'!
 moveStoneX: aPoint to: aPoint2 
 
-^self playStonesAfterGameHasEnded! !
+^terni playStonesAfterGameHasEnded! !
 
 !TerniTerminadoX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/7/2018 02:32:41'!
 putStoneO: aPoint
