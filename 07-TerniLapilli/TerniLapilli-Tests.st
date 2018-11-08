@@ -5,19 +5,7 @@ TestCase subclass: #TerniLapilliTests
 	poolDictionaries: ''
 	category: 'TerniLapilli-Tests'!
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/3/2018 01:51:17'!
-shouldFail: aBlockClosure withDescription: aFailureDescription 
-
-	| failedAsExpected |
-	
-	failedAsExpected := false.
-	aBlockClosure
-		on: Error - MessageNotUnderstood 
-		do: [ :anError | failedAsExpected	:= anError messageText = aFailureDescription ].
-		
-	failedAsExpected ifFalse: [ Error signal: 'Expected to fail but did not fail' ]! !
-
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 14:23:59'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 14:23:59'!
 test01ThereAreNotStonesInPlayAtTheStartOfTheGame
 
 |terni|
@@ -27,7 +15,7 @@ terni:= TerniLapilli new.
 self assert: terni stonesXInPlay =0 .
 self assert: terni stonesOInPlay =0.! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 14:24:15'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 14:24:15'!
 test02PlayingAStonePutsItInTheBoard
 
 |terni|
@@ -40,7 +28,7 @@ self assert: terni stonesXInPlay = 1.
 self assert: terni stonesOInPlay = 0.
 self assert: (terni thereIsAnXStoneIn: 1@1 ).! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 14:24:38'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 14:24:38'!
 test03BothPlayersCanPlayStonesInTheBoard
 
 |terni|
@@ -55,7 +43,7 @@ self assert: terni stonesOInPlay = 1.
 self assert: (terni thereIsAnXStoneIn: 1@1 ).
 self assert: (terni thereIsAnOStoneIn: 1@2 ).! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 14:24:38'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 14:24:38'!
 test04PlayerOShouldNotPlayOutsideTurn
 
 |terni|
@@ -72,7 +60,7 @@ self deny: (terni thereIsAnOStoneIn: 1@3).
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 14:24:15'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 14:24:15'!
 test05PlayerXShouldNotPlayOutsideTurn
 
 |terni|
@@ -89,7 +77,7 @@ self deny: (terni thereIsAnXStoneIn: 1@2).
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 14:24:16'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 14:24:16'!
 test06PlayersCannotPlayStonesWhereIsPlacedAnOpponentStone
 
 |terni|
@@ -106,7 +94,7 @@ self deny: (terni thereIsAnXStoneIn: 1@2).
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 14:23:59'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 14:23:59'!
 test07PlayersCannotPlayStonnesWhereTheyHadPlayedOtherStone
 
 |terni|
@@ -123,7 +111,7 @@ self assert: terni stonesXInPlay = 1.
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 14:24:16'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 14:24:16'!
 test08PlayerCannotPlayMoreThanThreeStones
 
 |terni|
@@ -143,7 +131,7 @@ self deny: (terni thereIsAnXStoneIn: 3@2).
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:10:20'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:10:20'!
 test09aPlayerWInsWIthFirstRow
 
 |terni|
@@ -163,7 +151,7 @@ self assert: terni playerXWon
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:10:40'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:10:40'!
 test09bPlayerWInsWIthSecondRow
 
 |terni|
@@ -183,7 +171,7 @@ self assert: terni playerXWon.
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:10:49'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:10:49'!
 test09cPlayerWInsWIthThirdRow
 
 |terni|
@@ -203,7 +191,7 @@ self assert: terni playerXWon.
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:11:01'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:11:01'!
 test10aPlayerWInsWIthFirstColunm
 
 |terni|
@@ -223,7 +211,7 @@ self assert: terni  playerXWon.
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:11:12'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:11:12'!
 test10bPlayerWInsWIthSecondColunm
 
 |terni|
@@ -243,7 +231,7 @@ self assert: terni  playerXWon.
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:11:21'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:11:21'!
 test10cPlayerWInsWIthThirdColunm
 
 |terni|
@@ -263,7 +251,7 @@ self assert: terni playerXWon.
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:11:26'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:11:26'!
 test11PlayerWInsWIthAnUpDiagonal
 
 |terni|
@@ -283,7 +271,7 @@ self assert: terni playerXWon.
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:11:33'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:11:33'!
 test12PlayerWInsWIthAnDownDiagonal
 
 |terni|
@@ -303,7 +291,7 @@ self assert: terni playerXWon.
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:12:20'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:12:20'!
 test13CannotAskWinnerIfGameHasNotEnded
 
 |terni|
@@ -319,7 +307,7 @@ self shouldFail: [terni playerOWon ] withDescription: TerniLapilli  CannotAskFor
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:12:39'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:12:39'!
 test14CannotPlayIfGameHasEnded
 
 |terni|
@@ -339,7 +327,7 @@ self shouldFail: [terni putStoneO: 1@1] withDescription: TerniLapilli  CannotPla
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:41:08'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:41:08'!
 test14aCannotPlayOutofBordersByExceedingRows
 
 |terni|
@@ -351,7 +339,7 @@ self deny: (terni thereIsAnXStoneIn: 3@4)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:42:37'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:42:37'!
 test14bCannotPlayOutofBordersByLoweringRows
 
 |terni|
@@ -363,7 +351,7 @@ self deny: (terni thereIsAnXStoneIn: 3@0)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:43:03'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:43:03'!
 test14cCannotPlayOutofBordersByLoweringColumns
 
 |terni|
@@ -375,7 +363,7 @@ self deny: (terni thereIsAnXStoneIn: 0@2)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:43:37'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:43:37'!
 test14dCannotPlayOutofBordersByExceedingColumns
 
 |terni|
@@ -387,7 +375,7 @@ self deny: (terni thereIsAnXStoneIn: 4@1)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:44:08'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:44:08'!
 test14eCannotPlayOutofBorders
 
 |terni|
@@ -399,7 +387,7 @@ self deny: (terni thereIsAnXStoneIn: 0@5)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 14:24:15'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 14:24:15'!
 test15MoveStonesDoesNotChangeTheNumerOfStonesInTheBoard
 
 |terni|
@@ -421,7 +409,7 @@ self deny: (terni thereIsAnXStoneIn: 3@3)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:16:33'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:16:33'!
 test16CannotMoveStonesUntilAllTheStonesArePlayed
 
 |terni|
@@ -440,7 +428,7 @@ self deny:(terni thereIsAnXStoneIn: 2@3)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:18:07'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:18:07'!
 test17PlayerCannotMoveFromPositionsWHereHeDoesNotHaveRocksPlaced
 
 |terni|
@@ -460,7 +448,7 @@ self deny: (terni thereIsAnXStoneIn: 3@1)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:19:10'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:19:10'!
 test18PlayerCannotMoveRockMoreThanOneSpace
 
 |terni|
@@ -482,7 +470,7 @@ self deny: (terni thereIsAnXStoneIn: 3@1)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:20:18'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:20:18'!
 test19PlayerCannotMoveWhereThereIsAnRockFromAnotherPlayer
 
 |terni|
@@ -503,7 +491,7 @@ self assert: (terni thereIsAnOStoneIn: 1@2).
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:21:09'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:21:09'!
 test20PlayerCannotMoveWhereThereIsAnRockFromThePlayer
 
 |terni|
@@ -523,7 +511,7 @@ self assert: (terni thereIsAnXStoneIn: 1@2).
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:24:44'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:24:44'!
 test21PlayerCannotMoveIfGameHasEnded
 
 |terni|
@@ -545,7 +533,7 @@ self deny: (terni thereIsAnOStoneIn: 1@1)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:30:50'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:30:50'!
 test22WinnerPlayerCannotMoveIfGameHasEnded
 
 |terni|
@@ -569,7 +557,7 @@ self deny: (terni thereIsAnXStoneIn: 2@2)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:31:40'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:31:40'!
 test23LoserPlayerCannotMoveIfGameHasEnded
 
 |terni|
@@ -594,7 +582,7 @@ self deny: (terni thereIsAnOStoneIn: 3@2)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:46:42'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:46:42'!
 test24aPlayerCannotMoveOutsideBordersByExceedingRows
 
 |terni|
@@ -616,7 +604,7 @@ self deny: (terni thereIsAnXStoneIn: 1@5)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:57:28'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:57:28'!
 test24bPlayerCannotMoveOutsideBordersByExceedingColumns
 
 |terni|
@@ -638,7 +626,7 @@ self deny: (terni thereIsAnOStoneIn: 5@1)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:53:22'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:53:22'!
 test24cPlayerCannotMoveOutsideBordersByLoweringRows
 
 |terni|
@@ -660,7 +648,7 @@ self deny: (terni thereIsAnOStoneIn: 2@0)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:53:16'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:53:16'!
 test24dPlayerCannotMoveOutsideBordersByLoweringColumns
 
 |terni|
@@ -682,7 +670,7 @@ self deny: (terni thereIsAnXStoneIn: 0@1)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:57:16'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:57:16'!
 test25PlayerXMovesWithinTurn
 
 |terni|
@@ -705,7 +693,7 @@ self deny: (terni thereIsAnOStoneIn: 3@2)
 
 ! !
 
-!TerniLapilliTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/8/2018 15:57:11'!
+!TerniLapilliTests methodsFor: 'testing' stamp: 'AAAM 11/8/2018 15:57:11'!
 test26PlayerOMovesWithinTurn
 
 |terni|
@@ -727,3 +715,16 @@ self assert: (terni thereIsAnXStoneIn: 1@1).
 self deny: (terni thereIsAnXStoneIn: 1@2)
 
 ! !
+
+
+!TerniLapilliTests methodsFor: 'stringErrorComparer-private' stamp: 'AAAM 11/3/2018 01:51:17'!
+shouldFail: aBlockClosure withDescription: aFailureDescription 
+
+	| failedAsExpected |
+	
+	failedAsExpected := false.
+	aBlockClosure
+		on: Error - MessageNotUnderstood 
+		do: [ :anError | failedAsExpected	:= anError messageText = aFailureDescription ].
+		
+	failedAsExpected ifFalse: [ Error signal: 'Expected to fail but did not fail' ]! !
