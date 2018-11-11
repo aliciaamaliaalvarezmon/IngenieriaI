@@ -1161,6 +1161,141 @@ testView05
 
 	! !
 
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/11/2018 05:25:43'!
+testView06
+
+	| scene|
+	game := TerniLapilli  new.
+	
+	
+	game putXAt: 	2@2.
+	game putOAt:  3@1.
+	game putXAt: 1@1.
+	game putOAt:  2@1.
+	game putXAt: 3@2.
+	game putOAt: 3@3.
+	
+	scene := ReadStream on: game showView contents.
+	self assert: '' equals: scene nextLine.
+	self assert: 'X|O|O' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' |X|X' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' | |O' equals: scene nextLine.
+	self assert: 'Playing X' equals: scene nextLine.
+	self assert: scene  atEnd.
+
+	game slideXFrom: 2@2 to: 1@2. 
+	
+	scene := ReadStream on: game showView contents.
+	self assert: '' equals: scene nextLine.
+	self assert: 'X|O|O' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: 'X| |X' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' | |O' equals: scene nextLine.
+	self assert: 'Playing O' equals: scene nextLine.
+	self assert: scene  atEnd.
+
+
+	! !
+
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/11/2018 05:29:46'!
+testView07
+
+	| scene|
+	game := TerniLapilli  new.
+	
+	
+	game putXAt: 	2@2.
+	game putOAt:  3@1.
+	game putXAt: 1@1.
+	game putOAt:  2@1.
+	game putXAt: 3@2.
+	game putOAt: 3@3.
+	
+	scene := ReadStream on: game showView contents.
+	self assert: '' equals: scene nextLine.
+	self assert: 'X|O|O' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' |X|X' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' | |O' equals: scene nextLine.
+	self assert: 'Playing X' equals: scene nextLine.
+	self assert: scene  atEnd.
+
+	game slideXFrom: 2@2 to: 1@2. 
+	game slideOFrom: 3@3 to: 2@3.
+	 
+	scene := ReadStream on: game showView contents.
+	self assert: '' equals: scene nextLine.
+	self assert: 'X|O|O' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: 'X| |X' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' |O| ' equals: scene nextLine.
+	self assert: 'Playing X' equals: scene nextLine.
+	self assert: scene  atEnd.
+	
+	game slideXFrom: 1@1 to: 2@2. 
+	
+	scene := ReadStream on: game showView contents.
+	self assert: '' equals: scene nextLine.
+	self assert: ' |O|O' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: 'X|X|X' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' |O| ' equals: scene nextLine.
+	self assert: 'X Won!!' equals: scene nextLine.
+	self assert: scene  atEnd.
+
+
+	! !
+
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/11/2018 05:39:22'!
+testView08
+
+	| scene|
+	game := TerniLapilli  new.
+	
+	
+	game putXAt: 	2@2.
+	game putOAt:  3@1.
+	game putXAt: 1@1.
+	game putOAt:  2@1.
+	game putXAt: 3@2.
+	game putOAt: 3@3.
+	
+	scene := ReadStream on: game showView contents.
+	self assert: '' equals: scene nextLine.
+	self assert: 'X|O|O' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' |X|X' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' | |O' equals: scene nextLine.
+	self assert: 'Playing X' equals: scene nextLine.
+	self assert: scene  atEnd.
+
+	game slideXFrom: 2@2 to: 1@2. 
+	game slideOFrom: 3@1 to: 2@2.
+	game slideXFrom: 1@2 to: 1@3.
+	game slideOFrom: 3@3 to: 2@3.
+	  
+	scene := ReadStream on: game showView contents.
+	self assert: '' equals: scene nextLine.
+	self assert: 'X|O| ' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' |O|X' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: 'X|O| ' equals: scene nextLine.
+	self assert: 'O Won!!' equals: scene nextLine.
+	self assert: scene  atEnd.
+	
+	
+
+
+	! !
+
 
 !classDefinition: #TerniLapilli category: #'TerniLapilli-Solucion'!
 Object subclass: #TerniLapilli
@@ -1399,7 +1534,7 @@ slideOWhenPlayingXFrom: aPosition to: anotherPosition
 
 	self error: self class notOTurnErrorMessage ! !
 
-!TerniLapilli methodsFor: 'sliding - private' stamp: 'AAAM 11/11/2018 02:09:05'!
+!TerniLapilli methodsFor: 'sliding - private' stamp: 'AAAM 11/11/2018 04:55:25'!
 slideOWhenSlidingOFrom: aPosition to: anotherPosition
 	
 	self assertIsFree: anotherPosition .
@@ -1413,7 +1548,10 @@ slideOWhenSlidingOFrom: aPosition to: anotherPosition
 	console newLine.
 	self hasPlayerOWon ifTrue:[console nextPutAll:'Estado: Juego terminado - ¡Ganó O!!']
 	ifFalse:[console nextPutAll:'Estado: Jugando X'].
-	console newLine.! !
+	console newLine.
+	
+	self hasPlayerOWon ifTrue:[view actualizeOnFinishedGameMovingTo: anotherPosition  from: aPosition  by: $O ]
+						   ifFalse:[view actualizeOnUnfinishedGameMovingTo: anotherPosition  from: aPosition  by: $O  ].! !
 
 !TerniLapilli methodsFor: 'sliding - private' stamp: 'HAW 11/8/2018 11:16:01'!
 slideXWhenPlacingXFrom: aPosition to: anotherPosition
@@ -1425,7 +1563,7 @@ slideXWhenPlayingOFrom: aPosition to: anotherPosition
 
 	self error: self class notXTurnErrorMessage! !
 
-!TerniLapilli methodsFor: 'sliding - private' stamp: 'AAAM 11/11/2018 02:09:10'!
+!TerniLapilli methodsFor: 'sliding - private' stamp: 'AAAM 11/11/2018 05:09:07'!
 slideXWhenSlidingXFrom: aPosition to: anotherPosition
 	
 	self assertIsFree: anotherPosition .
@@ -1439,7 +1577,10 @@ slideXWhenSlidingXFrom: aPosition to: anotherPosition
 	console newLine.
 	self hasPlayerXWon ifTrue:[console nextPutAll:'Estado: Juego terminado - ¡Ganó X!!']
 	ifFalse:[console nextPutAll:'Estado: Jugando O'].
-	console newLine.! !
+	console newLine.
+	
+		self hasPlayerXWon ifTrue:[view actualizeOnFinishedGameMovingTo: anotherPosition  from: aPosition  by: $X ]
+						   ifFalse:[view actualizeOnUnfinishedGameMovingTo: anotherPosition  from: aPosition  by: $X  ].! !
 
 
 !TerniLapilli methodsFor: 'testing board positions' stamp: 'HAW 11/8/2018 12:19:28'!
@@ -2084,6 +2225,26 @@ Object subclass: #TerniLapilliView
 	poolDictionaries: ''
 	category: 'TerniLapilli-Solucion'!
 
+!TerniLapilliView methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 05:32:34'!
+actualizeOnFinishedGameMovingTo: anotherPosition  from: aPosition  by: aPlayer
+
+|indexFrom indexTo|
+ indexFrom := aPosition x + (aPosition x -1).
+ indexTo := anotherPosition x + (anotherPosition x -1).
+aPosition y= 1 ifTrue:[ lines1 at:  indexFrom put: $ . ] . 
+aPosition y= 2 ifTrue:[ lines2 at:  indexFrom put: $  .] .
+aPosition y= 3 ifTrue:[ lines3 at:  indexFrom put: $  .] .
+
+anotherPosition y = 1ifTrue:[ lines1 at:  indexTo put: aPlayer. ] . 
+anotherPosition y = 2ifTrue:[ lines2 at:  indexTo put: aPlayer. ] . 
+anotherPosition y = 3ifTrue:[ lines3 at:  indexTo put: aPlayer. ] . 
+
+
+
+self setSceneFinished: aPlayer.
+
+ ^self! !
+
 !TerniLapilliView methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 04:11:49'!
 actualizeOnFinishedGameWith: aPosition by: aPlayer
 
@@ -2101,6 +2262,26 @@ aPosition y= 3 ifTrue:[ lines3 at:  index put: aPlayer ] .
 
 
 ! !
+
+!TerniLapilliView methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 05:23:54'!
+actualizeOnUnfinishedGameMovingTo: anotherPosition  from: aPosition  by: aPlayer
+
+
+|indexFrom indexTo|
+ indexFrom := aPosition x + (aPosition x -1).
+ indexTo := anotherPosition x + (anotherPosition x -1).
+aPosition y= 1 ifTrue:[ lines1 at:  indexFrom put: $ . ] . 
+aPosition y= 2 ifTrue:[ lines2 at:  indexFrom put: $  .] .
+aPosition y= 3 ifTrue:[ lines3 at:  indexFrom put: $  .] .
+
+anotherPosition y = 1ifTrue:[ lines1 at:  indexTo put: aPlayer. ] . 
+anotherPosition y = 2ifTrue:[ lines2 at:  indexTo put: aPlayer. ] . 
+anotherPosition y = 3ifTrue:[ lines3 at:  indexTo put: aPlayer. ] . 
+
+
+aPlayer = $X ifTrue:[self setSceneUnfinished: $O] ifFalse:[ self setSceneUnfinished: $X].
+
+^self ! !
 
 !TerniLapilliView methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 04:01:01'!
 actualizeOnUnfinishedGameWith: aPosition by: aPlayer
