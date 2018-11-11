@@ -1048,6 +1048,46 @@ testConsole06
 	self assert: console atEnd.
 	! !
 
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/11/2018 00:06:46'!
+testView01
+
+	| view scene|
+	game := TerniLapilli  new.
+	
+	view := TerniLapilliView newWith: game.
+	
+	scene := ReadStream on: view showScene contents.
+	self assert: '' equals: scene nextLine.
+	self assert: ' | | ' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' | | ' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' | | ' equals: scene nextLine.
+	self assert: scene  atEnd.
+
+
+	! !
+
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/11/2018 00:08:33'!
+testView02
+
+	| view scene|
+	game := TerniLapilli  new.
+	
+	view := TerniLapilliView newWith: game.
+	game putXAt: 	2@2.
+	scene := ReadStream on: view showScene contents.
+	self assert: '' equals: scene nextLine.
+	self assert: ' | | ' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' |X| ' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' | | ' equals: scene nextLine.
+	self assert: scene  atEnd.
+
+
+	! !
+
 
 !classDefinition: #TerniLapilli category: #'TerniLapilli-Solucion'!
 Object subclass: #TerniLapilli
@@ -1376,6 +1416,10 @@ isSlidingX
 	^state isSlidingX! !
 
 
+!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 00:20:42'!
+lastPlay
+"Hay que implementarla"! !
+
 !TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/10/2018 19:14:41'!
 log
 	 
@@ -1670,6 +1714,12 @@ slideXFrom: aPosition to: anotherPostion
 
 	game slideXWhenPlayingOFrom: aPosition to: anotherPostion .! !
 
+
+!PlayingO methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 00:13:41'!
+accept: unVisitor.
+
+self subclassResponsibility.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'PlayingO class' category: #'TerniLapilli-Solucion'!
@@ -1788,6 +1838,12 @@ slideOFrom: aPosition to: anotherPostion
  
 	game slideOWhenPlayingXFrom: aPosition to: anotherPostion .! !
 
+
+!PlayingX methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 00:13:47'!
+accept: unVisitor.
+
+self subclassResponsibility.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'PlayingX class' category: #'TerniLapilli-Solucion'!
@@ -1899,3 +1955,57 @@ SlidingX class
 isFor: aTerniLapilli 
 
 	^aTerniLapilli isPlayingO and: [ aTerniLapilli hasXMorePiecesToPlace not and: [ aTerniLapilli hasPlayerOWon not ]]! !
+
+
+!classDefinition: #TerniLapilliView category: #'TerniLapilli-Solucion'!
+Object subclass: #TerniLapilliView
+	instanceVariableNames: 'game lines1 lines2 lines3'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli-Solucion'!
+
+!TerniLapilliView methodsFor: 'as yet unclassified' stamp: 'AAAM 11/10/2018 23:29:30'!
+newInitialize: aGame
+
+game:= aGame.
+lines1 := OrderedCollection new.
+lines1 addAllLast: ' | | '.
+lines2 := OrderedCollection new.
+lines2 addAllLast: ' | | '.
+lines3 := OrderedCollection new.
+lines3 addAllLast: ' | | '.
+
+! !
+
+!TerniLapilliView methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 00:18:14'!
+showScene
+
+|  scene|
+
+"game unVisitador: self."
+
+
+scene := WriteStream  on: String new.
+scene newLine.
+scene nextPutAll: lines1 contents.
+scene newLine.
+scene nextPutAll: '-----'. 
+scene newLine.
+scene nextPutAll: lines2 contents. 
+scene newLine.
+scene nextPutAll: '-----'. 
+scene newLine.
+scene nextPutAll: lines3 contents.
+
+^scene! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TerniLapilliView class' category: #'TerniLapilli-Solucion'!
+TerniLapilliView class
+	instanceVariableNames: ''!
+
+!TerniLapilliView class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/10/2018 23:05:33'!
+newWith: aGame
+
+^ self new newInitialize: aGame! !
