@@ -1807,16 +1807,15 @@ thereIsNotObserverErrorMessage
 
 !classDefinition: #TerniLapilliConsoleObserver category: #'TerniLapilli-Solucion'!
 Object subclass: #TerniLapilliConsoleObserver
-	instanceVariableNames: 'game observerState contents'
+	instanceVariableNames: 'game contents'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TerniLapilli-Solucion'!
 
-!TerniLapilliConsoleObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 21:13:47'!
+!TerniLapilliConsoleObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:29:17'!
 newInitializeWith: aGame.
 
 game:= aGame.
-observerState:= aGame setState.
 contents := WriteStream on: String new. 
 
 game attach: self.! !
@@ -1826,15 +1825,13 @@ showConsole
 
 	^ ReadStream on: contents contents.! !
 
-!TerniLapilliConsoleObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:18:07'!
+!TerniLapilliConsoleObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:44:32'!
 update
-
-observerState := game getState.
 
 contents nextPutAll:  game lastPlay showMove .
 contents newLine.
  
-contents nextPutAll: observerState isPlaying.
+contents nextPutAll: (VisitorConsole for: game) value.
 
 contents newLine .
 ! !
@@ -1917,6 +1914,12 @@ initializeFor: aGame
 
 	game := aGame ! !
 
+
+!TerniLapilliState methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:02:38'!
+accept: aVisitor
+
+	^self subclassResponsibility.! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'TerniLapilliState class' category: #'TerniLapilli-Solucion'!
@@ -1973,10 +1976,10 @@ slideXFrom: aPosition to: anotherPostion
 	game error: game class canNotPlayWhenGameIsOverErrorMessage ! !
 
 
-!GameOverState methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:17:28'!
-isPlaying
+!GameOverState methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:20:56'!
+accept: aVisitor
 
-	game hasPlayerXWon ifTrue: [^'Estado: Juego terminado - ¡Ganó X!!'] ifFalse: [^'Estado: Juego terminado - ¡Ganó O!!'].! !
+	aVisitor visitGameOverState.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -2009,10 +2012,10 @@ slideXFrom: aPosition to: anotherPostion
 	game slideXWhenPlayingOFrom: aPosition to: anotherPostion .! !
 
 
-!PlayingO methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:15:51'!
-isPlaying
+!PlayingO methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:20:39'!
+accept: aVisitor
 
-	^'Estado: Jugando O'.! !
+	aVisitor visitPlayingO.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -2121,10 +2124,10 @@ slideOFrom: aPosition to: anotherPostion
 	game slideOWhenPlayingXFrom: aPosition to: anotherPostion .! !
 
 
-!PlayingX methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:16:02'!
-isPlaying
+!PlayingX methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:20:47'!
+accept: aVisitor
 
-	^'Estado: Jugando X'.! !
+	aVisitor visitPlayingX.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -2258,7 +2261,7 @@ row:=(lines at: (aPosition y)).
 row at: index put: aPlayer .
 ! !
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 05:26:01'!
+!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:30:42'!
 newInitialize: aGame
 
 |lines1 lines2 lines3|
@@ -2278,13 +2281,13 @@ lines add: lines1.
 lines add: lines2.
 lines add: lines3. 
 
-self setScene:'Playing X'.
+self setScene.
 
 game attach:  self.
 ! !
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 05:01:17'!
-setScene: aString
+!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:30:29'!
+setScene
 
 scene := WriteStream  on: String new.
 scene newLine.
@@ -2298,14 +2301,14 @@ scene nextPutAll: '-----'.
 scene newLine.
 scene nextPutAll: (lines at:3) contents.
 scene newLine.
-scene nextPutAll: aString.! !
+scene nextPutAll: (VisitorView for: game) value.! !
 
 !TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:19:30'!
 showScene
 
 ^ ReadStream on: scene contents.! !
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 03:48:07'!
+!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:32:05'!
 update
 
 |action positions|
@@ -2316,10 +2319,8 @@ action:= game lastPlay showMove .
 
 (action includesSubString: 'marcó ') ifTrue:[self actualizeOnPlacingGameWith: (positions at:1) by: (action at:1) ] ifFalse:[self actualizeOnGameMovingTo: (positions at:2) from: (positions at:1)  by: (action at:1) ]. 
 
+self setScene.
 
-(observerState isKindOf: PlayingO) ifTrue:[self setScene:'Playing O' ].
-(observerState isKindOf: PlayingX) ifTrue:[self setScene:'Playing X' ].
-(observerState isKindOf: GameOverState ) ifTrue:[ game hasPlayerXWon ifTrue: [self setScene:'X Won!!'] ifFalse: [self setScene: 'O Won!!']].
 
 
 ! !
@@ -2334,3 +2335,111 @@ TerniLapilliViewObserver class
 newWith: aGame
 
 ^ self new newInitialize: aGame! !
+
+
+!classDefinition: #VisitorViews category: #'TerniLapilli-Solucion'!
+Object subclass: #VisitorViews
+	instanceVariableNames: 'game'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli-Solucion'!
+
+!VisitorViews methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:45:44'!
+initializeWith: aGame
+
+	game := aGame.! !
+
+!VisitorViews methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:28:36'!
+value
+
+	^self subclassResponsibility.! !
+
+!VisitorViews methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:19:41'!
+visitGameOverState
+
+	^self subclassResponsibility.! !
+
+!VisitorViews methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:19:19'!
+visitPlayingO
+	
+	^self subclassResponsibility.! !
+
+!VisitorViews methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:19:29'!
+visitPlayingX
+
+	^self subclassResponsibility.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'VisitorViews class' category: #'TerniLapilli-Solucion'!
+VisitorViews class
+	instanceVariableNames: ''!
+
+!VisitorViews class methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:33:16'!
+for: aGame
+
+	^self new initializeWith: aGame.! !
+
+
+!classDefinition: #VisitorConsole category: #'TerniLapilli-Solucion'!
+VisitorViews subclass: #VisitorConsole
+	instanceVariableNames: 'message'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli-Solucion'!
+
+!VisitorConsole methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:48:22'!
+value
+
+	message := String.
+	
+	game getState accept: self.
+	
+	^message.! !
+
+!VisitorConsole methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:20:14'!
+visitGameOverState
+
+	game hasPlayerXWon ifTrue: [message := 'Estado: Juego terminado - ¡Ganó X!!'] ifFalse: [message := 'Estado: Juego terminado - ¡Ganó O!!'].! !
+
+!VisitorConsole methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:20:07'!
+visitPlayingO
+
+	message := 'Estado: Jugando O'. ! !
+
+!VisitorConsole methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:20:00'!
+visitPlayingX
+
+	message := 'Estado: Jugando X'.! !
+
+
+!classDefinition: #VisitorView category: #'TerniLapilli-Solucion'!
+VisitorViews subclass: #VisitorView
+	instanceVariableNames: 'message'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TerniLapilli-Solucion'!
+
+!VisitorView methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:22:15'!
+value
+
+	message := String.
+	
+	game getState accept: self.
+	
+	^message.! !
+
+!VisitorView methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:27:39'!
+visitGameOverState
+
+	game hasPlayerXWon ifTrue: [message := 'X Won!!'] ifFalse: [message := 'O Won!!'].! !
+
+!VisitorView methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:25:35'!
+visitPlayingO
+
+	message := 'Playing O'. ! !
+
+!VisitorView methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:25:53'!
+visitPlayingX
+
+	message := 'Playing X'.! !
