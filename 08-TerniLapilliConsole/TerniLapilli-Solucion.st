@@ -2212,74 +2212,75 @@ isFor: aTerniLapilli
 
 !classDefinition: #TerniLapilliViewObserver category: #'TerniLapilli-Solucion'!
 Object subclass: #TerniLapilliViewObserver
-	instanceVariableNames: 'game observerState scene lines1 lines2 lines3'
+	instanceVariableNames: 'game observerState scene lines'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TerniLapilli-Solucion'!
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 01:47:12'!
+!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 05:27:26'!
 actualizeOnGameMovingTo: anotherPosition  from: aPosition  by: aPlayer
 
 
 |indexFrom indexTo|
  indexFrom := aPosition x + (aPosition x -1).
  indexTo := anotherPosition x + (anotherPosition x -1).
-aPosition y= 1 ifTrue:[ lines1 at:  indexFrom put: $ . ] . 
-aPosition y= 2 ifTrue:[ lines2 at:  indexFrom put: $  .] .
-aPosition y= 3 ifTrue:[ lines3 at:  indexFrom put: $  .] .
 
-anotherPosition y = 1ifTrue:[ lines1 at:  indexTo put: aPlayer. ] . 
-anotherPosition y = 2ifTrue:[ lines2 at:  indexTo put: aPlayer. ] . 
-anotherPosition y = 3ifTrue:[ lines3 at:  indexTo put: aPlayer. ] . 
+ (lines at: aPosition y) at: indexFrom put: $ .
+ (lines at: anotherPosition y) at: indexTo put: aPlayer .
 
 
 ! !
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 01:46:50'!
+!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 05:27:19'!
 actualizeOnPlacingGameWith: aPosition by: aPlayer
 
-|index|
+|index row|
  index := aPosition x + (aPosition x -1).
 
-aPosition y= 1 ifTrue:[ lines1 at:  index put: aPlayer ] . 
-aPosition y= 2 ifTrue:[ lines2 at:  index put: aPlayer ] .
-aPosition y= 3 ifTrue:[ lines3 at:  index put: aPlayer ] .
+row:=(lines at: (aPosition y)).
 
+row at: index put: aPlayer .
 ! !
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 03:47:54'!
+!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 05:26:01'!
 newInitialize: aGame
 
+|lines1 lines2 lines3|
 game:= aGame.
 
 observerState:= aGame setState.
 
 lines1 := OrderedCollection new.
-lines1 addAllLast: ' | | '.
+lines1 addAllLast:' | | '.
 lines2 := OrderedCollection new.
-lines2 addAllLast: ' | | '.
+lines2 addAllLast:' | | '.
 lines3 := OrderedCollection new.
-lines3 addAllLast: ' | | '.
+lines3 addAllLast:' | | '.
+
+lines:= OrderedCollection  new.
+lines add: lines1.
+lines add: lines2.
+lines add: lines3. 
 
 self setScene:'Playing X'.
 
 game attach:  self.
 ! !
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 03:45:16'!
+!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 05:01:17'!
 setScene: aString
 
 scene := WriteStream  on: String new.
 scene newLine.
-scene nextPutAll: lines1 contents.
+scene nextPutAll: (lines at:1) contents.
 scene newLine.
 scene nextPutAll: '-----'. 
 scene newLine.
-scene nextPutAll: lines2 contents. 
+scene nextPutAll: (lines at:2) contents. 
 scene newLine.
 scene nextPutAll: '-----'. 
 scene newLine.
-scene nextPutAll: lines3 contents.
+scene nextPutAll: (lines at:3) contents.
 scene newLine.
 scene nextPutAll: aString.! !
 
