@@ -870,8 +870,8 @@ test40CanNotSlideOWhenPlayingX
 	! !
 
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:11:42'!
-testConsole00
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 14:56:16'!
+testConsole00AtNewGameIsEmpty
 
 	| observerconsole console|
 	game := TerniLapilli  new.
@@ -883,8 +883,8 @@ testConsole00
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:11:53'!
-testConsole01
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 14:56:35'!
+testConsole01UpdatesWhenPlayerXPlacesStones
 
 	| observerconsole console|
 	game := TerniLapilli  new.
@@ -901,8 +901,8 @@ testConsole01
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:12:03'!
-testConsole02
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 14:56:57'!
+testConsole02UpdatesWhenPlayerOPlacesStones
 
 	| observerconsole console|
 	game := TerniLapilli  new.
@@ -919,8 +919,8 @@ testConsole02
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:12:15'!
-testConsole03
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 14:57:36'!
+testConsole03UpdatesWhenGameFinishesAndXWins
 
 	| observerconsole console|
 	game := TerniLapilli  new.
@@ -947,8 +947,8 @@ testConsole03
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:12:25'!
-testConsole04
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 14:58:23'!
+testConsole04UpdatesWhenGameFinishesAndOWins
 
 	| observerconsole console|
 	game := TerniLapilli  new.
@@ -978,8 +978,45 @@ testConsole04
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:12:51'!
-testConsole05
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:00:00'!
+testConsole05UpdatesWhenPlayerXMoves
+
+	| observerconsole console|
+	game := TerniLapilli  new.
+	observerconsole := TerniLapilliConsoleObserver newWith: game.
+	
+	
+	game putXAt: 	2@2.
+	game putOAt: 1@1.
+	game putXAt: 	1@3.
+	game putOAt: 3@1.
+	game putXAt: 	2@1.
+	game putOAt: 2@3.
+	
+	game slideXFrom: 1@3  to: 1@2.
+
+
+
+	console:= observerconsole showConsole.
+	self assert:'X marcó en 2@2' equals: console nextLine.
+	self assert:'Estado: Jugando O' equals: console nextLine.
+	self assert:'O marcó en 1@1' equals: console nextLine.
+	self assert:'Estado: Jugando X' equals: console nextLine.
+	self assert:'X marcó en 1@3' equals: console nextLine.
+	self assert:'Estado: Jugando O' equals: console nextLine.
+	self assert:'O marcó en 3@1' equals: console nextLine.
+	self assert:'Estado: Jugando X' equals: console nextLine.
+	self assert:'X marcó en 2@1' equals: console nextLine.
+	self assert:'Estado: Jugando O' equals: console nextLine.
+	self assert:'O marcó en 2@3' equals: console nextLine.
+	self assert:'Estado: Jugando X' equals: console nextLine.
+	self assert:'X deslizó hasta 1@2 desde 1@3' equals: console nextLine.	
+	self assert:'Estado: Jugando O' equals: console nextLine.
+	self assert: console atEnd.
+	! !
+
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:01:48'!
+testConsole06UpdatesWhenPlayerOMoves
 
 	| observerconsole console|
 	game := TerniLapilli  new.
@@ -1020,8 +1057,8 @@ testConsole05
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:13:01'!
-testConsole06
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:02:57'!
+testConsole07UpdatesWhenGameFinishesAfterMoving
 
 	| observerconsole console|
 	game := TerniLapilli  new.
@@ -1056,8 +1093,69 @@ testConsole06
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:19:40'!
-testView01
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:19:34'!
+testConsoleAndViewCanWorkAtTheSameTime
+
+	| viewObserver scene observerconsole console|
+	game := TerniLapilli  new.
+	
+	viewObserver := TerniLapilliViewObserver newWith: game.
+	observerconsole := TerniLapilliConsoleObserver newWith: game.
+	
+	
+	game putXAt: 	2@2.
+	game putOAt:  3@1.
+	game putXAt: 1@1.
+	game putOAt:  2@1.
+	game putXAt: 3@2.
+	game putOAt: 3@3.
+
+	game slideXFrom: 2@2 to: 1@2. 
+	game slideOFrom: 3@1 to: 2@2.
+	game slideXFrom: 1@2 to: 1@3.
+	game slideOFrom: 3@3 to: 2@3.
+	  
+	scene := viewObserver showScene.
+	self assert: '' equals: scene nextLine.
+	self assert: 'X|O| ' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' |O|X' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: 'X|O| ' equals: scene nextLine.
+	self assert: 'O Won!!' equals: scene nextLine.
+	self assert: scene  atEnd.
+	
+	console:= observerconsole showConsole. 
+
+	self assert:'X marcó en 2@2' equals: console nextLine.
+	self assert:'Estado: Jugando O' equals: console nextLine.
+	self assert:'O marcó en 3@1' equals: console nextLine.
+	self assert:'Estado: Jugando X' equals: console nextLine.
+	self assert:'X marcó en 1@1' equals: console nextLine.
+	self assert:'Estado: Jugando O' equals: console nextLine.
+	self assert:'O marcó en 2@1' equals: console nextLine.
+	self assert:'Estado: Jugando X' equals: console nextLine.
+	self assert:'X marcó en 3@2' equals: console nextLine.
+	self assert:'Estado: Jugando O' equals: console nextLine.
+	self assert:'O marcó en 3@3' equals: console nextLine.
+	self assert:'Estado: Jugando X' equals: console nextLine.
+	self assert:'X deslizó hasta 1@2 desde 2@2' equals: console nextLine.	
+	self assert:'Estado: Jugando O' equals: console nextLine.
+	self assert:'O deslizó hasta 2@2 desde 3@1' equals: console nextLine.	
+	self assert:'Estado: Jugando X' equals: console nextLine.
+	self assert:'X deslizó hasta 1@3 desde 1@2' equals: console nextLine.	
+	self assert:'Estado: Jugando O' equals: console nextLine.
+	self assert:'O deslizó hasta 2@3 desde 3@3' equals: console nextLine.	
+	self assert:'Estado: Juego terminado - ¡Ganó O!!' equals: console nextLine.
+	self assert: console atEnd.
+	
+	
+
+
+	! !
+
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:03:34'!
+testView01AtNewGameIsEmpthy
 
 	| viewObserver scene|
 	game := TerniLapilli  new.
@@ -1077,8 +1175,8 @@ testView01
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:19:50'!
-testView02
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:04:50'!
+testView02UpdatesCorrectlyWhenPlayerXPlacesStones
 
 	| viewObserver scene|
 	game := TerniLapilli  new.
@@ -1100,8 +1198,8 @@ testView02
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:19:59'!
-testView03
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:04:37'!
+testView03UpdatesCorrectlyWhenPlayerOPlacesStones
 
 	| viewObserver scene|
 	game := TerniLapilli  new.
@@ -1124,8 +1222,8 @@ testView03
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:20:15'!
-testView04
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:06:25'!
+testView04UpdatesCorrectlyWhenPlacingAnotherStones
 
 	| viewObserver scene|
 	game := TerniLapilli  new.
@@ -1150,8 +1248,8 @@ testView04
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:20:32'!
-testView05
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:06:47'!
+testView05UpdatesCorrextlyWhenGameFinishes
 
 	| viewObserver scene|
 	game := TerniLapilli  new.
@@ -1178,8 +1276,8 @@ testView05
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 03:50:04'!
-testView06
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:07:22'!
+testView06UpdatesCorrectlyWhenPlayerXMoves
 
 	| viewObserver scene|
 	game := TerniLapilli  new.
@@ -1218,8 +1316,8 @@ testView06
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:20:45'!
-testView07
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:08:21'!
+testView07UpdatesCorrectlyWhenPlayerOMoves 
 
 	| viewObserver scene|
 	game := TerniLapilli  new.
@@ -1257,6 +1355,40 @@ testView07
 	self assert: 'Playing X' equals: scene nextLine.
 	self assert: scene  atEnd.
 	
+	
+
+
+	! !
+
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:09:05'!
+testView08UpdatesCorrectlyWhenPlayerXWinsAfterMoving
+
+	| viewObserver scene|
+	game := TerniLapilli  new.
+	
+	viewObserver := TerniLapilliViewObserver newWith: game.
+	
+	
+	game putXAt: 	2@2.
+	game putOAt:  3@1.
+	game putXAt: 1@1.
+	game putOAt:  2@1.
+	game putXAt: 3@2.
+	game putOAt: 3@3.
+	
+	game slideXFrom: 2@2 to: 1@2. 
+	game slideOFrom: 3@3 to: 2@3.
+	 
+	scene := viewObserver showScene.
+	self assert: '' equals: scene nextLine.
+	self assert: 'X|O|O' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: 'X| |X' equals: scene nextLine.
+	self assert: '-----' equals: scene nextLine.
+	self assert: ' |O| ' equals: scene nextLine.
+	self assert: 'Playing X' equals: scene nextLine.
+	self assert: scene  atEnd.
+	
 	game slideXFrom: 1@1 to: 2@2. 
 	
 	scene := viewObserver showScene.
@@ -1272,8 +1404,8 @@ testView07
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:20:54'!
-testView08
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 15:10:43'!
+testView09UpdatesCorrectlyWhenPlayerOWinsAfterMoving
 
 	| viewObserver scene|
 	game := TerniLapilli  new.
@@ -1326,41 +1458,43 @@ Object subclass: #LastPlay
 	poolDictionaries: ''
 	category: 'TerniLapilli-Solucion'!
 
-!LastPlay methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 03:18:37'!
-actualizeMoveWith: aString.
-
- move:= aString. ! !
-
-!LastPlay methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 03:10:25'!
-actualizePositionsWith:  aPosition.
-
-positions:= OrderedCollection new.
-positions add: aPosition. ! !
-
-!LastPlay methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 03:15:06'!
-actualizePositionsWith:  anotherPosition and: aPosition 
-
-positions:= OrderedCollection new.
-positions add: aPosition. 
-positions add: anotherPosition . ! !
-
-!LastPlay methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 03:02:36'!
-newInitialize
-
-positions:= OrderedCollection new.
-move:= String new.! !
-
-!LastPlay methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 03:11:48'!
+!LastPlay methodsFor: 'showAction' stamp: 'AAAM 11/12/2018 03:11:48'!
 showMove
 
 
 ^move copy. ! !
 
-!LastPlay methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 03:11:34'!
+!LastPlay methodsFor: 'showAction' stamp: 'AAAM 11/12/2018 03:11:34'!
 showPositions
 
 
 ^positions copy. ! !
+
+
+!LastPlay methodsFor: 'initialize' stamp: 'AAAM 11/12/2018 03:02:36'!
+newInitialize
+
+positions:= OrderedCollection new.
+move:= String new.! !
+
+
+!LastPlay methodsFor: 'actualize' stamp: 'AAAM 11/12/2018 03:18:37'!
+actualizeMoveWith: aString.
+
+ move:= aString. ! !
+
+!LastPlay methodsFor: 'actualize' stamp: 'AAAM 11/12/2018 03:10:25'!
+actualizePositionsWith:  aPosition.
+
+positions:= OrderedCollection new.
+positions add: aPosition. ! !
+
+!LastPlay methodsFor: 'actualize' stamp: 'AAAM 11/12/2018 03:15:06'!
+actualizePositionsWith:  anotherPosition and: aPosition 
+
+positions:= OrderedCollection new.
+positions add: aPosition. 
+positions add: anotherPosition . ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1705,29 +1839,30 @@ isSlidingX
 	^state isSlidingX! !
 
 
-!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 01:55:07'!
+!TerniLapilli methodsFor: 'managing observers' stamp: 'AAAM 11/12/2018 01:55:07'!
 attach: aObserver
 
 observers add: aObserver .! !
 
-!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 21:00:43'!
+!TerniLapilli methodsFor: 'managing observers' stamp: 'AAAM 11/11/2018 21:00:43'!
 detach: aObserver
 
 observers  remove: aObserver ifAbsent:[self error: self class thereIsNotObserverErrorMessage]! !
 
-!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 20:57:56'!
+!TerniLapilli methodsFor: 'managing observers' stamp: 'AAAM 11/11/2018 20:57:56'!
 getState
 
 ^state! !
 
-!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 02:09:24'!
-lastPlay
- ^ lastPlay . "Hay que implementar"! !
-
-!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 21:02:11'!
+!TerniLapilli methodsFor: 'managing observers' stamp: 'AAAM 11/11/2018 21:02:11'!
 notify
 
 observers do:[:observer | observer update]! !
+
+
+!TerniLapilli methodsFor: 'showing lastplay' stamp: 'AAAM 11/11/2018 02:09:24'!
+lastPlay
+ ^ lastPlay . "Hay que implementar"! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1807,7 +1942,7 @@ Object subclass: #TerniLapilliConsoleObserver
 	poolDictionaries: ''
 	category: 'TerniLapilli-Solucion'!
 
-!TerniLapilliConsoleObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:29:17'!
+!TerniLapilliConsoleObserver methodsFor: 'initialize' stamp: 'n 11/12/2018 11:29:17'!
 newInitializeWith: aGame.
 
 game:= aGame.
@@ -1815,12 +1950,14 @@ contents := WriteStream on: String new.
 
 game attach: self.! !
 
-!TerniLapilliConsoleObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:11:27'!
+
+!TerniLapilliConsoleObserver methodsFor: 'showing console' stamp: 'n 11/12/2018 08:11:27'!
 showConsole
 
 	^ ReadStream on: contents contents.! !
 
-!TerniLapilliConsoleObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:44:32'!
+
+!TerniLapilliConsoleObserver methodsFor: 'updating' stamp: 'n 11/12/2018 11:44:32'!
 update
 
 contents nextPutAll:  game lastPlay showMove .
@@ -1910,7 +2047,7 @@ initializeFor: aGame
 	game := aGame ! !
 
 
-!TerniLapilliState methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:02:38'!
+!TerniLapilliState methodsFor: 'accept visitors' stamp: 'n 11/12/2018 11:02:38'!
 accept: aVisitor
 
 	^self subclassResponsibility.! !
@@ -1971,7 +2108,7 @@ slideXFrom: aPosition to: anotherPostion
 	game error: game class canNotPlayWhenGameIsOverErrorMessage ! !
 
 
-!GameOverState methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:20:56'!
+!GameOverState methodsFor: 'accept visitors' stamp: 'n 11/12/2018 12:20:56'!
 accept: aVisitor
 
 	aVisitor visitGameOverState.! !
@@ -2007,7 +2144,7 @@ slideXFrom: aPosition to: anotherPostion
 	game slideXWhenPlayingOFrom: aPosition to: anotherPostion .! !
 
 
-!PlayingO methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:20:39'!
+!PlayingO methodsFor: 'accept visitors' stamp: 'n 11/12/2018 12:20:39'!
 accept: aVisitor
 
 	aVisitor visitPlayingO.! !
@@ -2119,7 +2256,7 @@ slideOFrom: aPosition to: anotherPostion
 	game slideOWhenPlayingXFrom: aPosition to: anotherPostion .! !
 
 
-!PlayingX methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:20:47'!
+!PlayingX methodsFor: 'accept visitors' stamp: 'n 11/12/2018 12:20:47'!
 accept: aVisitor
 
 	aVisitor visitPlayingX.! !
@@ -2231,32 +2368,7 @@ Object subclass: #TerniLapilliViewObserver
 	poolDictionaries: ''
 	category: 'TerniLapilli-Solucion'!
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 05:27:26'!
-actualizeOnGameMovingTo: anotherPosition  from: aPosition  by: aPlayer
-
-
-|indexFrom indexTo|
- indexFrom := aPosition x + (aPosition x -1).
- indexTo := anotherPosition x + (anotherPosition x -1).
-
- (lines at: aPosition y) at: indexFrom put: $ .
- (lines at: anotherPosition y) at: indexTo put: aPlayer .
-
-
-! !
-
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 05:27:19'!
-actualizeOnPlacingGameWith: aPosition by: aPlayer
-
-|index row|
- index := aPosition x + (aPosition x -1).
-
-row:=(lines at: (aPosition y)).
-
-row at: index put: aPlayer .
-! !
-
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 15:05:21'!
+!TerniLapilliViewObserver methodsFor: 'initialize' stamp: 'AAAM 11/12/2018 12:48:35'!
 newInitialize: aGame
 
 |lines1 lines2 lines3|
@@ -2281,7 +2393,33 @@ self setScene.
 game attach:  self.
 ! !
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:30:29'!
+
+!TerniLapilliViewObserver methodsFor: 'updating scene-private' stamp: 'AAAM 11/12/2018 05:27:26'!
+actualizeOnGameMovingTo: anotherPosition  from: aPosition  by: aPlayer
+
+
+|indexFrom indexTo|
+ indexFrom := aPosition x + (aPosition x -1).
+ indexTo := anotherPosition x + (anotherPosition x -1).
+
+ (lines at: aPosition y) at: indexFrom put: $ .
+ (lines at: anotherPosition y) at: indexTo put: aPlayer .
+
+
+! !
+
+!TerniLapilliViewObserver methodsFor: 'updating scene-private' stamp: 'AAAM 11/12/2018 05:27:19'!
+actualizeOnPlacingGameWith: aPosition by: aPlayer
+
+|index row|
+ index := aPosition x + (aPosition x -1).
+
+row:=(lines at: (aPosition y)).
+
+row at: index put: aPlayer .
+! !
+
+!TerniLapilliViewObserver methodsFor: 'updating scene-private' stamp: 'n 11/12/2018 12:30:29'!
 setScene
 
 scene := WriteStream  on: String new.
@@ -2298,12 +2436,14 @@ scene nextPutAll: (lines at:3) contents.
 scene newLine.
 scene nextPutAll: (VisitorView for: game) value.! !
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:19:30'!
+
+!TerniLapilliViewObserver methodsFor: 'showing scene' stamp: 'n 11/12/2018 08:19:30'!
 showScene
 
 ^ ReadStream on: scene contents.! !
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:32:05'!
+
+!TerniLapilliViewObserver methodsFor: 'updating scene' stamp: 'n 11/12/2018 12:32:05'!
 update
 
 |action positions|
@@ -2339,27 +2479,29 @@ Object subclass: #VisitorViews
 	poolDictionaries: ''
 	category: 'TerniLapilli-Solucion'!
 
-!VisitorViews methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:45:44'!
+!VisitorViews methodsFor: 'initialize' stamp: 'n 11/12/2018 11:45:44'!
 initializeWith: aGame
 
 	game := aGame.! !
 
-!VisitorViews methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:28:36'!
+
+!VisitorViews methodsFor: 'evaluating' stamp: 'n 11/12/2018 11:28:36'!
 value
 
 	^self subclassResponsibility.! !
 
-!VisitorViews methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:19:41'!
+
+!VisitorViews methodsFor: 'visiting' stamp: 'n 11/12/2018 12:19:41'!
 visitGameOverState
 
 	^self subclassResponsibility.! !
 
-!VisitorViews methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:19:19'!
+!VisitorViews methodsFor: 'visiting' stamp: 'n 11/12/2018 12:19:19'!
 visitPlayingO
 	
 	^self subclassResponsibility.! !
 
-!VisitorViews methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:19:29'!
+!VisitorViews methodsFor: 'visiting' stamp: 'n 11/12/2018 12:19:29'!
 visitPlayingX
 
 	^self subclassResponsibility.! !
@@ -2383,7 +2525,7 @@ VisitorViews subclass: #VisitorConsole
 	poolDictionaries: ''
 	category: 'TerniLapilli-Solucion'!
 
-!VisitorConsole methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 11:48:22'!
+!VisitorConsole methodsFor: 'evaluating' stamp: 'n 11/12/2018 11:48:22'!
 value
 
 	message := String.
@@ -2392,17 +2534,18 @@ value
 	
 	^message.! !
 
-!VisitorConsole methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:20:14'!
+
+!VisitorConsole methodsFor: 'visiting' stamp: 'n 11/12/2018 12:20:14'!
 visitGameOverState
 
 	game hasPlayerXWon ifTrue: [message := 'Estado: Juego terminado - ¡Ganó X!!'] ifFalse: [message := 'Estado: Juego terminado - ¡Ganó O!!'].! !
 
-!VisitorConsole methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:20:07'!
+!VisitorConsole methodsFor: 'visiting' stamp: 'n 11/12/2018 12:20:07'!
 visitPlayingO
 
 	message := 'Estado: Jugando O'. ! !
 
-!VisitorConsole methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:20:00'!
+!VisitorConsole methodsFor: 'visiting' stamp: 'n 11/12/2018 12:20:00'!
 visitPlayingX
 
 	message := 'Estado: Jugando X'.! !
@@ -2415,7 +2558,7 @@ VisitorViews subclass: #VisitorView
 	poolDictionaries: ''
 	category: 'TerniLapilli-Solucion'!
 
-!VisitorView methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:22:15'!
+!VisitorView methodsFor: 'evaluating' stamp: 'n 11/12/2018 12:22:15'!
 value
 
 	message := String.
@@ -2424,17 +2567,18 @@ value
 	
 	^message.! !
 
-!VisitorView methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:27:39'!
+
+!VisitorView methodsFor: 'visiting' stamp: 'n 11/12/2018 12:27:39'!
 visitGameOverState
 
 	game hasPlayerXWon ifTrue: [message := 'X Won!!'] ifFalse: [message := 'O Won!!'].! !
 
-!VisitorView methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:25:35'!
+!VisitorView methodsFor: 'visiting' stamp: 'n 11/12/2018 12:25:35'!
 visitPlayingO
 
 	message := 'Playing O'. ! !
 
-!VisitorView methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:25:53'!
+!VisitorView methodsFor: 'visiting' stamp: 'n 11/12/2018 12:25:53'!
 visitPlayingX
 
 	message := 'Playing X'.! !
