@@ -1729,11 +1729,6 @@ notify
 
 observers do:[:observer | observer update]! !
 
-!TerniLapilli methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 20:57:52'!
-setState
-
-^state! !
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'TerniLapilli class' category: #'TerniLapilli-Solucion'!
@@ -2261,13 +2256,13 @@ row:=(lines at: (aPosition y)).
 row at: index put: aPlayer .
 ! !
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 12:30:42'!
+!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 15:05:21'!
 newInitialize: aGame
 
 |lines1 lines2 lines3|
 game:= aGame.
 
-observerState:= aGame setState.
+observerState:= aGame getState.
 
 lines1 := OrderedCollection new.
 lines1 addAllLast:' | | '.
