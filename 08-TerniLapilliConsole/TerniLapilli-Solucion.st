@@ -870,20 +870,20 @@ test40CanNotSlideOWhenPlayingX
 	! !
 
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/11/2018 21:15:28'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:11:42'!
 testConsole00
 
 	| observerconsole console|
 	game := TerniLapilli  new.
 	observerconsole := TerniLapilliConsoleObserver newWith: game.
 	
-	console:= ReadStream on:   observerconsole showConsole contents. 
+	console:= observerconsole showConsole. 
 
 	
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/11/2018 21:17:02'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:11:53'!
 testConsole01
 
 	| observerconsole console|
@@ -892,7 +892,7 @@ testConsole01
 	
 	game putXAt: 	2@2.
 
-	console:= ReadStream on:   observerconsole showConsole contents. 
+	console:= observerconsole showConsole. 
 
 	.
 	
@@ -901,7 +901,7 @@ testConsole01
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/11/2018 21:18:31'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:12:03'!
 testConsole02
 
 	| observerconsole console|
@@ -911,7 +911,7 @@ testConsole02
 	game putXAt: 	2@2.
 	game putOAt: 1@1.
 
-	console:= ReadStream on:   observerconsole showConsole contents.
+	console:= observerconsole showConsole.
 	self assert:'X marcó en 2@2' equals: console nextLine.
 	self assert:'Estado: Jugando O' equals: console nextLine.
 	self assert:'O marcó en 1@1' equals: console nextLine.
@@ -919,7 +919,7 @@ testConsole02
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/11/2018 21:19:03'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:12:15'!
 testConsole03
 
 	| observerconsole console|
@@ -933,7 +933,7 @@ testConsole03
 	game putXAt: 	3@1.
 
 
-	console:= ReadStream on:   observerconsole showConsole contents.
+	console:= observerconsole showConsole.
 	self assert:'X marcó en 2@2' equals: console nextLine.
 	self assert:'Estado: Jugando O' equals: console nextLine.
 	self assert:'O marcó en 1@1' equals: console nextLine.
@@ -947,7 +947,7 @@ testConsole03
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/11/2018 21:20:16'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:12:25'!
 testConsole04
 
 	| observerconsole console|
@@ -962,7 +962,7 @@ testConsole04
 	game putXAt: 	3@2.
 	game putOAt: 1@3.
 
-	console:= ReadStream on:   observerconsole showConsole contents.
+	console:= observerconsole showConsole.
 	self assert:'X marcó en 2@2' equals: console nextLine.
 	self assert:'Estado: Jugando O' equals: console nextLine.
 	self assert:'O marcó en 1@1' equals: console nextLine.
@@ -978,7 +978,7 @@ testConsole04
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/11/2018 21:20:50'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:12:51'!
 testConsole05
 
 	| observerconsole console|
@@ -998,7 +998,7 @@ testConsole05
 	game slideXFrom:  2@2 to: 3@3. 
 
 
-	console:= ReadStream on:  observerconsole showConsole contents.
+	console:= observerconsole showConsole.
 	self assert:'X marcó en 2@2' equals: console nextLine.
 	self assert:'Estado: Jugando O' equals: console nextLine.
 	self assert:'O marcó en 1@1' equals: console nextLine.
@@ -1020,7 +1020,7 @@ testConsole05
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/11/2018 21:21:16'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:13:01'!
 testConsole06
 
 	| observerconsole console|
@@ -1038,7 +1038,7 @@ testConsole06
 	
 
 
-	console:= ReadStream on:   observerconsole showConsole contents.
+	console:= observerconsole showConsole.
 	self assert:'X marcó en 2@2' equals: console nextLine.
 	self assert:'Estado: Jugando O' equals: console nextLine.
 	self assert:'O marcó en 1@1' equals: console nextLine.
@@ -1056,7 +1056,7 @@ testConsole06
 	self assert: console atEnd.
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 03:50:04'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:19:40'!
 testView01
 
 	| viewObserver scene|
@@ -1064,7 +1064,7 @@ testView01
 	
 	viewObserver := TerniLapilliViewObserver newWith: game.
 	
-	scene := ReadStream on: viewObserver showScene contents.
+	scene := viewObserver showScene.
 	self assert: '' equals: scene nextLine.
 	self assert: ' | | ' equals: scene nextLine.
 	self assert: '-----' equals: scene nextLine.
@@ -1077,7 +1077,7 @@ testView01
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 03:50:04'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:19:50'!
 testView02
 
 	| viewObserver scene|
@@ -1087,7 +1087,7 @@ testView02
 	
 	
 	game putXAt: 	2@2.
-	scene := ReadStream on: viewObserver showScene contents.
+	scene := viewObserver showScene.
 	self assert: '' equals: scene nextLine.
 	self assert: ' | | ' equals: scene nextLine.
 	self assert: '-----' equals: scene nextLine.
@@ -1100,7 +1100,7 @@ testView02
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 03:50:04'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:19:59'!
 testView03
 
 	| viewObserver scene|
@@ -1111,7 +1111,7 @@ testView03
 	
 	game putXAt: 	2@2.
 	game putOAt:  3@1.
-	scene := ReadStream on: viewObserver showScene contents.
+	scene := viewObserver showScene.
 	self assert: '' equals: scene nextLine.
 	self assert: ' | |O' equals: scene nextLine.
 	self assert: '-----' equals: scene nextLine.
@@ -1124,7 +1124,7 @@ testView03
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 03:50:04'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:20:15'!
 testView04
 
 	| viewObserver scene|
@@ -1137,7 +1137,7 @@ testView04
 	game putOAt:  3@1.
 	game putXAt: 1@1.
 	
-	scene := ReadStream on: viewObserver showScene contents.
+	scene := viewObserver showScene.
 	self assert: '' equals: scene nextLine.
 	self assert: 'X| |O' equals: scene nextLine.
 	self assert: '-----' equals: scene nextLine.
@@ -1150,7 +1150,7 @@ testView04
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 03:50:04'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:20:32'!
 testView05
 
 	| viewObserver scene|
@@ -1165,7 +1165,7 @@ testView05
 	game putOAt:  2@1.
 	game putXAt: 3@3.
 
-	scene := ReadStream on: viewObserver showScene contents.
+	scene := viewObserver showScene.
 	self assert: '' equals: scene nextLine.
 	self assert: 'X|O|O' equals: scene nextLine.
 	self assert: '-----' equals: scene nextLine.
@@ -1218,7 +1218,7 @@ testView06
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 03:50:04'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:20:45'!
 testView07
 
 	| viewObserver scene|
@@ -1234,7 +1234,7 @@ testView07
 	game putXAt: 3@2.
 	game putOAt: 3@3.
 	
-	scene := ReadStream on: viewObserver showScene contents.
+	scene := viewObserver showScene.
 	self assert: '' equals: scene nextLine.
 	self assert: 'X|O|O' equals: scene nextLine.
 	self assert: '-----' equals: scene nextLine.
@@ -1247,7 +1247,7 @@ testView07
 	game slideXFrom: 2@2 to: 1@2. 
 	game slideOFrom: 3@3 to: 2@3.
 	 
-	scene := ReadStream on: viewObserver showScene contents.
+	scene := viewObserver showScene.
 	self assert: '' equals: scene nextLine.
 	self assert: 'X|O|O' equals: scene nextLine.
 	self assert: '-----' equals: scene nextLine.
@@ -1259,7 +1259,7 @@ testView07
 	
 	game slideXFrom: 1@1 to: 2@2. 
 	
-	scene := ReadStream on: viewObserver  showScene contents.
+	scene := viewObserver showScene.
 	self assert: '' equals: scene nextLine.
 	self assert: ' |O|O' equals: scene nextLine.
 	self assert: '-----' equals: scene nextLine.
@@ -1272,7 +1272,7 @@ testView07
 
 	! !
 
-!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'AAAM 11/12/2018 03:50:04'!
+!TerniLapilliTest methodsFor: 'testingConsole&View' stamp: 'n 11/12/2018 08:20:54'!
 testView08
 
 	| viewObserver scene|
@@ -1288,7 +1288,7 @@ testView08
 	game putXAt: 3@2.
 	game putOAt: 3@3.
 	
-	scene := ReadStream on: viewObserver showScene contents.
+	scene := viewObserver showScene.
 	self assert: '' equals: scene nextLine.
 	self assert: 'X|O|O' equals: scene nextLine.
 	self assert: '-----' equals: scene nextLine.
@@ -1303,7 +1303,7 @@ testView08
 	game slideXFrom: 1@2 to: 1@3.
 	game slideOFrom: 3@3 to: 2@3.
 	  
-	scene := ReadStream on: viewObserver  showScene contents.
+	scene := viewObserver showScene.
 	self assert: '' equals: scene nextLine.
 	self assert: 'X|O| ' equals: scene nextLine.
 	self assert: '-----' equals: scene nextLine.
@@ -1821,12 +1821,12 @@ contents := WriteStream on: String new.
 
 game attach: self.! !
 
-!TerniLapilliConsoleObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 21:13:17'!
+!TerniLapilliConsoleObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:11:27'!
 showConsole
 
-	^ contents copy! !
+	^ ReadStream on: contents contents.! !
 
-!TerniLapilliConsoleObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 03:16:27'!
+!TerniLapilliConsoleObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:18:07'!
 update
 
 observerState := game getState.
@@ -1834,9 +1834,7 @@ observerState := game getState.
 contents nextPutAll:  game lastPlay showMove .
 contents newLine.
  
-(observerState isKindOf: PlayingO) ifTrue:[contents nextPutAll:'Estado: Jugando O' ].
-(observerState isKindOf: PlayingX) ifTrue:[contents nextPutAll:'Estado: Jugando X' ].
-(observerState isKindOf: GameOverState ) ifTrue:[ game hasPlayerXWon ifTrue: [contents nextPutAll:'Estado: Juego terminado - ¡Ganó X!!'] ifFalse: [contents nextPutAll: 'Estado: Juego terminado - ¡Ganó O!!']].
+contents nextPutAll: observerState isPlaying.
 
 contents newLine .
 ! !
@@ -1974,6 +1972,12 @@ slideXFrom: aPosition to: anotherPostion
 
 	game error: game class canNotPlayWhenGameIsOverErrorMessage ! !
 
+
+!GameOverState methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:17:28'!
+isPlaying
+
+	game hasPlayerXWon ifTrue: [^'Estado: Juego terminado - ¡Ganó X!!'] ifFalse: [^'Estado: Juego terminado - ¡Ganó O!!'].! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'GameOverState class' category: #'TerniLapilli-Solucion'!
@@ -2003,6 +2007,12 @@ isPlayingO
 slideXFrom: aPosition to: anotherPostion
 
 	game slideXWhenPlayingOFrom: aPosition to: anotherPostion .! !
+
+
+!PlayingO methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:15:51'!
+isPlaying
+
+	^'Estado: Jugando O'.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -2109,6 +2119,12 @@ isPlayingX
 slideOFrom: aPosition to: anotherPostion
  
 	game slideOWhenPlayingXFrom: aPosition to: anotherPostion .! !
+
+
+!PlayingX methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:16:02'!
+isPlaying
+
+	^'Estado: Jugando X'.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -2284,12 +2300,10 @@ scene nextPutAll: (lines at:3) contents.
 scene newLine.
 scene nextPutAll: aString.! !
 
-!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/11/2018 03:02:13'!
+!TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'n 11/12/2018 08:19:30'!
 showScene
 
-
-
-^scene! !
+^ ReadStream on: scene contents.! !
 
 !TerniLapilliViewObserver methodsFor: 'as yet unclassified' stamp: 'AAAM 11/12/2018 03:48:07'!
 update
