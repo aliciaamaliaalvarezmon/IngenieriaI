@@ -5,21 +5,30 @@ TestCase subclass: #TusLibrosTests
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!TusLibrosTests methodsFor: 'as yet unclassified' stamp: 'z 11/12/2018 20:58:59'!
+!TusLibrosTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 02:52:37'!
 test01ElCarritoCreadoSinElementosEstaVacio
 
-	|carrito|
+	|carrito editorial|
 	
-	carrito := Carrito novo.
+	editorial := Editorial novo.
+	
+	
+	
+	carrito := Carrito novoWith: editorial.
 	
 	self assert: carrito isEmpty.! !
 
-!TusLibrosTests methodsFor: 'as yet unclassified' stamp: 'z 11/12/2018 21:00:08'!
+!TusLibrosTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 03:44:12'!
 test02ElCarritoDejaDeEstarVacioCuandoSeAgregaUnLibro
 
-	|carrito|
+	|carrito editorial|
 	
-	carrito := Carrito novo.
+	editorial := Editorial novo.
+	
+	editorial addToCatalogo: 1 with: 2.
+	
+	
+	carrito := Carrito novoWith: editorial.
 	
 	carrito agregarLibro: 1.
 	
@@ -27,12 +36,18 @@ test02ElCarritoDejaDeEstarVacioCuandoSeAgregaUnLibro
 	self assert: (carrito listarContenido includes: 1).
 	! !
 
-!TusLibrosTests methodsFor: 'as yet unclassified' stamp: 'z 11/12/2018 21:01:10'!
+!TusLibrosTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 03:50:36'!
 test03ElCarritoContieneLosLibrosQueYoAgregue
 
-	|carrito|
+	|carrito editorial|
 	
-	carrito := Carrito novo.
+	editorial := Editorial novo.
+	
+	
+	editorial addToCatalogo: 1with: 1.
+	editorial addToCatalogo: 2 with: 1.
+	editorial addToCatalogo: 3 with:1.
+	carrito := Carrito novoWith: editorial.
 	
 	carrito agregarLibro: 1.
 	carrito agregarLibro: 2.
@@ -45,40 +60,88 @@ test03ElCarritoContieneLosLibrosQueYoAgregue
 	self deny: (carrito listarContenido includes: 4).
 	self deny: (carrito listarContenido includes: 5).! !
 
-!TusLibrosTests methodsFor: 'as yet unclassified' stamp: 'z 11/12/2018 21:02:47'!
-test04ElCarritoRegistraMasDeUnMismoLibroAlAgregar
+!TusLibrosTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 03:50:47'!
+test04AlAgregarMasDeUnMismoLibroAlCarritoSeAgreganAlCarrito
 
-	|carrito|
+	|carrito editorial|
 	
-	carrito := Carrito novo.
+	editorial := Editorial novo.
+	
+	editorial addToCatalogo: 1 with: 2.
+	
+	
+	carrito := Carrito novoWith: editorial.
 	
 	carrito agregarLibro: 1.
 	carrito agregarLibro: 1.
 	
 	self assert: (carrito cantLibro: 1) = 2.! !
 
+!TusLibrosTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 04:01:12'!
+test05NoSePuedeAgregarAlCarritoUnLibroQueNoEsDeLaEditorial
+
+	|carrito editorial|
+	
+	editorial := Editorial novo.
+	
+	 
+	carrito := Carrito novoWith: editorial .
+	
+	
+	
+	
+	self
+		should: [ carrito agregarLibro: 1. ]
+		raise: Error
+		withExceptionDo: [ :anError |
+			self assert: anError messageText equals: Carrito seQuiereAgregarLibroQueNoEstaEnElCatalogo. ].! !
+
+!TusLibrosTests methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 04:08:39'!
+test06NoSePuedeAgregarAlCarritoSiNoHayStockDeEseLibro
+
+|carrito editorial|
+	
+	editorial := Editorial novo.
+	carrito := Carrito novoWith: editorial .
+	
+	
+	editorial addToCatalogo: 1 with: 1.
+	
+	
+	carrito agregarLibro: 1.
+	
+	
+	
+	self
+		should: [ carrito agregarLibro: 1. ]
+		raise: Error
+		withExceptionDo: [ :anError |
+			self assert: anError messageText equals: Carrito noHayStockErrorMessage ].! !
+
 
 !classDefinition: #Carrito category: #TusLibros!
 Object subclass: #Carrito
-	instanceVariableNames: 'contenido'
+	instanceVariableNames: 'contenido editorial'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Carrito methodsFor: 'as yet unclassified' stamp: 'z 11/12/2018 20:17:53'!
-agregarLibro: aInteger 
+!Carrito methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 04:03:35'!
+agregarLibro: aBook 
 	
-	contenido add: aInteger.! !
+	(editorial estaEnElCatalogo: aBook) ifFalse:[^self error: self class seQuiereAgregarLibroQueNoEstaEnElCatalogo. ]ifTrue: [(editorial hayStock: aBook ) ifTrue:[contenido add: aBook.editorial compreLibro: aBook.^self] ifFalse: [^self error: self class noHayStockErrorMessage]].
+	! !
 
 !Carrito methodsFor: 'as yet unclassified' stamp: 'z 11/12/2018 20:44:00'!
 cantLibro: aBook 
 	
 	^(contenido select: [:anElement| anElement = aBook]) size.! !
 
-!Carrito methodsFor: 'as yet unclassified' stamp: 'z 11/12/2018 20:18:31'!
-initialize
+!Carrito methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 02:50:43'!
+initializeWith:anEditorial
 
-	contenido := OrderedCollection new.! !
+	contenido := OrderedCollection new.
+	editorial:= anEditorial .! !
 
 !Carrito methodsFor: 'as yet unclassified' stamp: 'z 11/12/2018 20:19:10'!
 isEmpty
@@ -96,7 +159,79 @@ listarContenido
 Carrito class
 	instanceVariableNames: ''!
 
-!Carrito class methodsFor: 'as yet unclassified' stamp: 'z 11/12/2018 20:14:23'!
-novo
+!Carrito class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 02:51:25'!
+novoWith: anEditorial
 	
-	^self new initialize.! !
+	^self new initializeWith: anEditorial.! !
+
+
+!Carrito class methodsFor: 'error handling' stamp: 'AAAM 11/14/2018 04:08:02'!
+noHayStockErrorMessage
+	^'no hay stock de este libro en estos momentos'! !
+
+!Carrito class methodsFor: 'error handling' stamp: 'AAAM 11/14/2018 02:57:35'!
+seQuiereAgregarLibroQueNoEstaEnElCatalogo
+	^'Ese libro no esta a la venta'.! !
+
+
+!classDefinition: #Editorial category: #TusLibros!
+Object subclass: #Editorial
+	instanceVariableNames: 'carritos catalogo'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!Editorial methodsFor: 'initializing' stamp: 'AAAM 11/14/2018 03:43:16'!
+initializar
+	
+	catalogo := Dictionary new.! !
+
+
+!Editorial methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 03:39:03'!
+addToCatalogo: aBook 
+	
+	
+	catalogo add: aBook ! !
+
+!Editorial methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 03:27:27'!
+addToCatalogo: aBook with: aQuantity
+
+	
+	
+	catalogo at: aBook put: aQuantity .
+! !
+
+!Editorial methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 04:07:24'!
+compreLibro:aBook
+
+|oldvalue|
+
+oldvalue := catalogo at: aBook.
+catalogo at: aBook put: oldvalue-1.! !
+
+!Editorial methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 04:00:35'!
+estaEnElCatalogo: aBook 
+	
+	^catalogo includesKey: aBook.
+	
+	! !
+
+!Editorial methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 03:58:53'!
+hayStock: aBook 
+	^ (catalogo  at: aBook ) > 0! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Editorial class' category: #TusLibros!
+Editorial class
+	instanceVariableNames: 'carritos'!
+
+!Editorial class methodsFor: 'class initialization' stamp: 'AAAM 11/14/2018 02:53:48'!
+novo
+	^self new initializar.! !
+
+
+!Editorial class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 02:26:05'!
+notABookFromTheEditorialErrorMesagge
+
+^'editorial does not sell this book'! !
