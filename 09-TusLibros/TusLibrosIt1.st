@@ -126,10 +126,19 @@ Object subclass: #Carrito
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Carrito methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 04:03:35'!
+!Carrito methodsFor: 'as yet unclassified' stamp: 'n 11/15/2018 10:32:22'!
+agregarConfirmado: aBook
+
+	editorial compreLibro: aBook.
+	contenido add: aBook.! !
+
+!Carrito methodsFor: 'as yet unclassified' stamp: 'n 11/15/2018 10:22:57'!
 agregarLibro: aBook 
 	
-	(editorial estaEnElCatalogo: aBook) ifFalse:[^self error: self class seQuiereAgregarLibroQueNoEstaEnElCatalogo. ]ifTrue: [(editorial hayStock: aBook ) ifTrue:[contenido add: aBook.editorial compreLibro: aBook.^self] ifFalse: [^self error: self class noHayStockErrorMessage]].
+	"(editorial estaEnElCatalogo: aBook) ifFalse:[^self error: self class seQuiereAgregarLibroQueNoEstaEnElCatalogo. ]ifTrue: [(editorial hayStock: aBook ) ifTrue:[contenido add: aBook.editorial compreLibro: aBook.^self] ifFalse: [^self error: self class noHayStockErrorMessage]]"
+	
+	
+		editorial puedoAgregar: aBook carrito: self.
 	! !
 
 !Carrito methodsFor: 'as yet unclassified' stamp: 'z 11/12/2018 20:44:00'!
@@ -137,11 +146,12 @@ cantLibro: aBook
 	
 	^(contenido select: [:anElement| anElement = aBook]) size.! !
 
-!Carrito methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 02:50:43'!
+!Carrito methodsFor: 'as yet unclassified' stamp: 'n 11/15/2018 10:22:22'!
 initializeWith:anEditorial
 
 	contenido := OrderedCollection new.
-	editorial:= anEditorial .! !
+	editorial:= anEditorial .
+	editorial agregarCarrito: self.! !
 
 !Carrito methodsFor: 'as yet unclassified' stamp: 'z 11/12/2018 20:19:10'!
 isEmpty
@@ -152,6 +162,16 @@ isEmpty
 listarContenido
 
 	^ contenido copy.! !
+
+!Carrito methodsFor: 'as yet unclassified' stamp: 'n 11/15/2018 10:30:30'!
+noExisteElLibro
+
+	^self error: self class seQuiereAgregarLibroQueNoEstaEnElCatalogo.! !
+
+!Carrito methodsFor: 'as yet unclassified' stamp: 'n 11/15/2018 10:29:50'!
+noHayStock
+	
+	^self error: self class noHayStockErrorMessage.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -181,10 +201,11 @@ Object subclass: #Editorial
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Editorial methodsFor: 'initializing' stamp: 'AAAM 11/14/2018 03:43:16'!
+!Editorial methodsFor: 'initializing' stamp: 'n 11/15/2018 10:28:13'!
 initializar
 	
-	catalogo := Dictionary new.! !
+	catalogo := Dictionary new.
+	carritos := OrderedCollection new.! !
 
 
 !Editorial methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 03:39:03'!
@@ -200,6 +221,11 @@ addToCatalogo: aBook with: aQuantity
 	
 	catalogo at: aBook put: aQuantity .
 ! !
+
+!Editorial methodsFor: 'as yet unclassified' stamp: 'n 11/15/2018 10:22:14'!
+agregarCarrito: aCarrito
+
+	carritos add: aCarrito.! !
 
 !Editorial methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 04:07:24'!
 compreLibro:aBook
@@ -219,6 +245,11 @@ estaEnElCatalogo: aBook
 !Editorial methodsFor: 'as yet unclassified' stamp: 'AAAM 11/14/2018 03:58:53'!
 hayStock: aBook 
 	^ (catalogo  at: aBook ) > 0! !
+
+!Editorial methodsFor: 'as yet unclassified' stamp: 'n 11/15/2018 10:27:44'!
+puedoAgregar: aBook carrito: aCarrito
+
+	(self estaEnElCatalogo: aBook) ifTrue: [(self hayStock: aBook) ifTrue: [aCarrito agregarConfirmado: aBook] ifFalse: [aCarrito noHayStock]] ifFalse: [aCarrito noExisteElLibro.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
