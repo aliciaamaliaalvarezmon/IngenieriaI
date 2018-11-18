@@ -91,17 +91,17 @@ test08CartRemembersTheNumberOfAddedItems
 	cart add: 2 of: self itemSellByTheStore.
 	self assert: (cart occurrencesOf: self itemSellByTheStore) = 2! !
 
-!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 01:46:27'!
+!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 19:02:04'!
 test09CanNotCheckOutEmpthyCart
 
-	|date  cart cashier creditCard |
+	|merchant date  cart cashier creditCard |
 	
 	cart := self createCart.
 	cashier := self createCashier.
 	
 	
 	self 
-		should: [cashier doesCheckOut: cart with: creditCard attheDate: date  ]
+		should: [cashier doesCheckOut: cart with: creditCard attheDate: date to: merchant ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = cashier class  invalidCartErrorMessage.
@@ -122,49 +122,75 @@ test10CheckOutSumSHouldEqualCartTotal
 	self assert: (cashier totalCount: cart) = 50.
 	! !
 
-!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 03:25:40'!
+!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 19:38:42'!
 test11CanNotCheckOutIfTheTargetIsInvalid
 	
 	
-	|date cart cashier creditCard |
+	|merchant date cart cashier creditCard|
 	
 	cart := self createCart.
 	cashier := self createCashier.
-	creditCard := self createInvalidCreditCard.
-	date := self createValidDate.
+	creditCard := self createdefaultCreditCard .
+	date := self createInvalidDate.
 	cart add: 5 of: self itemSellByTheStore.
+	merchant := MerchantProcessor new.
 	
 	
 	self 
-	should: [cashier doesCheckOut: cart with: creditCard attheDate: date  ]
+	should: [cashier doesCheckOut: cart with: creditCard attheDate: date  to: merchant]
 	raise: Error - MessageNotUnderstood
 	withExceptionDo: [ :anError |
 		self assert: anError messageText = cashier class  invalidCreditCardErrorMessage.
 		self assert: cashier noRegistroVentas.
-		"self assert: noSeHizoElCheckOut"
+		self assert: merchant isEmpty .
 		]
 ! !
 
-!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 03:21:56'!
+!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 19:37:15'!
 test12CheckingOutRegistersTheSell
 	
 	
-	|date cart cashier creditCard reception |
+	|date cart cashier creditCard reception merchant|
 	
 	cart := self createCart.
 	cashier := self createCashier.
-	creditCard := self createValidCreditCard.
+	creditCard := self createdefaultCreditCard .
 	date := self createValidDate.
+	merchant := MerchantProcessor new.
 	
 	cart add: 5 of: self itemSellByTheStore.
 	
-	reception:=cashier doesCheckOut: cart with: creditCard attheDate: date.
+	reception:=cashier doesCheckOut: cart with: creditCard attheDate: date to: merchant.
 	 
 	self assert: reception = 'OK'.
 	self deny: cashier noRegistroVentas.
 	
 	
 	! !
+
+!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 19:41:20'!
+test13CannotCheckOutIfTarjetIDIsInvalid
+	
+	
+	|merchant date cart cashier creditCard |
+	
+	cart := self createCart.
+	cashier := self createCashier.
+	creditCard := self createCreditCard:  -1thatexpires: self createValidDate .
+	date := self createValidDate.
+	merchant := MerchantProcessor new.
+	
+	cart add: 5 of: self itemSellByTheStore.
+	
+	self 
+	should: [ cashier doesCheckOut: cart with: creditCard attheDate: date to: merchant ]
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: anError messageText = cashier class  invalidCreditCardErrorMessage.
+		self assert: cashier noRegistroVentas.
+		self assert: merchant isEmpty.
+		]
+! !
 
 
 !CartTest methodsFor: 'support' stamp: 'HernanWilkinson 6/17/2013 17:48'!
@@ -181,29 +207,31 @@ createCashier
 	
 	! !
 
-!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 01:21:34'!
-createInvalidCreditCard
+!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 17:20:43'!
+createCreditCard: anId thatexpires: anExpirationDate
+	
+	^CreditCard  with:  anId thatExpires: anExpirationDate . ! !
+
+!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 18:48:17'!
+createInvalidDate
 	
 	|vencimiento|
-	vencimiento :=GregorianMonthOfYear year: (GregorianYear number:2000) month: GregorianMonth september. 
+	vencimiento :=GregorianMonthOfYear year: (GregorianYear number:2022) month: GregorianMonth september. 
 	
 	^vencimiento! !
 
-!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 03:16:13'!
-createValidCreditCard
-	
-	|vencimiento|
-	vencimiento :=GregorianMonthOfYear year: (GregorianYear number:2021) month: GregorianMonth september. 
-	
-	^vencimiento! !
-
-!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 03:15:23'!
+!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 18:44:51'!
 createValidDate
 	
 	|vencimiento|
-	vencimiento :=GregorianMonthOfYear year: (GregorianYear number:2020) month: GregorianMonth september. 
+	vencimiento :=GregorianMonthOfYear year: (GregorianYear number:2019) month: GregorianMonth september. 
 	
 	^vencimiento! !
+
+!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 18:52:11'!
+createdefaultCreditCard
+	
+	^CreditCard  with:  1 thatExpires: ( GregorianMonthOfYear year: (GregorianYear number:2020) month: GregorianMonth september)! !
 
 !CartTest methodsFor: 'support' stamp: 'AAAM 11/15/2018 20:33:07'!
 defaultCatalog
@@ -330,13 +358,14 @@ Object subclass: #Cashier
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 03:23:42'!
-doesCheckOut: aCart with: aCreditCard attheDate: aDateofExpiration
+!Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 19:32:37'!
+doesCheckOut: aCart with: aCreditCard attheDate: aDateofExpiration to: aMerchantProcessor
+	
 	aCart isEmpty ifTrue:[^ self error: self class invalidCartErrorMessage.].
-	(self isExpired: aCreditCard With: aDateofExpiration )  ifTrue:[^self error: self class invalidCreditCardErrorMessage].
+	(aCreditCard isValid: aDateofExpiration )  ifFalse:[^self error: self class invalidCreditCardErrorMessage].
 
 	ventasRegistro  add: aCart.
-	^ 'OK'! !
+	^ aMerchantProcessor processSellWith: aCreditCard and: (self totalCount: aCart).! !
 
 !Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/15/2018 20:35:32'!
 initialize
@@ -384,3 +413,74 @@ invalidProductErrorMessage
 new
 
 	^self basicNew initialize.! !
+
+
+!classDefinition: #CreditCard category: #TusLibros!
+Object subclass: #CreditCard
+	instanceVariableNames: 'Id expirationDate'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!CreditCard methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 17:32:19'!
+intializeWith: anId thatExpires: aDateOfExpiration 
+
+Id := anId.
+expirationDate := aDateOfExpiration .
+! !
+
+!CreditCard methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 17:35:15'!
+isValid: aDateOfExpiration
+
+^ (aDateOfExpiration < expirationDate ) and: (Id positive).! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'CreditCard class' category: #TusLibros!
+CreditCard class
+	instanceVariableNames: ''!
+
+!CreditCard class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 16:44:34'!
+with:  anId thatExpires:  aDateOfExpiration
+
+ ^self new intializeWith: anId thatExpires: aDateOfExpiration ! !
+
+
+!classDefinition: #MerchantProcessor category: #TusLibros!
+Object subclass: #MerchantProcessor
+	instanceVariableNames: 'historial'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibros'!
+
+!MerchantProcessor methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 19:39:26'!
+initialize
+
+
+historial := OrderedCollection new! !
+
+!MerchantProcessor methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 19:40:50'!
+isEmpty
+
+
+^historial isEmpty 
+! !
+
+!MerchantProcessor methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 19:40:09'!
+processSellWith: aCreditCard and: aTotalAmount
+
+|res|
+res:= 'OK'.
+historial add: res.
+^res! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'MerchantProcessor class' category: #TusLibros!
+MerchantProcessor class
+	instanceVariableNames: ''!
+
+!MerchantProcessor class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 19:35:52'!
+create
+
+^self new initialize! !
