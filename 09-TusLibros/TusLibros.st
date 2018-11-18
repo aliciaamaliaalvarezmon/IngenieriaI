@@ -91,17 +91,17 @@ test08CartRemembersTheNumberOfAddedItems
 	cart add: 2 of: self itemSellByTheStore.
 	self assert: (cart occurrencesOf: self itemSellByTheStore) = 2! !
 
-!CartTest methodsFor: 'tests' stamp: 'AAAM 11/15/2018 20:38:55'!
+!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 01:46:27'!
 test09CanNotCheckOutEmpthyCart
 
-	| cart cashier creditCard |
+	|date  cart cashier creditCard |
 	
 	cart := self createCart.
 	cashier := self createCashier.
 	
 	
 	self 
-		should: [cashier doesCheckOut: cart with: creditCard  ]
+		should: [cashier doesCheckOut: cart with: creditCard attheDate: date  ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = cashier class  invalidCartErrorMessage.
@@ -122,6 +122,50 @@ test10CheckOutSumSHouldEqualCartTotal
 	self assert: (cashier totalCount: cart) = 50.
 	! !
 
+!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 03:25:40'!
+test11CanNotCheckOutIfTheTargetIsInvalid
+	
+	
+	|date cart cashier creditCard |
+	
+	cart := self createCart.
+	cashier := self createCashier.
+	creditCard := self createInvalidCreditCard.
+	date := self createValidDate.
+	cart add: 5 of: self itemSellByTheStore.
+	
+	
+	self 
+	should: [cashier doesCheckOut: cart with: creditCard attheDate: date  ]
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: anError messageText = cashier class  invalidCreditCardErrorMessage.
+		self assert: cashier noRegistroVentas.
+		"self assert: noSeHizoElCheckOut"
+		]
+! !
+
+!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 03:21:56'!
+test12CheckingOutRegistersTheSell
+	
+	
+	|date cart cashier creditCard reception |
+	
+	cart := self createCart.
+	cashier := self createCashier.
+	creditCard := self createValidCreditCard.
+	date := self createValidDate.
+	
+	cart add: 5 of: self itemSellByTheStore.
+	
+	reception:=cashier doesCheckOut: cart with: creditCard attheDate: date.
+	 
+	self assert: reception = 'OK'.
+	self deny: cashier noRegistroVentas.
+	
+	
+	! !
+
 
 !CartTest methodsFor: 'support' stamp: 'HernanWilkinson 6/17/2013 17:48'!
 createCart
@@ -136,6 +180,30 @@ createCashier
 
 	
 	! !
+
+!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 01:21:34'!
+createInvalidCreditCard
+	
+	|vencimiento|
+	vencimiento :=GregorianMonthOfYear year: (GregorianYear number:2000) month: GregorianMonth september. 
+	
+	^vencimiento! !
+
+!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 03:16:13'!
+createValidCreditCard
+	
+	|vencimiento|
+	vencimiento :=GregorianMonthOfYear year: (GregorianYear number:2021) month: GregorianMonth september. 
+	
+	^vencimiento! !
+
+!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 03:15:23'!
+createValidDate
+	
+	|vencimiento|
+	vencimiento :=GregorianMonthOfYear year: (GregorianYear number:2020) month: GregorianMonth september. 
+	
+	^vencimiento! !
 
 !CartTest methodsFor: 'support' stamp: 'AAAM 11/15/2018 20:33:07'!
 defaultCatalog
@@ -262,12 +330,13 @@ Object subclass: #Cashier
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/15/2018 19:34:52'!
-doesCheckOut: aCart with: anUndefinedObject 
- 
+!Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 03:23:42'!
+doesCheckOut: aCart with: aCreditCard attheDate: aDateofExpiration
 	aCart isEmpty ifTrue:[^ self error: self class invalidCartErrorMessage.].
+	(self isExpired: aCreditCard With: aDateofExpiration )  ifTrue:[^self error: self class invalidCreditCardErrorMessage].
 
-	^ self totalCount: aCart.! !
+	ventasRegistro  add: aCart.
+	^ 'OK'! !
 
 !Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/15/2018 20:35:32'!
 initialize
@@ -275,6 +344,11 @@ initialize
 	ventasRegistro:= OrderedCollection new.
 
 	! !
+
+!Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 03:14:35'!
+isExpired: aCreditCard With: aDateofExpiration
+
+	^ aCreditCard < aDateofExpiration.! !
 
 !Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/15/2018 20:39:30'!
 noRegistroVentas
@@ -296,6 +370,10 @@ Cashier class
 !Cashier class methodsFor: 'error handling' stamp: 'AAAM 11/15/2018 18:37:45'!
 invalidCartErrorMessage
 	^'cannot check out invalid cart'! !
+
+!Cashier class methodsFor: 'error handling' stamp: 'AAAM 11/18/2018 01:59:02'!
+invalidCreditCardErrorMessage
+	^'The credit card has expirated'! !
 
 
 !Cashier class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/15/2018 19:26:56'!
