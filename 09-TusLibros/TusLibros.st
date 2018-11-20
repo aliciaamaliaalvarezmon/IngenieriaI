@@ -1,16 +1,119 @@
-!classDefinition: #CartTest category: #TusLibros!
-TestCase subclass: #CartTest
+!classDefinition: #TusLibrosOnlineTest category: #TusLibros!
+TestCase subclass: #TusLibrosOnlineTest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 17:08'!
+
+!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'z 11/20/2018 16:24:45'!
+test01ANewCashierDoNotHaveSells
+
+	|cashier|
+	
+	cashier := self createCashier.
+	
+	self assert: cashier ventas isEmpty.! !
+
+!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'z 11/20/2018 16:33:43'!
+test02CashierTotalCountOfProductsPricesIsEqualToCartTotalSum
+
+	| cart cashier|
+	
+	cart := self createCart.
+	cashier := self createCashier.
+	
+	cart add: 5 of: self itemSellByTheStore.
+	
+	self assert: (cashier totalCount: cart) = (cart totalSumOfProductsPricesInTheCart).! !
+
+!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'z 11/20/2018 16:34:25'!
+test03CanNotCheckOutEmptyCart
+
+	| date  cart cashier creditCard |
+	
+	cart := self createCart.
+	cashier := self createCashier.
+	date := self createValidDate.
+	creditCard := self createdefaultCreditCard.
+	
+	self 
+		should: [cashier checkOut: cart with: creditCard attheDate: date]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError |
+			self assert: anError messageText = cashier class  invalidCartErrorMessage.
+			self assert: cashier ventas isEmpty.]
+			! !
+
+!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'z 11/20/2018 16:34:46'!
+test04CanNotCheckOutIfTheCreditCardIsInvalid
+	
+	
+	| date cart cashier creditCard|
+	
+	cart := self createCart.
+	cashier := self createCashier.
+	creditCard := self createdefaultCreditCard .
+	date := self createInvalidDate.
+	cart add: 5 of: self itemSellByTheStore.
+	
+	self 
+	should: [cashier checkOut: cart with: creditCard attheDate: date]
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: anError messageText = cashier class  invalidCreditCardErrorMessage.
+		self assert: cashier ventas isEmpty.
+		]! !
+
+!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'z 11/20/2018 16:35:07'!
+test05CannotCheckOutIfTarjetIDIsInvalid
+	
+	
+	| date cart cashier creditCard |
+	
+	cart := self createCart.
+	cashier := self createCashier.
+	creditCard := self createCreditCard:  -1thatexpires: self createValidDate .
+	date := self createValidDate.
+	
+	cart add: 5 of: self itemSellByTheStore.
+	
+	self 
+	should: [ cashier checkOut: cart with: creditCard attheDate: date]
+	raise: Error - MessageNotUnderstood
+	withExceptionDo: [ :anError |
+		self assert: anError messageText = cashier class  invalidCreditCardErrorMessage.
+		self assert: cashier ventas isEmpty.
+		]
+! !
+
+!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'z 11/20/2018 16:35:25'!
+test06CheckingOutRegistersTheSell
+	
+	
+	|date cart cashier creditCard reception|
+	
+	cart := self createCart.
+	cashier := self createCashier.
+	creditCard := self createdefaultCreditCard .
+	date := self createValidDate.
+	
+	cart add: 5 of: self itemSellByTheStore.
+	
+	reception:=cashier checkOut: cart with: creditCard attheDate: date.
+	 
+	self assert: reception = 'OK'.
+	self deny: cashier ventas isEmpty.
+	
+	! !
+
+
+!TusLibrosOnlineTest methodsFor: 'cartTests' stamp: 'HernanWilkinson 6/17/2013 17:08'!
 test01NewCartsAreCreatedEmpty
 
 	self assert: self createCart isEmpty! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 17:45'!
+!TusLibrosOnlineTest methodsFor: 'cartTests' stamp: 'HernanWilkinson 6/17/2013 17:45'!
 test02CanNotAddItemsThatDoNotBelongToStore
 
 	| cart |
@@ -24,7 +127,7 @@ test02CanNotAddItemsThatDoNotBelongToStore
 			self assert: anError messageText = cart invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 17:43'!
+!TusLibrosOnlineTest methodsFor: 'cartTests' stamp: 'HernanWilkinson 6/17/2013 17:43'!
 test03AfterAddingAnItemTheCartIsNotEmptyAnymore
 
 	| cart |
@@ -34,7 +137,7 @@ test03AfterAddingAnItemTheCartIsNotEmptyAnymore
 	cart add: self itemSellByTheStore.
 	self deny: cart isEmpty ! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 17:43'!
+!TusLibrosOnlineTest methodsFor: 'cartTests' stamp: 'HernanWilkinson 6/17/2013 17:43'!
 test04CanNotAddNonPositiveNumberOfItems
 
 	| cart |
@@ -48,7 +151,7 @@ test04CanNotAddNonPositiveNumberOfItems
 			self assert: anError messageText = cart invalidQuantityErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 17:45'!
+!TusLibrosOnlineTest methodsFor: 'cartTests' stamp: 'HernanWilkinson 6/17/2013 17:45'!
 test05CanNotAddMoreThanOneItemNotSellByTheStore
 
 	| cart |
@@ -62,7 +165,7 @@ test05CanNotAddMoreThanOneItemNotSellByTheStore
 			self assert: anError messageText = cart invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 17:43'!
+!TusLibrosOnlineTest methodsFor: 'cartTests' stamp: 'HernanWilkinson 6/17/2013 17:43'!
 test06CartRemembersAddedItems
 
 	| cart |
@@ -72,7 +175,7 @@ test06CartRemembersAddedItems
 	cart add: self itemSellByTheStore.
 	self assert: (cart includes: self itemSellByTheStore)! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 17:43'!
+!TusLibrosOnlineTest methodsFor: 'cartTests' stamp: 'HernanWilkinson 6/17/2013 17:43'!
 test07CartDoesNotHoldNotAddedItems
 
 	| cart |
@@ -81,7 +184,7 @@ test07CartDoesNotHoldNotAddedItems
 	
 	self deny: (cart includes: self itemSellByTheStore)! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 17:45'!
+!TusLibrosOnlineTest methodsFor: 'cartTests' stamp: 'HernanWilkinson 6/17/2013 17:45'!
 test08CartRemembersTheNumberOfAddedItems
 
 	| cart |
@@ -91,128 +194,27 @@ test08CartRemembersTheNumberOfAddedItems
 	cart add: 2 of: self itemSellByTheStore.
 	self assert: (cart occurrencesOf: self itemSellByTheStore) = 2! !
 
-!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 19:02:04'!
-test09CanNotCheckOutEmpthyCart
 
-	|merchant date  cart cashier creditCard |
-	
-	cart := self createCart.
-	cashier := self createCashier.
-	
-	
-	self 
-		should: [cashier doesCheckOut: cart with: creditCard attheDate: date to: merchant ]
-		raise: Error - MessageNotUnderstood
-		withExceptionDo: [ :anError |
-			self assert: anError messageText = cashier class  invalidCartErrorMessage.
-			self assert: cashier noRegistroVentas ]
-
-	! !
-
-!CartTest methodsFor: 'tests' stamp: 'AAAM 11/15/2018 20:45:57'!
-test10CheckOutSumSHouldEqualCartTotal
-
-	| cart cashier creditCard |
-	
-	cart := self createCart.
-	cashier := self createCashier.
-	
-	cart add: 5 of: self itemSellByTheStore.
-	
-	self assert: (cashier totalCount: cart) = 50.
-	! !
-
-!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 19:38:42'!
-test11CanNotCheckOutIfTheTargetIsInvalid
-	
-	
-	|merchant date cart cashier creditCard|
-	
-	cart := self createCart.
-	cashier := self createCashier.
-	creditCard := self createdefaultCreditCard .
-	date := self createInvalidDate.
-	cart add: 5 of: self itemSellByTheStore.
-	merchant := MerchantProcessor new.
-	
-	
-	self 
-	should: [cashier doesCheckOut: cart with: creditCard attheDate: date  to: merchant]
-	raise: Error - MessageNotUnderstood
-	withExceptionDo: [ :anError |
-		self assert: anError messageText = cashier class  invalidCreditCardErrorMessage.
-		self assert: cashier noRegistroVentas.
-		self assert: merchant isEmpty .
-		]
-! !
-
-!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 19:37:15'!
-test12CheckingOutRegistersTheSell
-	
-	
-	|date cart cashier creditCard reception merchant|
-	
-	cart := self createCart.
-	cashier := self createCashier.
-	creditCard := self createdefaultCreditCard .
-	date := self createValidDate.
-	merchant := MerchantProcessor new.
-	
-	cart add: 5 of: self itemSellByTheStore.
-	
-	reception:=cashier doesCheckOut: cart with: creditCard attheDate: date to: merchant.
-	 
-	self assert: reception = 'OK'.
-	self deny: cashier noRegistroVentas.
-	
-	
-	! !
-
-!CartTest methodsFor: 'tests' stamp: 'AAAM 11/18/2018 19:41:20'!
-test13CannotCheckOutIfTarjetIDIsInvalid
-	
-	
-	|merchant date cart cashier creditCard |
-	
-	cart := self createCart.
-	cashier := self createCashier.
-	creditCard := self createCreditCard:  -1thatexpires: self createValidDate .
-	date := self createValidDate.
-	merchant := MerchantProcessor new.
-	
-	cart add: 5 of: self itemSellByTheStore.
-	
-	self 
-	should: [ cashier doesCheckOut: cart with: creditCard attheDate: date to: merchant ]
-	raise: Error - MessageNotUnderstood
-	withExceptionDo: [ :anError |
-		self assert: anError messageText = cashier class  invalidCreditCardErrorMessage.
-		self assert: cashier noRegistroVentas.
-		self assert: merchant isEmpty.
-		]
-! !
-
-
-!CartTest methodsFor: 'support' stamp: 'HernanWilkinson 6/17/2013 17:48'!
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'HernanWilkinson 6/17/2013 17:48'!
 createCart
 	
 	^Cart acceptingItemsOf: self defaultCatalog! !
 
-!CartTest methodsFor: 'support' stamp: 'AAAM 11/15/2018 20:36:39'!
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'z 11/20/2018 15:40:46'!
 createCashier
 
-^Cashier new
+^Cashier to: (MerchantProcessor create).
 
 
 	
 	! !
 
-!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 17:20:43'!
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 17:20:43'!
 createCreditCard: anId thatexpires: anExpirationDate
 	
 	^CreditCard  with:  anId thatExpires: anExpirationDate . ! !
 
-!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 18:48:17'!
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 18:48:17'!
 createInvalidDate
 	
 	|vencimiento|
@@ -220,7 +222,12 @@ createInvalidDate
 	
 	^vencimiento! !
 
-!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 18:44:51'!
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'z 11/20/2018 15:40:18'!
+createMerchantProcessor
+
+	^MerchantProcessor create.! !
+
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 18:44:51'!
 createValidDate
 	
 	|vencimiento|
@@ -228,12 +235,12 @@ createValidDate
 	
 	^vencimiento! !
 
-!CartTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 18:52:11'!
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'AAAM 11/18/2018 18:52:11'!
 createdefaultCreditCard
 	
 	^CreditCard  with:  1 thatExpires: ( GregorianMonthOfYear year: (GregorianYear number:2020) month: GregorianMonth september)! !
 
-!CartTest methodsFor: 'support' stamp: 'AAAM 11/15/2018 20:33:07'!
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'AAAM 11/15/2018 20:33:07'!
 defaultCatalog
 	
 	|dic|
@@ -243,17 +250,17 @@ defaultCatalog
 	
 	^dic! !
 
-!CartTest methodsFor: 'support' stamp: 'AAAM 11/15/2018 19:18:43'!
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'AAAM 11/15/2018 19:18:43'!
 item2SellByTheStore
 	
 	^ 'validBook2'! !
 
-!CartTest methodsFor: 'support' stamp: 'HernanWilkinson 6/17/2013 17:44'!
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'HernanWilkinson 6/17/2013 17:44'!
 itemNotSellByTheStore
 	
 	^'invalidBook'! !
 
-!CartTest methodsFor: 'support' stamp: 'HernanWilkinson 6/17/2013 17:43'!
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'HernanWilkinson 6/17/2013 17:43'!
 itemSellByTheStore
 	
 	^ 'validBook'! !
@@ -331,8 +338,8 @@ precio: anElement
 
 	^catalog at: anElement.! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'AAAM 11/15/2018 20:47:58'!
-recorreElementos
+!Cart methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 12:04:17'!
+totalSumOfProductsPricesInTheCart
 
 	|acum|
 	acum := 0.
@@ -353,24 +360,25 @@ acceptingItemsOf: aCatalog
 
 !classDefinition: #Cashier category: #TusLibros!
 Object subclass: #Cashier
-	instanceVariableNames: 'ventasRegistro'
+	instanceVariableNames: 'ventasRegistro merchantProcessor'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 19:32:37'!
-doesCheckOut: aCart with: aCreditCard attheDate: aDateofExpiration to: aMerchantProcessor
+!Cashier methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 15:51:59'!
+checkOut: aCart with: aCreditCard attheDate: aDateofExpiration
 	
 	aCart isEmpty ifTrue:[^ self error: self class invalidCartErrorMessage.].
 	(aCreditCard isValid: aDateofExpiration )  ifFalse:[^self error: self class invalidCreditCardErrorMessage].
 
 	ventasRegistro  add: aCart.
-	^ aMerchantProcessor processSellWith: aCreditCard and: (self totalCount: aCart).! !
+	^ merchantProcessor processSellWith: aCreditCard and: (self totalCount: aCart).! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/15/2018 20:35:32'!
-initialize
+!Cashier methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 15:35:44'!
+initializeWith: aMerchantProcessor
 
 	ventasRegistro:= OrderedCollection new.
+	merchantProcessor := aMerchantProcessor .
 
 	! !
 
@@ -379,16 +387,16 @@ isExpired: aCreditCard With: aDateofExpiration
 
 	^ aCreditCard < aDateofExpiration.! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/15/2018 20:39:30'!
-noRegistroVentas
-
-^ventasRegistro  isEmpty .! !
-
-!Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/15/2018 20:44:54'!
+!Cashier methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 12:04:17'!
 totalCount: aCart
 	
-	^aCart recorreElementos.
+	^aCart totalSumOfProductsPricesInTheCart.
 	! !
+
+!Cashier methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 15:10:26'!
+ventas
+
+	^ReadStream on: ventasRegistro.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -409,10 +417,10 @@ invalidCreditCardErrorMessage
 invalidProductErrorMessage
 	^'No esta listado el precio del producto'! !
 
-!Cashier class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/15/2018 20:40:40'!
-new
+!Cashier class methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 15:33:16'!
+to: aMerchantProcessor
 
-	^self basicNew initialize.! !
+	^self new initializeWith: aMerchantProcessor.! !
 
 
 !classDefinition: #CreditCard category: #TusLibros!
@@ -453,7 +461,7 @@ Object subclass: #MerchantProcessor
 	poolDictionaries: ''
 	category: 'TusLibros'!
 
-!MerchantProcessor methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 19:39:26'!
+!MerchantProcessor methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 15:39:53'!
 initialize
 
 
@@ -480,7 +488,7 @@ historial add: res.
 MerchantProcessor class
 	instanceVariableNames: ''!
 
-!MerchantProcessor class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/18/2018 19:35:52'!
+!MerchantProcessor class methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 15:39:42'!
 create
 
-^self new initialize! !
+^self new initialize.! !
