@@ -86,7 +86,7 @@ test05CannotCheckOutIfTarjetIDIsInvalid
 		]
 ! !
 
-!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'z 11/20/2018 19:02:47'!
+!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'n 11/21/2018 01:22:48'!
 test06CheckingOutRegistersTheSell
 	
 	
@@ -102,12 +102,13 @@ test06CheckingOutRegistersTheSell
 	reception:=cashier checkOut: cart with: creditCard attheDate: date.
 	 
 	self assert: reception = 'OK'.
+	self assert: (cashier sells at: 1) = 'validBook 10 5'.
 	self deny: cashier sells isEmpty.
 	
 	! !
 
-!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'z 11/20/2018 21:23:43'!
-test07
+!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'n 11/21/2018 01:32:10'!
+test07ACashierCanRememberSells
 	
 	|date cart1 cart2 cart3 cashier creditCard reception1 reception2 reception3|
 	
@@ -116,13 +117,13 @@ test07
 	creditCard := self createdefaultCreditCard .
 	date := self createValidDate.
 	
-	cart1 add: 1 of: self itemSellByTheStore.
+	cart1 add: 5 of: self itemSellByTheStore.
 	 
 	cart2 := self createCart.
-	cart2 add: 1 of: self itemSellByTheStore.
+	cart2 add: 5 of: self itemSellByTheStore.
 	
 	cart3 := self createCart.
-	cart3 add: 1 of: self itemSellByTheStore.
+	cart3 add: 5 of: self itemSellByTheStore.
 	
 	reception1:=cashier checkOut: cart1 with: creditCard attheDate: date.
 	reception2:=cashier checkOut: cart2 with: creditCard attheDate: date.
@@ -132,7 +133,11 @@ test07
 	self assert: reception2 = 'OK'.
 	self assert: reception3 = 'OK'.
 	
-	cashier sells 
+	self assert: cashier sells size = 3.
+	self assert: (cashier sells at: 1) = 'validBook 10 5'.
+	self assert: (cashier sells at: 2) = 'validBook 10 5'.
+	self assert: (cashier sells at: 3) = 'validBook 10 5'.
+	self deny: cashier sells isEmpty.
 	
 		! !
 
@@ -324,23 +329,23 @@ assertIsValidQuantity: aQuantity
 	aQuantity strictlyPositive ifFalse: [ self error: self invalidQuantityErrorMessage ]! !
 
 
-!Cart methodsFor: 'initialization' stamp: 'z 11/20/2018 20:30:19'!
+!Cart methodsFor: 'initialization' stamp: 'n 11/21/2018 01:09:31'!
 initializeAcceptingItemsOf: aCatalog
 
 	catalog := aCatalog.	
-	items := OrderedCollection new.! !
+	items := Dictionary new.! !
 
 
-!Cart methodsFor: 'queries' stamp: 'AAAM 11/15/2018 19:09:56'!
+!Cart methodsFor: 'queries' stamp: 'n 11/21/2018 01:28:33'!
 occurrencesOf: anItem
 
-	^items occurrencesOf: anItem  ! !
+	^items at: anItem  ! !
 
 
-!Cart methodsFor: 'testing' stamp: 'HernanWilkinson 6/17/2013 17:44'!
+!Cart methodsFor: 'testing' stamp: 'n 11/21/2018 01:27:35'!
 includes: anItem
 
-	^items includes: anItem ! !
+	^items includesKey: anItem ! !
 
 !Cart methodsFor: 'testing' stamp: 'HernanWilkinson 6/17/2013 17:44'!
 isEmpty
@@ -353,35 +358,34 @@ add: anItem
 
 	^ self add: 1 of: anItem ! !
 
-!Cart methodsFor: 'adding' stamp: 'HernanWilkinson 6/17/2013 17:51'!
+!Cart methodsFor: 'adding' stamp: 'n 11/21/2018 01:26:49'!
 add: aQuantity of: anItem
 
 	self assertIsValidQuantity: aQuantity.
 	self assertIsValidItem: anItem.
 
-	1 to: aQuantity do: [ :aNumber | items add: anItem ]! !
+	items at: anItem ifPresent: [items at: anItem put: ((items at: anItem) + aQuantity)] ifAbsent: [items at: anItem put: aQuantity]. ! !
 
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 21:16:59'!
+!Cart methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 01:22:32'!
 itemsSold
 	
-	|colection|
-	colection := String new.
-	items do: [:anElement | colection append: (anElement asString,' ', (self price: anElement) asString)].
-	
-	^colection.! !
+	|string|
+	string := String new.
+	(items keys) do: [:anElement | string := string , (anElement asString, ' ', (self price: anElement) asString, ' ', (items at: anElement) asString)].
+	^string! !
 
 !Cart methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 19:02:21'!
 price: anElement
 
 	^catalog at: anElement.! !
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 19:02:21'!
+!Cart methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 01:20:14'!
 totalSumOfProductsPricesInTheCart
 
 	|acum|
 	acum := 0.
-	items do: [:anElement | acum := acum + (self price: anElement )].
+	(items keys) do: [:anElement | acum := acum + (self price: anElement )].
 	^acum.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -423,10 +427,10 @@ isExpired: aCreditCard With: aDateofExpiration
 
 	^ aCreditCard < aDateofExpiration.! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 19:02:47'!
+!Cashier methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 01:06:24'!
 sells
 
-	^ReadStream on: ventasRegistro.! !
+	^ventasRegistro copy.! !
 
 !Cashier methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 12:04:17'!
 totalCount: aCart
