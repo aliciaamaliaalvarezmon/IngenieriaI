@@ -5,6 +5,7 @@ TestCase subclass: #TusLibrosOnlineTest
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
+
 !TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'z 11/20/2018 19:02:47'!
 test01ANewCashierDoNotHaveSells
 
@@ -45,8 +46,8 @@ test03CanNotCheckOutEmptyCart
 			]
 			! !
 
-!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'AAAM 11/21/2018 07:36:38'!
-test04CanNotCheckOutIfTheCreditCardIsInvalid
+!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'n 11/21/2018 09:17:13'!
+test04CanNotCheckOutIfTheCreditCardIsExpires
 	
 	
 	|date cart cashier creditCard|
@@ -66,8 +67,8 @@ test04CanNotCheckOutIfTheCreditCardIsInvalid
 		
 		]! !
 
-!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'AAAM 11/21/2018 07:36:58'!
-test05CannotCheckOutIfTarjetIDIsInvalid
+!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'n 11/21/2018 09:15:50'!
+test05CannotCheckOutIfTheCreditCardIDIsInvalid
 	
 	
 	| date cart cashier creditCard |
@@ -143,8 +144,8 @@ test07ACashierCanRememberSells
 	
 		! !
 
-!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'AAAM 11/21/2018 07:44:04'!
-test08CannotCheckOutIfTarjetWithoutCredit
+!TusLibrosOnlineTest methodsFor: 'cashierTest' stamp: 'n 11/21/2018 09:14:13'!
+test08CannotCheckOutIfTheCreditCardHasnoCredit
 	
 	
 	|res date cart cashier creditCard |
@@ -430,18 +431,32 @@ Object subclass: #Cashier
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'AAAM 11/21/2018 07:47:01'!
-checkOut: aCart with: aCreditCard attheDate: aDateofExpiration
-
-	|res|	
-	aCart isEmpty ifTrue:[^ self error: self class invalidCartErrorMessage.].
-	(aCreditCard isValid: aDateofExpiration )  ifFalse:[^self error: self class invalidCreditCardErrorMessage].
-
+!Cashier methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:15:04'!
+canDoTheCheckOutWith: aCart and: aCreditCard
 	
+	|res|
+
 	res:= merchantProcessor processSellWith: aCreditCard and: (self totalCount: aCart).
 	
 	res = 'OK' ifTrue: [ventasRegistro add: (aCart itemsSold).].
 	^res! !
+
+!Cashier methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 09:56:34'!
+cartInvalid
+
+	^self error: self class invalidCartErrorMessage.! !
+
+!Cashier methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:36:40'!
+checkOut: aCart with: aCreditCard attheDate: aDateofExpiration
+
+	^(CheckOutState for: aCart with: aCreditCard attheDate: aDateofExpiration from: self) value.
+	
+	! !
+
+!Cashier methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 09:56:06'!
+creditCardInvalid
+
+	self error: self class invalidCreditCardErrorMessage.! !
 
 !Cashier methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 21:18:23'!
 initializeWith: aMerchantProcessor
@@ -488,6 +503,115 @@ invalidProductErrorMessage
 to: aMerchantProcessor
 
 	^self new initializeWith: aMerchantProcessor.! !
+
+
+!classDefinition: #CheckOutState category: #TusLibrosPrueba!
+Object subclass: #CheckOutState
+	instanceVariableNames: 'cashier cart creditCard'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibrosPrueba'!
+
+!CheckOutState methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:19:11'!
+initializeWith: aCashier and: aCreditCard and: aCart
+
+	cashier := aCashier.
+	cart := aCart.
+	creditCard := aCreditCard.! !
+
+!CheckOutState methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 09:52:25'!
+value
+
+	^self subclassResponsibility.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'CheckOutState class' category: #TusLibrosPrueba!
+CheckOutState class
+	instanceVariableNames: ''!
+
+!CheckOutState class methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:40:13'!
+for: aCart with: aCreditCard  attheDate: aDate from: aCashier
+	|subClass|
+	subClass := self allSubclasses detect: [:aSubClass | aSubClass isFor: aCart and: aCreditCard atthedate: aDate].
+	^subClass new initializeWith: aCashier and: aCreditCard and: aCart.	! !
+
+!CheckOutState class methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:27:44'!
+isFor: aCart and: aCreditCard atthedate: aDate
+
+	^self subclassResponsibility.! !
+
+
+!classDefinition: #CanDoTheCheckOut category: #TusLibrosPrueba!
+CheckOutState subclass: #CanDoTheCheckOut
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibrosPrueba'!
+
+!CanDoTheCheckOut methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:37:15'!
+value
+	
+	^cashier canDoTheCheckOutWith: cart and: creditCard! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'CanDoTheCheckOut class' category: #TusLibrosPrueba!
+CanDoTheCheckOut class
+	instanceVariableNames: ''!
+
+!CanDoTheCheckOut class methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:28:18'!
+isFor: aCart and: aCreditCard atthedate: aDate
+
+	^(aCart isEmpty not) and: [aCreditCard isValid: aDate].! !
+
+
+!classDefinition: #TheCartIsInvalid category: #TusLibrosPrueba!
+CheckOutState subclass: #TheCartIsInvalid
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibrosPrueba'!
+
+!TheCartIsInvalid methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:37:07'!
+value
+
+	^cashier cartInvalid! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TheCartIsInvalid class' category: #TusLibrosPrueba!
+TheCartIsInvalid class
+	instanceVariableNames: ''!
+
+!TheCartIsInvalid class methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:28:36'!
+isFor: aCart and: aCreditCard atthedate: aDate
+
+	^aCart isEmpty! !
+
+
+!classDefinition: #TheCreditCartIsInvalid category: #TusLibrosPrueba!
+CheckOutState subclass: #TheCreditCartIsInvalid
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibrosPrueba'!
+
+!TheCreditCartIsInvalid methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:37:21'!
+value
+
+	^cashier creditCardInvalid! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'TheCreditCartIsInvalid class' category: #TusLibrosPrueba!
+TheCreditCartIsInvalid class
+	instanceVariableNames: ''!
+
+!TheCreditCartIsInvalid class methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:28:50'!
+isFor: aCart and: aCreditCard atthedate: aDate
+
+	^(aCreditCard isValid: aDate) not! !
 
 
 !classDefinition: #CreditCard category: #TusLibrosPrueba!
