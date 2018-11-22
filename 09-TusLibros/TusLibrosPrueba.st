@@ -5,14 +5,14 @@ TestCase subclass: #TusLibrosOnlineTest
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'z 11/20/2018 19:02:47'!
+!TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'AAAM 11/22/2018 13:38:11'!
 test01ANewCashierDoNotHaveSells
 
 	|cashier|
 	
 	cashier := self createCashier.
 	
-	self assert: cashier sells isEmpty.! !
+	self assert: cashier  thereHavenNotBeenSells.! !
 
 !TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'n 11/22/2018 11:06:34'!
 test02CashierTotalCountOfProductsPricesIsEqualToCartTotalSum
@@ -26,7 +26,7 @@ test02CashierTotalCountOfProductsPricesIsEqualToCartTotalSum
 	
 	self assert: (cashier totalCount: cart) equals: (cart totalSumOfProductsPricesInTheCart).! !
 
-!TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'AAAM 11/21/2018 07:36:01'!
+!TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'AAAM 11/22/2018 13:41:10'!
 test03CanNotCheckOutEmptyCart
 
 	| date  cart cashier creditCard |
@@ -41,11 +41,11 @@ test03CanNotCheckOutEmptyCart
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
 			self assert: anError messageText = cashier class  invalidCartErrorMessage.
-			self assert: cashier sells isEmpty.
+			self assert: cashier  thereHavenNotBeenSells.
 			]
 			! !
 
-!TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'n 11/21/2018 09:17:13'!
+!TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'AAAM 11/22/2018 13:41:18'!
 test04CanNotCheckOutIfTheCreditCardIsExpires
 	
 	
@@ -62,11 +62,11 @@ test04CanNotCheckOutIfTheCreditCardIsExpires
 	raise: Error - MessageNotUnderstood
 	withExceptionDo: [ :anError |
 		self assert: anError messageText = cashier class  invalidCreditCardErrorMessage.
-		self assert: cashier sells isEmpty.
+		self assert: cashier  thereHavenNotBeenSells.
 		
 		]! !
 
-!TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'n 11/22/2018 10:15:44'!
+!TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'AAAM 11/22/2018 13:41:28'!
 test05CannotCheckOutIfTheCreditCardIDIsInvalid
 	
 	
@@ -84,11 +84,11 @@ test05CannotCheckOutIfTheCreditCardIDIsInvalid
 	raise: Error - MessageNotUnderstood
 	withExceptionDo: [ :anError |
 		self assert: anError messageText = cashier class  invalidCreditCardErrorMessage.
-		self assert: cashier sells isEmpty.
+		self assert: cashier  thereHavenNotBeenSells.
 		]
 ! !
 
-!TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'n 11/22/2018 11:08:33'!
+!TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'AAAM 11/22/2018 14:34:07'!
 test06CheckingOutRegistersTheSell
 	
 	
@@ -104,12 +104,12 @@ test06CheckingOutRegistersTheSell
 	reception:=cashier checkOut: cart with: creditCard attheDate: date.
 	 
 	self assert: reception equals: 'OK'.
-	self assert: (cashier sells at: 1) equals: 'validBook 10 5'.
-	self deny: cashier sells isEmpty.
+	self assert: (cashier sellByOrder: 1) equals: 'validBook 10 5'.
+	self deny: cashier thereHavenNotBeenSells.
 	
 	! !
 
-!TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'n 11/22/2018 11:09:04'!
+!TusLibrosOnlineTest methodsFor: 'cashierTests' stamp: 'AAAM 11/22/2018 14:33:23'!
 test07ACashierCanRememberSells
 	
 	|date cart1 cart2 cart3 cashier creditCard reception1 reception2 reception3|
@@ -122,7 +122,7 @@ test07ACashierCanRememberSells
 	cart1 add: 5 of: self itemSellByTheStore.
 	 
 	cart2 := self createCart.
-	cart2 add: 5 of: self itemSellByTheStore.
+	cart2 add: 6 of: self itemSellByTheStore.
 	
 	cart3 := self createCart.
 	cart3 add: 5 of: self itemSellByTheStore.
@@ -135,11 +135,12 @@ test07ACashierCanRememberSells
 	self assert: reception2 equals: 'OK'.
 	self assert: reception3 equals: 'OK'.
 	
-	self assert: cashier sells size equals: 3.
-	self assert: (cashier sells at: 1) equals: 'validBook 10 5'.
-	self assert: (cashier sells at: 2) equals: 'validBook 10 5'.
-	self assert: (cashier sells at: 3) equals: 'validBook 10 5'.
-	self deny: cashier sells isEmpty.
+	self assert: cashier numberOfSells equals: 3.
+	
+	self assert:( cashier  sellByOrder: 1) equals: 'validBook 10 5'.
+	self assert:( cashier  sellByOrder: 2) equals:'validBook 10 6'.
+	self assert:( cashier  sellByOrder: 3) equals:  'validBook 10 5'.
+	self deny: cashier  thereHavenNotBeenSells.
 	
 		! !
 
@@ -236,10 +237,10 @@ createCart
 	
 	^Cart acceptingItemsOf: self defaultCatalog! !
 
-!TusLibrosOnlineTest methodsFor: 'support' stamp: 'z 11/20/2018 15:40:46'!
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'AAAM 11/22/2018 15:05:53'!
 createCashier
 
-^Cashier to: (MerchantProcessor create).
+^Cashier to: (MerchantProcessor createWith: 10000).
 
 
 	
@@ -258,10 +259,10 @@ createInvalidDate
 	
 	^vencimiento! !
 
-!TusLibrosOnlineTest methodsFor: 'support' stamp: 'z 11/20/2018 15:40:18'!
+!TusLibrosOnlineTest methodsFor: 'support' stamp: 'AAAM 11/22/2018 15:06:05'!
 createMerchantProcessor
 
-	^MerchantProcessor create.! !
+	^MerchantProcessor createWith:10000.! !
 
 !TusLibrosOnlineTest methodsFor: 'support' stamp: 'AAAM 11/21/2018 07:09:58'!
 createValidDate
@@ -302,18 +303,31 @@ itemSellByTheStore
 	^ 'validBook'! !
 
 
-!TusLibrosOnlineTest methodsFor: 'merchantProcessorTests' stamp: 'n 11/22/2018 11:27:52'!
+!TusLibrosOnlineTest methodsFor: 'merchantProcessorTests' stamp: 'AAAM 11/22/2018 15:18:04'!
 test01AMerchantCanConfirmATransaction
 
 	|creditCard merchant date invalidDate|
 	
-	merchant := MerchantProcessor create.
+	merchant := MerchantProcessor createWith: 10000.
 	creditCard := self createdefaultCreditCard.
 	date := self createValidDate.
 	invalidDate := self createInvalidDate.
 	
-	self assert: (merchant processSellWith: creditCard atthedate: date) equals: 'OK'.
-	self assert: (merchant processSellWith: creditCard atthedate: invalidDate) equals: 'error'.! !
+	self assert: (merchant processSellWith:500 and: creditCard atthedate: date) equals: 'OK'.
+	self assert: (merchant processSellWith: 500and:creditCard atthedate: invalidDate) equals: 'error'.! !
+
+!TusLibrosOnlineTest methodsFor: 'merchantProcessorTests' stamp: 'AAAM 11/22/2018 15:20:06'!
+test02AMerchantCanConfirmNotEnoughMoney
+
+	|creditCard merchant date|
+	
+	merchant := MerchantProcessor createWith: 1000.
+	creditCard := self createdefaultCreditCard.
+	date := self createValidDate.
+	
+	
+	self assert: (merchant processSellWith:500 and: creditCard atthedate: date) equals: 'OK'.
+	self assert: (merchant processSellWith: 5000and:creditCard atthedate: date) equals: 'error'.! !
 
 
 !TusLibrosOnlineTest methodsFor: 'creditCardTests' stamp: 'n 11/22/2018 11:10:02'!
@@ -380,6 +394,19 @@ occurrencesOf: anItem
 
 	^items at: anItem  ! !
 
+!Cart methodsFor: 'queries' stamp: 'z 11/20/2018 19:02:21'!
+price: anElement
+
+	^catalog at: anElement.! !
+
+!Cart methodsFor: 'queries' stamp: 'n 11/21/2018 01:20:14'!
+totalSumOfProductsPricesInTheCart
+
+	|acum|
+	acum := 0.
+	(items keys) do: [:anElement | acum := acum + (self price: anElement )].
+	^acum.! !
+
 
 !Cart methodsFor: 'testing' stamp: 'n 11/21/2018 01:27:35'!
 includes: anItem
@@ -406,26 +433,13 @@ add: aQuantity of: anItem
 	items at: anItem ifPresent: [items at: anItem put: ((items at: anItem) + aQuantity)] ifAbsent: [items at: anItem put: aQuantity]. ! !
 
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 01:22:32'!
+!Cart methodsFor: 'printing' stamp: 'n 11/21/2018 01:22:32'!
 itemsSold
 	
 	|string|
 	string := String new.
 	(items keys) do: [:anElement | string := string , (anElement asString, ' ', (self price: anElement) asString, ' ', (items at: anElement) asString)].
 	^string! !
-
-!Cart methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 19:02:21'!
-price: anElement
-
-	^catalog at: anElement.! !
-
-!Cart methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 01:20:14'!
-totalSumOfProductsPricesInTheCart
-
-	|acum|
-	acum := 0.
-	(items keys) do: [:anElement | acum := acum + (self price: anElement )].
-	^acum.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -446,45 +460,56 @@ Object subclass: #Cashier
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'n 11/22/2018 11:17:39'!
+!Cashier methodsFor: 'testing' stamp: 'AAAM 11/22/2018 13:49:05'!
+numberOfSells
+	^ventasRegistro  size! !
+
+!Cashier methodsFor: 'testing' stamp: 'AAAM 11/22/2018 14:31:38'!
+sellByOrder: aNumber 
+	^ventasRegistro  at: aNumber ! !
+
+!Cashier methodsFor: 'testing' stamp: 'AAAM 11/22/2018 13:40:02'!
+thereHavenNotBeenSells
+	^ventasRegistro  isEmpty.! !
+
+
+!Cashier methodsFor: 'initializing' stamp: 'z 11/20/2018 21:18:23'!
+initializeWith: aMerchantProcessor
+
+	ventasRegistro:= OrderedCollection new.
+	merchantProcessor := aMerchantProcessor.! !
+
+
+!Cashier methodsFor: 'checkingOut' stamp: 'AAAM 11/22/2018 15:16:12'!
 canDoTheCheckOutWith: aCart and: aCreditCard atthedate: aDate
 	
 	|res|
 
-	res:= merchantProcessor processSellWith: aCreditCard atthedate: aDate.
+	res:= merchantProcessor processSellWith: (self totalCount: aCart) and: aCreditCard atthedate: aDate.
 	
 	res = 'OK' ifTrue: [ventasRegistro add: (aCart itemsSold).].
 	^res! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 09:56:34'!
+
+!Cashier methodsFor: 'checkingOut-private' stamp: 'n 11/21/2018 09:56:34'!
 cartInvalid
 
 	^self error: self class invalidCartErrorMessage.! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:36:40'!
+!Cashier methodsFor: 'checkingOut-private' stamp: 'n 11/21/2018 10:36:40'!
 checkOut: aCart with: aCreditCard attheDate: aDateofExpiration
 
 	^(CheckOutState for: aCart with: aCreditCard attheDate: aDateofExpiration from: self) value.
 	
 	! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 09:56:06'!
+!Cashier methodsFor: 'checkingOut-private' stamp: 'n 11/21/2018 09:56:06'!
 creditCardInvalid
 
 	self error: self class invalidCreditCardErrorMessage.! !
 
-!Cashier methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 21:18:23'!
-initializeWith: aMerchantProcessor
 
-	ventasRegistro:= OrderedCollection new.
-	merchantProcessor := aMerchantProcessor.! !
-
-!Cashier methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 01:06:24'!
-sells
-
-	^ventasRegistro copy.! !
-
-!Cashier methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 12:04:17'!
+!Cashier methodsFor: 'queries' stamp: 'z 11/20/2018 12:04:17'!
 totalCount: aCart
 	
 	^aCart totalSumOfProductsPricesInTheCart.
@@ -504,12 +529,12 @@ invalidCartErrorMessage
 invalidCreditCardErrorMessage
 	^'The credit card has expirated'! !
 
-
-!Cashier class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/15/2018 19:26:56'!
+!Cashier class methodsFor: 'error handling' stamp: 'AAAM 11/15/2018 19:26:56'!
 invalidProductErrorMessage
 	^'No esta listado el precio del producto'! !
 
-!Cashier class methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 15:33:16'!
+
+!Cashier class methodsFor: 'instance creation' stamp: 'z 11/20/2018 15:33:16'!
 to: aMerchantProcessor
 
 	^self new initializeWith: aMerchantProcessor.! !
@@ -522,7 +547,7 @@ Object subclass: #CheckOutState
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!CheckOutState methodsFor: 'as yet unclassified' stamp: 'n 11/22/2018 10:35:17'!
+!CheckOutState methodsFor: 'instance creation' stamp: 'n 11/22/2018 10:35:17'!
 initializeWith: aCashier and: aCreditCard and: aCart atthedate: aDate.
 
 	cashier := aCashier.
@@ -530,7 +555,8 @@ initializeWith: aCashier and: aCreditCard and: aCart atthedate: aDate.
 	creditCard := aCreditCard.
 	atTheDate := aDate.! !
 
-!CheckOutState methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 09:52:25'!
+
+!CheckOutState methodsFor: 'evaluating' stamp: 'n 11/21/2018 09:52:25'!
 value
 
 	^self subclassResponsibility.! !
@@ -541,13 +567,13 @@ value
 CheckOutState class
 	instanceVariableNames: ''!
 
-!CheckOutState class methodsFor: 'as yet unclassified' stamp: 'n 11/22/2018 10:34:48'!
+!CheckOutState class methodsFor: 'initialization' stamp: 'n 11/22/2018 10:34:48'!
 for: aCart with: aCreditCard  attheDate: aDate from: aCashier
 	|subClass|
 	subClass := self allSubclasses detect: [:aSubClass | aSubClass isFor: aCart and: aCreditCard atthedate: aDate].
 	^subClass new initializeWith: aCashier and: aCreditCard and: aCart atthedate: aDate.	! !
 
-!CheckOutState class methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:27:44'!
+!CheckOutState class methodsFor: 'initialization' stamp: 'n 11/21/2018 10:27:44'!
 isFor: aCart and: aCreditCard atthedate: aDate
 
 	^self subclassResponsibility.! !
@@ -560,7 +586,7 @@ CheckOutState subclass: #CanDoTheCheckOut
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!CanDoTheCheckOut methodsFor: 'as yet unclassified' stamp: 'n 11/22/2018 10:35:29'!
+!CanDoTheCheckOut methodsFor: 'evaluating' stamp: 'n 11/22/2018 10:35:29'!
 value
 	
 	^cashier canDoTheCheckOutWith: cart and: creditCard atthedate: atTheDate.! !
@@ -584,7 +610,7 @@ CheckOutState subclass: #TheCartIsInvalid
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!TheCartIsInvalid methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:37:07'!
+!TheCartIsInvalid methodsFor: 'evaluating' stamp: 'n 11/21/2018 10:37:07'!
 value
 
 	^cashier cartInvalid! !
@@ -608,7 +634,7 @@ CheckOutState subclass: #TheCreditCartIsInvalid
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!TheCreditCartIsInvalid methodsFor: 'as yet unclassified' stamp: 'n 11/21/2018 10:37:21'!
+!TheCreditCartIsInvalid methodsFor: 'evaluating' stamp: 'n 11/21/2018 10:37:21'!
 value
 
 	^cashier creditCardInvalid! !
@@ -632,14 +658,15 @@ Object subclass: #CreditCard
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!CreditCard methodsFor: 'as yet unclassified' stamp: 'n 11/22/2018 10:12:53'!
+!CreditCard methodsFor: 'instance creation' stamp: 'n 11/22/2018 10:12:53'!
 initializeWithAClientName: aName and: anID thatExpires: aExpirationDate
 
 	clientName := aName.
 	expirationDate := aExpirationDate .
 	identificartion := anID .! !
 
-!CreditCard methodsFor: 'as yet unclassified' stamp: 'AAAM 11/21/2018 07:42:18'!
+
+!CreditCard methodsFor: 'validating' stamp: 'AAAM 11/21/2018 07:42:18'!
 isValid: aDateOfExpiration
 
 ^ (aDateOfExpiration <= expirationDate ) and: (identificartion > 0).! !
@@ -650,7 +677,7 @@ isValid: aDateOfExpiration
 CreditCard class
 	instanceVariableNames: ''!
 
-!CreditCard class methodsFor: 'as yet unclassified' stamp: 'n 11/22/2018 10:13:05'!
+!CreditCard class methodsFor: 'initialization' stamp: 'n 11/22/2018 10:13:05'!
 createWithAClientName: aName and: anID thatExpires: aExpirationDate 
 
  ^(self new) initializeWithAClientName: aName and: anID thatExpires: aExpirationDate.  ! !
@@ -658,19 +685,25 @@ createWithAClientName: aName and: anID thatExpires: aExpirationDate
 
 !classDefinition: #MerchantProcessor category: #TusLibrosPrueba!
 Object subclass: #MerchantProcessor
-	instanceVariableNames: ''
+	instanceVariableNames: 'credit'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!MerchantProcessor methodsFor: 'as yet unclassified' stamp: 'n 11/22/2018 11:17:19'!
-processSellWith: aCreditCard atthedate: aDate
+!MerchantProcessor methodsFor: 'processingSell' stamp: 'AAAM 11/22/2018 15:11:21'!
+processSellWith:aTotalSum and: aCreditCard atthedate: aDate
 
 	|res|
 
-	(aCreditCard isValid: aDate)  ifTrue: [ res:= 'OK'] ifFalse: [res:= 'error'].
+	((aCreditCard isValid: aDate) and: (aTotalSum <= credit)) ifTrue: [ res:= 'OK'] ifFalse: [res:= 'error'].
 
 	^res! !
+
+
+!MerchantProcessor methodsFor: 'initializing' stamp: 'AAAM 11/22/2018 14:54:38'!
+initializeWith: aQuantity
+
+credit := aQuantity ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -678,7 +711,12 @@ processSellWith: aCreditCard atthedate: aDate
 MerchantProcessor class
 	instanceVariableNames: ''!
 
-!MerchantProcessor class methodsFor: 'as yet unclassified' stamp: 'z 11/20/2018 15:39:42'!
+!MerchantProcessor class methodsFor: 'initialization' stamp: 'z 11/20/2018 15:39:42'!
 create
 
 ^self new initialize.! !
+
+!MerchantProcessor class methodsFor: 'initialization' stamp: 'AAAM 11/22/2018 14:53:56'!
+createWith: aQuantity
+
+^self new initializeWith: aQuantity .! !
