@@ -10,7 +10,7 @@ test01NewCartsAreCreatedEmpty
 
 	self assert: testObjectsFactory createCart isEmpty! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'AAAM 11/25/2018 04:07:45'!
 test02CanNotAddItemsThatDoNotBelongToStore
 
 	| cart |
@@ -21,7 +21,7 @@ test02CanNotAddItemsThatDoNotBelongToStore
 		should: [ cart add: testObjectsFactory itemNotSellByTheStore ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
-			self assert: anError messageText = cart invalidItemErrorMessage.
+			self assert: anError messageText = cart class  invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
 !CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
@@ -34,7 +34,7 @@ test03AfterAddingAnItemTheCartIsNotEmptyAnymore
 	cart add: testObjectsFactory itemSellByTheStore.
 	self deny: cart isEmpty ! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'AAAM 11/25/2018 04:06:51'!
 test04CanNotAddNonPositiveNumberOfItems
 
 	| cart |
@@ -45,10 +45,10 @@ test04CanNotAddNonPositiveNumberOfItems
 		should: [cart add: 0 of: testObjectsFactory itemSellByTheStore ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
-			self assert: anError messageText = cart invalidQuantityErrorMessage.
+			self assert: anError messageText = cart class invalidQuantityErrorMessage.
 			self assert: cart isEmpty ]! !
 
-!CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
+!CartTest methodsFor: 'tests' stamp: 'AAAM 11/25/2018 04:07:50'!
 test05CanNotAddMoreThanOneItemNotSellByTheStore
 
 	| cart |
@@ -59,7 +59,7 @@ test05CanNotAddMoreThanOneItemNotSellByTheStore
 		should: [cart add: 2 of: testObjectsFactory itemNotSellByTheStore  ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError |
-			self assert: anError messageText = cart invalidItemErrorMessage.
+			self assert: anError messageText = cart class invalidItemErrorMessage.
 			self assert: cart isEmpty ]! !
 
 !CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:11'!
@@ -303,7 +303,7 @@ dic at:  'Caro' put: 2.
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 01:27:19'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 04:18:13'!
 test01CannotCreateCartIfTheUserIDIsInvalid
 
 |rest |
@@ -316,19 +316,14 @@ rest:= RestInternalInterface newWithUsers: self registeredUsersDefault AndProduc
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = RestInternalInterface canNotCreateCartWIthInvalidOwner.
-			self
-			should: [  rest listCart:  -1]
-			raise: Error - MessageNotUnderstood
-			withExceptionDo: [ :anotherError | 
-				self assert: anotherError messageText = RestInternalInterface cannotListsInvalidCartErrorMessage.			
-				 ]. 
+	
 			 ]
 
 
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 00:24:26'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 04:18:20'!
 test02CannotCreateCartIfThePasswordIsInvalid
 
 |rest |
@@ -341,12 +336,7 @@ rest:= RestInternalInterface newWith: self registeredUsersDefault.
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = RestInternalInterface canNotCreateCartWIthInvalidOwner.
-			self
-			should: [  rest listCart:  -1]
-			raise: Error - MessageNotUnderstood
-			withExceptionDo: [ :anotherError | 
-				self assert: anotherError messageText = RestInternalInterface cannotListsInvalidCartErrorMessage.			
-				 ]. 
+
 			 ]
 
 
@@ -371,7 +361,7 @@ cartID:=rest createCart: self defaultUser  withPassword: self defaultPassword .
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 01:34:28'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 04:17:21'!
 test04CannotAddToCartNotCreatedByThisInterface
 
 |rest " cartID"|
@@ -385,12 +375,12 @@ rest:= RestInternalInterface newWithUsers: self registeredUsersDefault  AndProdu
 
 
 		self
-		should: [  rest addtoCart: -1 thisNumberOfCopies: 1 ofThisBook: self itemSellByTheStore .]
+		should: [  rest addtoCart: 1 thisNumberOfCopies: 1 ofThisBook: self itemSellByTheStore .]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = RestInternalInterface cannotAddToInvalidCartErrorMessage.
 			self
-			should: [  rest listCart:  -1]
+			should: [  rest listCart: 1]
 			raise: Error - MessageNotUnderstood
 			withExceptionDo: [ :anotherError | 
 				self assert: anotherError messageText = RestInternalInterface cannotListsInvalidCartErrorMessage.			
@@ -420,8 +410,8 @@ self deny: (cartID = cartID2 ).
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 01:31:19'!
-test06CannotAddToCartABookNOtSoldByTheEditorial
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 04:19:16'!
+test06CannotAddToCartABookNotSoldByTheEditorial
 |rest cartID|
 
 
@@ -436,10 +426,67 @@ cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 		should: [  rest addtoCart: cartID thisNumberOfCopies: 1 ofThisBook: self itemNotSellByTheStore .]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
-			self assert: anError messageText = RestInternalInterface cannotAddToCartInvalidBookErrorMessage. 
-			
+			self assert: anError messageText = Cart invalidItemErrorMessage.
+				self assert: (rest listCart: cartID)isEmpty. 
+
+	 
 			 ]. 
 	 
+
+! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 04:20:05'!
+test07CannotAddToCartNonPositiveNumberOfBooks
+|rest cartID|
+
+
+
+rest:= RestInternalInterface newWithUsers: self registeredUsersDefault  AndProducts: self defaultCatalog .
+
+cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
+
+
+
+		self
+		should: [  rest addtoCart: cartID thisNumberOfCopies: 0 ofThisBook: self itemSellByTheStore .]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError | 
+			self assert: anError messageText = Cart invalidQuantityErrorMessage."preguntar si pueden ser errores de cart o tenemos que cambiar los errores de cart para que reporten a rest"
+			self assert: (rest listCart: cartID)isEmpty. 
+			 ]. 
+	 
+
+! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 05:39:34'!
+test08AddingBooksToCartAddsToTheLists
+|rest cartID|
+
+
+
+rest:= RestInternalInterface newWithUsers: self registeredUsersDefault  AndProducts: self defaultCatalog .
+
+cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
+
+rest addtoCart: cartID thisNumberOfCopies: 1 ofThisBook: self itemSellByTheStore.
+
+	self assert:( (rest listCart: cartID ) includes: (self itemSellByTheStore asString, ' ' , 1 asString) )."Vamos a tener que agregar un assert de totalPurchases luego"
+
+! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 05:40:18'!
+test08bAddingMoreThanOneBookToCartAddsToTheLists
+|rest cartID|
+
+
+
+rest:= RestInternalInterface newWithUsers: self registeredUsersDefault  AndProducts: self defaultCatalog .
+
+cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
+
+rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: self itemSellByTheStore.
+
+	self assert:( (rest listCart: cartID ) includes: (self itemSellByTheStore asString, ' ' , 2 asString) )."Vamos a tener que agregar un assert de totalPurchases luego"
 
 ! !
 
@@ -451,26 +498,16 @@ Object subclass: #Cart
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!Cart methodsFor: 'error messages' stamp: 'HernanWilkinson 6/17/2013 17:45'!
-invalidItemErrorMessage
-	
-	^'Item is not in catalog'! !
 
-!Cart methodsFor: 'error messages' stamp: 'HernanWilkinson 6/17/2013 17:45'!
-invalidQuantityErrorMessage
-	
-	^'Invalid number of items'! !
-
-
-!Cart methodsFor: 'assertions' stamp: 'HernanWilkinson 6/17/2013 18:06'!
+!Cart methodsFor: 'assertions' stamp: 'AAAM 11/25/2018 04:07:39'!
 assertIsValidItem: anItem
 
-	(catalog includesKey: anItem) ifFalse: [ self error: self invalidItemErrorMessage ]! !
+	(catalog includesKey: anItem) ifFalse: [ self error: self class invalidItemErrorMessage ]! !
 
-!Cart methodsFor: 'assertions' stamp: 'HernanWilkinson 6/17/2013 17:51'!
+!Cart methodsFor: 'assertions' stamp: 'AAAM 11/25/2018 04:06:44'!
 assertIsValidQuantity: aQuantity
 
-	aQuantity strictlyPositive ifFalse: [ self error: self invalidQuantityErrorMessage ]! !
+	aQuantity strictlyPositive ifFalse: [ self error: self class invalidQuantityErrorMessage ]! !
 
 
 !Cart methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 17:48'!
@@ -526,6 +563,16 @@ Cart class
 acceptingItemsOf: aCatalog
 
 	^self new initializeAcceptingItemsOf: aCatalog ! !
+
+!Cart class methodsFor: 'instance creation' stamp: 'AAAM 11/25/2018 04:05:56'!
+invalidItemErrorMessage
+	
+	^'Item is not in catalog'! !
+
+!Cart class methodsFor: 'instance creation' stamp: 'AAAM 11/25/2018 04:06:11'!
+invalidQuantityErrorMessage
+	
+	^'Invalid number of items'! !
 
 
 !classDefinition: #Cashier category: #TusLibrosPrueba!
@@ -665,15 +712,15 @@ autentify: aClientID with: aPassword
 
 ! !
 
-!RestInternalInterface methodsFor: 'creating' stamp: 'AAAM 11/25/2018 00:52:26'!
+!RestInternalInterface methodsFor: 'creating' stamp: 'AAAM 11/25/2018 05:22:10'!
 createCart: aClientID withPassword: aPassword
 
 	self autentify: aClientID  with: aPassword.	
 	lastCartID := lastCartID  +1.
-	carts at: lastCartID put:( Cart acceptingItemsOf:catalog ) .
+	carts at: lastCartID put:( Cart acceptingItemsOf:catalog ).	
 	^lastCartID .! !
 
-!RestInternalInterface methodsFor: 'creating' stamp: 'AAAM 11/25/2018 00:53:25'!
+!RestInternalInterface methodsFor: 'creating' stamp: 'AAAM 11/25/2018 05:22:22'!
 initializeWith: anAuthotificationApp
 
 	authentification := anAuthotificationApp .
@@ -683,27 +730,33 @@ initializeWith: anAuthotificationApp
 
 ! !
 
-!RestInternalInterface methodsFor: 'creating' stamp: 'AAAM 11/25/2018 01:29:22'!
+!RestInternalInterface methodsFor: 'creating' stamp: 'AAAM 11/25/2018 05:19:01'!
 initializeWith: anListofUsersAndPassword and: aCatalog 
 
 	authentification := anListofUsersAndPassword .
 	catalog := aCatalog .
 	carts := Dictionary new.
+	
 	lastCartID:= 0.
 
 ! !
 
 
-!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 01:36:56'!
+!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 05:12:55'!
 addtoCart: aCartID thisNumberOfCopies: aNumber ofThisBook: aBook 
 	
-	(catalog keys includes: aBook) ifFalse: [^self error: self class cannotAddToCartInvalidBookErrorMessage ].
-	(carts at: aCartID ifAbsent:[^self error: self class cannotAddToInvalidCartErrorMessage] ) add: aBook.! !
+	"(catalog keys includes: aBook) ifFalse: [^self error: self class cannotAddToCartInvalidBookErrorMessage ]."
+	(carts at: aCartID ifAbsent:[^self error: self class cannotAddToInvalidCartErrorMessage] ) add: aNumber of: aBook .
+	! !
 
-!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 00:27:36'!
-listCart: aCartID 
-	carts  at:  aCartID  ifAbsent:[^self error: self class cannotListsInvalidCartErrorMessage ].
-	^OrderedCollection new.! !
+!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 05:37:13'!
+listCart: aCartID
+
+	|currentCart list| 
+	currentCart := carts   at:  aCartID  ifAbsent:[^self error: self class cannotListsInvalidCartErrorMessage ].
+	list:= OrderedCollection new.
+	catalog keys do:[:elem| (currentCart includes: elem )ifTrue:[ list add: elem asString, ' ', (currentCart occurrencesOf: elem) asString ]].
+	^list.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -714,10 +767,6 @@ RestInternalInterface class
 !RestInternalInterface class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/22/2018 20:30:07'!
 canNotCreateCartWIthInvalidOwner
 	^'No es el usuario o contraseña valido'! !
-
-!RestInternalInterface class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 00:48:43'!
-cannotAddToCartInvalidBookErrorMessage
-^'cannot add to cart invalid book'! !
 
 !RestInternalInterface class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/24/2018 23:52:54'!
 cannotAddToInvalidCartErrorMessage
@@ -741,7 +790,7 @@ newWithUsers: anListofUsersAndPassword  AndProducts: aCatalog
 
 !classDefinition: #Sale category: #TusLibrosPrueba!
 Object subclass: #Sale
-	instanceVariableNames: 'total'
+	instanceVariableNames: 'total items'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
@@ -752,10 +801,11 @@ total
 	^ total! !
 
 
-!Sale methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 18:47'!
+!Sale methodsFor: 'initialization' stamp: 'AAAM 11/25/2018 05:12:42'!
 initializeTotal: aTotal
 
-	total := aTotal ! !
+	total := aTotal .
+	items:= OrderedCollection new."items es algo nuev mio"! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
