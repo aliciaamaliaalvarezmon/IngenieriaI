@@ -1100,26 +1100,6 @@ listCart: aCartID
 	^currentsession  listCart
 ! !
 
-!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 21:46:30'!
-listPurchases2: anClientId with: aPassword 
-
-	|list cartIDs cartWithCheckOut salesTotal cartsIDofCheckoutCarts|
-	self autentify: anClientId  with: aPassword.	
-	cartIDs:= cartsSessions keys select:[:users| (cartsSessions at: users) = anClientId ].
-	cartsIDofCheckoutCarts :=checkedOutCarts select:[:ids| cartIDs includes: ids ]. 
-	cartWithCheckOut := cartsSessions values select:[:elem|  cartsIDofCheckoutCarts  includes: elem ].
-	
-	list:= OrderedCollection new.
-	
-	cartsIDofCheckoutCarts do:[:idOfCheckedCarts| list addAll: (self listCart: idOfCheckedCarts )].
-	
-	list isEmpty ifFalse: [
-	salesTotal:=cartWithCheckOut inject: 0 into:[:subtotal :sales| subtotal + sales total] .
-	list addLast: salesTotal asString.
-	].
-
-	^list.! !
-
 !RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 04:56:52'!
 listPurchases: anClientId with: aPassword 
 
