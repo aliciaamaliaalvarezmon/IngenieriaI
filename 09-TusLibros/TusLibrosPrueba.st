@@ -249,7 +249,7 @@ debit: anAmount from: aCreditCard
 
 !classDefinition: #RestInternalInterfaceTest category: #TusLibrosPrueba!
 TestCase subclass: #RestInternalInterfaceTest
-	instanceVariableNames: 'testObjectsFactory debitBehavior lastCreditCartID'
+	instanceVariableNames: 'testObjectsFactory debitBehavior'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
@@ -269,6 +269,13 @@ defaultUser
 
 ^'Bob'! !
 
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:14:05'!
+invalidCreditCartID
+
+
+	
+	^'000000000000001'! !
+
 !RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 00:09:04'!
 registeredUsersDefault
 
@@ -281,11 +288,12 @@ dic at:  'Caro' put: 2.
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 11/25/2018 20:03:43'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:13:27'!
 setUp 
 
 	testObjectsFactory := StoreTestObjectsFactory new.
-	debitBehavior := [ :anAmount :aCreditCard | ]
+	debitBehavior := [ :anAmount :aCreditCard | ].
+	
 	! !
 
 !RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'z 11/26/2018 18:03:41'!
@@ -337,7 +345,7 @@ test03CreateCartIfBothUserAndPasswordAreCorrect
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'z 11/26/2018 18:03:41'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 21:13:43'!
 test04CannotAddToCartNotCreatedByThisInterface
 
 	|rest |
@@ -349,13 +357,26 @@ test04CannotAddToCartNotCreatedByThisInterface
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = RestInternalInterface cannotAddToInvalidCartErrorMessage.
-			self
-			should: [  rest listCart: 1]
-			raise: Error - MessageNotUnderstood
-			withExceptionDo: [ :anotherError | 
-				self assert: anotherError messageText = RestInternalInterface cannotListsInvalidCartErrorMessage.			
-				 ]. 
+			
 	]. 
+	 
+
+! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 21:13:32'!
+test04bCannotListCartNotCreatedByThisInterface
+
+	|rest |
+
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog.
+	
+	self
+		should: [  rest listCart: 1]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anotherError | 
+			self assert: anotherError messageText = RestInternalInterface cannotListsInvalidCartErrorMessage.			
+		 ]. 
+ 
 	 
 
 ! !
@@ -423,7 +444,7 @@ test08AddingBooksToCartAddsToTheLists
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 02:02:54'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 22:12:24'!
 test08bAddingMoreThanOneBookToCartAddsToTheLists
 	
 	|rest cartID|
@@ -433,13 +454,14 @@ test08bAddingMoreThanOneBookToCartAddsToTheLists
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
 	rest addtoCart: cartID thisNumberOfCopies: 1 ofThisBook: testObjectsFactory itemSellByTheStore2.
 	self assert: ((rest listCart: cartID ) at: 1) equals: (testObjectsFactory itemSellByTheStore asString).
-	self assert: ((rest listCart: cartID ) at: 3) equals: (testObjectsFactory itemSellByTheStore asString).
-	self assert: ((rest listCart: cartID ) at: 5) equals: (testObjectsFactory itemSellByTheStore2 asString).
-	self assert:( (rest listCart: cartID ) size = 6).
+	self assert: ((rest listCart: cartID ) at: 2) equals: 2.
+	self assert: ((rest listCart: cartID ) at: 3) equals: (testObjectsFactory itemSellByTheStore2 asString).
+	self assert: ((rest listCart: cartID ) at: 4) equals: 1.
+	self assert:( (rest listCart: cartID ) size = 4).
 	
 	self assert: (rest listPurchases: self defaultUser with: self defaultPassword )isEmpty .! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 02:55:43'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:17:03'!
 test09CannotCheckOutEmptyCart
 
 	|rest cartID|
@@ -447,7 +469,7 @@ test09CannotCheckOutEmptyCart
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 
 	self
-		should:[rest checkout: cartID withCreditCart: testObjectsFactory notExpiredDate thatExpires: testObjectsFactory  today throught: self  andIsOwnedBy: self defaultUser]
+		should:[rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory  today throught: self  andIsOwnedBy: self defaultUser]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = Cashier cartCanNotBeEmptyErrorMessage .
@@ -455,7 +477,7 @@ test09CannotCheckOutEmptyCart
 	]. 
 	 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 03:05:42'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:16:53'!
 test10CanNotCheckoutWithAnExpiredCreditCart
 
 	|rest cartID|
@@ -464,7 +486,7 @@ test10CanNotCheckoutWithAnExpiredCreditCart
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
 
 	self
-		should:[rest checkout: cartID withCreditCart: testObjectsFactory expiredDate thatExpires: testObjectsFactory  expiredDate throught: self andIsOwnedBy: self defaultUser ]
+		should:[rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory  expiredDate throught: self andIsOwnedBy: self defaultUser ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = Cashier canNotChargeAnExpiredCreditCardErrorMessage.
@@ -472,7 +494,7 @@ test10CanNotCheckoutWithAnExpiredCreditCart
 	]. 
 	 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 03:07:31'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:16:44'!
 test11CashierDoesNotSaleWhenTheCreditCardHasNoCredit
 
 	|rest cartID |
@@ -483,15 +505,15 @@ test11CashierDoesNotSaleWhenTheCreditCardHasNoCredit
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
 
 	self
-		should:[rest checkout: cartID withCreditCart: testObjectsFactory notExpiredCreditCard thatExpires: testObjectsFactory   notExpiredDate throught: self andIsOwnedBy: self defaultUser ]
+		should:[rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory   notExpiredDate throught: self andIsOwnedBy: self defaultUser ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = Cashier creditCardHasNoCreditErrorMessage.
 			self assert: (rest listPurchases: self defaultUser with: self defaultPassword )isEmpty .	 
 	]. 
-	 "Es el cliente Id = nombre del dueño de tarjeta, en parametro?....debo fijarme que quien hace el checkout sea quien creo el carrito? No creo que tenga que fijarme que sea el dueño de la tarjeta, solo asumir que lo es."! !
+! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 04:32:07'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:16:28'!
 test12DoingCheckOutRegistersTheSell
 
 	|creditCard rest cartID debitedAmout debitedCreditCard total |
@@ -502,21 +524,21 @@ test12DoingCheckOutRegistersTheSell
 	debitBehavior := [ :anAmount :aCreditCard | 
 		debitedAmout := anAmount.
 		debitedCreditCard := aCreditCard ].
-	total:= rest checkout: cartID withCreditCart: 50 thatExpires: testObjectsFactory  notExpiredDate throught: self andIsOwnedBy: self defaultUser .
+	total:= rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory  notExpiredDate throught: self andIsOwnedBy: self defaultUser .
 
 	"self assert: debitedCreditCard = creditCard. "
 	self assert: debitedAmout = total.
 	self deny: (rest listPurchases: self defaultUser with: self defaultPassword )isEmpty .! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 03:09:04'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:16:15'!
 test13CannotAddTOCartAfterDoingCheckOut
 "Estos tests son necesarios dependiendo si el carrito puede ser reutilizado luego de hacer checkOut, Si son reutilizables hay que reever lo que hace listPurchases"
-	|creditCard rest cartID |
+	| rest cartID |
 	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
-	creditCard:=  testObjectsFactory notExpiredCreditCard .	
-	rest checkout: cartID withCreditCart: creditCard thatExpires: testObjectsFactory  notExpiredDate throught: self andIsOwnedBy: self defaultUser .
+.	
+	rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory  notExpiredDate throught: self andIsOwnedBy: self defaultUser .
 
 	self
 		should: [  rest addtoCart: cartID thisNumberOfCopies: 1 ofThisBook: testObjectsFactory itemSellByTheStore .]
@@ -525,21 +547,18 @@ test13CannotAddTOCartAfterDoingCheckOut
 			self assert: anError messageText = RestInternalInterface cannotUseCheckedOutCartErrorMessage.
 	]. ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 04:32:32'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:16:08'!
 test14CannotShowPurchasesWIthUSerOfPasswordInvalid
 
-	|creditCard rest cartID debitedAmout debitedCreditCard total |
+	| rest cartID |
 	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
-	creditCard:=  testObjectsFactory notExpiredCreditCard .
-	debitBehavior := [ :anAmount :aCreditCard | 
-		debitedAmout := anAmount.
-		debitedCreditCard := aCreditCard ].
-	total:= rest checkout: cartID withCreditCart: creditCard thatExpires: testObjectsFactory  notExpiredDate throught: self andIsOwnedBy: self defaultUser .
+	
+	
+	 rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory  notExpiredDate throught: self andIsOwnedBy: self defaultUser .
 
-"self assert: debitedCreditCard = creditCard." 
-	self assert: debitedAmout = total.
+
 	self
 		should: [ rest listPurchases: 'Trudis' with: self defaultPassword. ]
 		raise: Error - MessageNotUnderstood
@@ -547,29 +566,123 @@ test14CannotShowPurchasesWIthUSerOfPasswordInvalid
 			self assert: anError messageText = RestInternalInterface canNotCreateCartWIthInvalidOwner.
 	].
 	self
-		should: [ rest listPurchases: 'Trudis' with: 0. ]
+		should: [ rest listPurchases: self defaultUser with: 0. ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = RestInternalInterface canNotCreateCartWIthInvalidOwner.
 	].
 	self deny: (rest listPurchases: self defaultUser with: self defaultPassword )isEmpty .! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 03:09:31'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:30:17'!
 test15CannotCheckoutCartTwice
 
-	|creditCard rest cartID |
+	| rest cartID |
 	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
-	creditCard:=  testObjectsFactory notExpiredCreditCard .	
-	rest checkout: cartID withCreditCart: creditCard thatExpires: testObjectsFactory notExpiredDate throught: self andIsOwnedBy: self defaultUser .
+		
+	rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory notExpiredDate throught: self andIsOwnedBy: self defaultUser .
 	
 	self
-		should: [ rest checkout: cartID withCreditCart: creditCard thatExpires: testObjectsFactory  today throught: self andIsOwnedBy: self defaultUser ]
+		should: [ rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory  today throught: self andIsOwnedBy: self defaultUser ]
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = RestInternalInterface cannotUseCheckedOutCartErrorMessage.
 	]. ! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:15:15'!
+test16CannotCheckoutCartAfter30MinutesHavePassed
+	| rest cartID |
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+		
+	rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory notExpiredDate throught: self andIsOwnedBy: self defaultUser .
+! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:15:06'!
+test17CannotCheckoutCartNotCreatedByUser
+	| rest cartID |
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	.	
+
+self
+		should: [ rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory  today throught: self andIsOwnedBy: 'Maria' ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError | 
+			self assert: anError messageText = RestInternalInterface cannotUseCartsOfOthersErrorMessage.
+	]. ! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:52:56'!
+test18ShowPurchasesShowsCorrectValues
+	
+	|purchases rest cartID |
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	
+	 rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory  notExpiredDate throught: self andIsOwnedBy: self defaultUser .
+
+
+purchases:= rest listPurchases: self defaultUser with: self defaultPassword.
+self deny: purchases  isEmpty .
+self assert: purchases elements size = 1.
+self assert: (purchases ocurrencesOf: testObjectsFactory itemSellByTheStore ) =4.
+self assert: purchases total = (testObjectsFactory itemSellByTheStorePrice *4) .! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:22:17'!
+test19CannotCheckOutWithInvalidId
+	
+	| rest cartID |
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	
+	
+	self
+		should: [ rest checkout: cartID withCreditCart: self invalidCreditCartID thatExpires: testObjectsFactory notExpiredDate  throught: self andIsOwnedBy: self defaultUser ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError | 
+			self assert: anError messageText = CreditCard cannotCreateWithInvalidTargetIDErrorMessage.
+	]. ! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:58:22'!
+test20ShowPurchasesCollectsSalesOfMultipleCarts
+	
+	|purchases rest cartID cartID2|
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	
+	 rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory  notExpiredDate throught: self andIsOwnedBy: self defaultUser .
+
+cartID2:= rest createCart: self defaultUser  withPassword: self defaultPassword.
+rest addtoCart: cartID2 thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+
+purchases:= rest listPurchases: self defaultUser with: self defaultPassword.
+self deny: purchases  isEmpty .
+self assert: purchases elements size = 1.
+self assert: (purchases ocurrencesOf: testObjectsFactory itemSellByTheStore ) =4.
+self assert: purchases total = (testObjectsFactory itemSellByTheStorePrice *4) .
+
+rest checkout: cartID2 withCreditCart: self validCreditCartID thatExpires: testObjectsFactory  notExpiredDate throught: self andIsOwnedBy: self defaultUser .
+
+purchases:= rest listPurchases: self defaultUser with: self defaultPassword.
+self deny: purchases  isEmpty .
+self assert: purchases elements size = 1.
+self assert: (purchases ocurrencesOf: testObjectsFactory itemSellByTheStore ) =6.
+self assert: purchases total = (testObjectsFactory itemSellByTheStorePrice *6) .! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:13:50'!
+validCreditCartID
+
+
+	
+	^'0000000000000001'! !
 
 
 !classDefinition: #Cart category: #TusLibrosPrueba!
@@ -590,11 +703,11 @@ assertIsValidQuantity: aQuantity
 	aQuantity strictlyPositive ifFalse: [ self error: self class invalidQuantityErrorMessage ]! !
 
 
-!Cart methodsFor: 'initialization' stamp: 'HernanWilkinson 6/17/2013 17:48'!
+!Cart methodsFor: 'initialization' stamp: 'AAAM 12/1/2018 21:50:56'!
 initializeAcceptingItemsOf: aCatalog
 
 	catalog := aCatalog.
-	items := OrderedCollection new.! !
+	items := Bag new.! !
 
 
 !Cart methodsFor: 'queries' stamp: 'HernanWilkinson 6/17/2013 17:45'!
@@ -603,7 +716,7 @@ occurrencesOf: anItem
 	^items occurrencesOf: anItem  ! !
 
 
-!Cart methodsFor: 'testing' stamp: 'HernanWilkinson 6/17/2013 17:44'!
+!Cart methodsFor: 'testing' stamp: 'AAAM 12/1/2018 21:53:22'!
 includes: anItem
 
 	^items includes: anItem ! !
@@ -614,7 +727,7 @@ isEmpty
 	^items isEmpty ! !
 
 
-!Cart methodsFor: 'total' stamp: 'HernanWilkinson 6/17/2013 19:09'!
+!Cart methodsFor: 'total' stamp: 'AAAM 12/1/2018 21:52:59'!
 total
 
 	^ items sum: [ :anItem | catalog at: anItem ]! !
@@ -625,19 +738,21 @@ add: anItem
 
 	^ self add: 1 of: anItem ! !
 
-!Cart methodsFor: 'adding' stamp: 'HernanWilkinson 6/17/2013 17:51'!
+!Cart methodsFor: 'adding' stamp: 'AAAM 12/1/2018 21:52:34'!
 add: aQuantity of: anItem
 
 	self assertIsValidQuantity: aQuantity.
 	self assertIsValidItem: anItem.
+	
+	items add: anItem withOccurrences: aQuantity.
 
-	1 to: aQuantity do: [ :aNumber | items add: anItem ]! !
+! !
 
 
-!Cart methodsFor: 'as yet unclassified' stamp: 'z 11/26/2018 17:45:52'!
+!Cart methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 22:11:32'!
 list
 	
-	^items copy.! !
+	^items contents keys copy.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -661,6 +776,79 @@ invalidQuantityErrorMessage
 	^'Invalid number of items'! !
 
 
+!classDefinition: #CartSession category: #TusLibrosPrueba!
+Object subclass: #CartSession
+	instanceVariableNames: 'cart cartID sessionOwner checkedOut restInterface'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibrosPrueba'!
+
+!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 23:11:20'!
+addtoCartThisNumberOfCopies: aNumber ofThisBook: aBook.
+
+self assertCartHasNotBeenCheckedOut: sessionOwner .
+
+cart add: aNumber of: aBook .! !
+
+!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 23:02:44'!
+assertCartHasNotBeenCheckedOut: aCartID.
+
+checkedOut  ifTrue:[^restInterface cartHasAlreadyBeenCheckedOut ]! !
+
+!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 00:51:20'!
+assertTheClientOwnsTheCart: aUserID .
+
+(sessionOwner  = aUserID )ifFalse:[^restInterface cartHasNotBeenCreatedByOwner]! !
+
+!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 01:32:09'!
+checkOut: aCartID withCreditCard: aCreditCardID  thatExpires: aDateAndTime throught: aMerchantProcessor andIsOwnedBy:aUserID registeringOn: sales
+
+	|creditCard cashier total sale|
+	self assertCartHasNotBeenCheckedOut: aCartID.
+	self assertTheClientOwnsTheCart: aUserID .
+	
+	sale:= OrderedCollection  new.
+	creditCard:= CreditCard expiringOn: aDateAndTime withOwner: aUserID andID: aCreditCardID .
+	cashier:= Cashier toCheckout: cart charging: creditCard throught: aMerchantProcessor on: DateAndTime now registeringOn: sales.
+	
+	
+	total:=cashier checkOut.  
+	checkedOut:= true.
+	^total.
+	! !
+
+!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 00:45:04'!
+initializeCartSession: aCart with: anCartID andOwner: anOwnerID by:aRestInterface
+
+cart := aCart .
+cartID := anCartID .
+sessionOwner := anOwnerID.
+checkedOut := false .
+restInterface := aRestInterface .! !
+
+!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 22:00:09'!
+listCart
+
+|itemlist|
+
+	itemlist:= OrderedCollection new.
+	
+	cart list do:[:itemName| itemlist add: itemName. itemlist add: (cart occurrencesOf: itemName)].
+	
+	^itemlist.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'CartSession class' category: #TusLibrosPrueba!
+CartSession class
+	instanceVariableNames: ''!
+
+!CartSession class methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 22:57:22'!
+createCartSession: aCart withID: anCartID andOwner: anOwnerID byInterface: aRest
+
+^self new initializeCartSession: aCart with: anCartID andOwner: anOwnerID by: aRest .! !
+
+
 !classDefinition: #Cashier category: #TusLibrosPrueba!
 Object subclass: #Cashier
 	instanceVariableNames: 'cart salesBook merchantProcessor creditCard total'
@@ -674,10 +862,10 @@ calculateTotal
 	total := cart total.
 	! !
 
-!Cashier methodsFor: 'checkout - private' stamp: 'AAAM 11/26/2018 03:28:20'!
+!Cashier methodsFor: 'checkout - private' stamp: 'AAAM 12/2/2018 03:50:24'!
 createSale
 
-	^ Sale of: total and: cart 
+	^ Sale of: creditCard owner and: (Ticket of: cart ) 
 ! !
 
 !Cashier methodsFor: 'checkout - private' stamp: 'HernanWilkinson 6/17/2013 19:06'!
@@ -686,10 +874,13 @@ debitTotal
 	merchantProcessor debit: total from: creditCard.
 	! !
 
-!Cashier methodsFor: 'checkout - private' stamp: 'HernanWilkinson 6/17/2013 19:06'!
+!Cashier methodsFor: 'checkout - private' stamp: 'AAAM 12/2/2018 04:10:40'!
 registerSale
 
-	salesBook add: self createSale! !
+|custumerSales|
+	custumerSales:= salesBook detect:[:sale| sale isCustomer: creditCard owner ]ifNone:[salesBook add: self createSale. ^self ].
+	
+	custumerSales addToTicket: cart! !
 
 
 !Cashier methodsFor: 'checkout' stamp: 'HernanWilkinson 6/17/2013 19:06'!
@@ -765,12 +956,30 @@ isExpiredOn: aDate
 	^expiration start < (Month  month: aDate monthIndex year: aDate yearNumber)  start! !
 
 
-!CreditCard methodsFor: 'initialization' stamp: 'AAAM 12/1/2018 02:36:40'!
+!CreditCard methodsFor: 'initialization' stamp: 'AAAM 12/2/2018 05:23:45'!
 initializeExpiringOn: aMonth withOwner: anOwner andID: anID .
+
+self assertValidID: anID.
 	expiration := aMonth. 
 	owner:= anOwner .
 	identification:= anID .
 	"assert validCartID"! !
+
+
+!CreditCard methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:28:38'!
+assertValidID: anID.
+
+(anID size = 16 and: anID  asInteger  > 0) ifFalse:[^self error: self class cannotCreateWithInvalidTargetIDErrorMessage]! !
+
+!CreditCard methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 01:35:06'!
+identity
+
+^identification ! !
+
+!CreditCard methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 01:34:41'!
+owner
+
+^owner ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -778,15 +987,44 @@ initializeExpiringOn: aMonth withOwner: anOwner andID: anID .
 CreditCard class
 	instanceVariableNames: ''!
 
+!CreditCard class methodsFor: 'instance creation' stamp: 'AAAM 12/2/2018 05:23:16'!
+cannotCreateWithInvalidTargetIDErrorMessage
+
+^'The ID is invalid'! !
+
 !CreditCard class methodsFor: 'instance creation' stamp: 'AAAM 12/1/2018 02:22:29'!
 expiringOn: aMonth withOwner: anOwner andID: anID
 	
 	^self new initializeExpiringOn: aMonth withOwner: anOwner andID: anID .! !
 
 
+!classDefinition: #ManualClock category: #TusLibrosPrueba!
+Object subclass: #ManualClock
+	instanceVariableNames: 'clock'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibrosPrueba'!
+
+!ManualClock methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 19:35:48'!
+initializeClock: anStartDateAndTime
+
+clock:= anStartDateAndTime .! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'ManualClock class' category: #TusLibrosPrueba!
+ManualClock class
+	instanceVariableNames: ''!
+
+!ManualClock class methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 19:34:55'!
+initialization: anStartMoment
+
+^self new initializeClock: anStartMoment .! !
+
+
 !classDefinition: #RestInternalInterface category: #TusLibrosPrueba!
 Object subclass: #RestInternalInterface
-	instanceVariableNames: 'authentification carts lastCartID catalog sales cartsUsers checkedOutCarts'
+	instanceVariableNames: 'authentification cartsSessions lastCartID catalog sales'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
@@ -800,78 +1038,76 @@ autentify: aClientID with: aPassword
 
 ! !
 
-!RestInternalInterface methodsFor: 'creating' stamp: 'z 11/26/2018 17:55:10'!
+!RestInternalInterface methodsFor: 'creating' stamp: 'AAAM 12/1/2018 22:58:00'!
 createCart: aClientID withPassword: aPassword
 
 	self autentify: aClientID  with: aPassword.	
 	lastCartID := lastCartID  +1.
-	carts at: lastCartID put:( Cart acceptingItemsOf:catalog ).	
-	cartsUsers at: lastCartID  put: aClientID .
+	cartsSessions at: lastCartID  put:(CartSession createCartSession: (Cart acceptingItemsOf: catalog) withID: lastCartID andOwner: aClientID byInterface: self ).
 	^lastCartID .! !
 
-!RestInternalInterface methodsFor: 'creating' stamp: 'z 11/26/2018 18:00:36'!
+!RestInternalInterface methodsFor: 'creating' stamp: 'AAAM 12/1/2018 23:40:04'!
 initializeWith: anListofUsersAndPassword and: aCatalog
 
 	authentification := anListofUsersAndPassword .
 	catalog := aCatalog.
-	carts := Dictionary new.
+
 	sales:= OrderedCollection  new.
-	checkedOutCarts:=  OrderedCollection  new.
-	cartsUsers:= Dictionary new.
+	
+	cartsSessions:= Dictionary  new.
+	
 	lastCartID:= 0.
 	
 
 ! !
 
 
-!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'z 11/26/2018 17:51:54'!
+!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 23:11:32'!
 addtoCart: aCartID thisNumberOfCopies: aNumber ofThisBook: aBook 
 	
-	self assertCartHasNotBeenCheckedOut: aCartID .
 	
-	^(carts at: aCartID ifAbsent:[^self error: self class cannotAddToInvalidCartErrorMessage] ) add: aNumber of: aBook .
+	
+	^(cartsSessions at: aCartID ifAbsent:[^self error: self class cannotAddToInvalidCartErrorMessage] ) addtoCartThisNumberOfCopies: aNumber ofThisBook: aBook.
 	! !
 
-!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 11/26/2018 04:55:48'!
-assertCartHasNotBeenCheckedOut:aCartID
+!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 23:03:09'!
+cartHasAlreadyBeenCheckedOut
 
+^ self error: self class cannotUseCheckedOutCartErrorMessage! !
 
-(checkedOutCarts includes: aCartID ) ifTrue:[^self error: self class cannotUseCheckedOutCartErrorMessage]! !
+!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 00:52:05'!
+cartHasNotBeenCreatedByOwner
 
-!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 02:58:07'!
+^ self error: self class cannotUseCartsOfOthersErrorMessage! !
+
+!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 01:31:33'!
 checkout: aCartID withCreditCart: aCreditCardID thatExpires: aDateAndTime throught: aMerchantProcessor andIsOwnedBy: aUserID
 
-	|cart total  cashier creditCard|
-	self assertCartHasNotBeenCheckedOut: aCartID.
+	|session |
 	
-	cart:=  (carts at: aCartID ).
-	creditCard:= CreditCard expiringOn: aDateAndTime withOwner: aUserID andID: aCreditCardID .
-	cashier:= Cashier toCheckout: cart charging: creditCard throught: aMerchantProcessor on: DateAndTime now registeringOn: sales.
-	total:=cashier checkOut.  
-	checkedOutCarts add: aCartID.
-	^total.
 	
+	session := cartsSessions  at: aCartID.
+	^ session checkOut: aCartID withCreditCard: aCreditCardID  thatExpires: aDateAndTime throught: aMerchantProcessor andIsOwnedBy:aUserID registeringOn: sales.
+	
+
 	! !
 
-!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 02:02:12'!
+!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 20:32:45'!
 listCart: aCartID
 
-	|currentCart list| 
-	currentCart := carts   at:  aCartID  ifAbsent:[^self error: self class cannotListsInvalidCartErrorMessage ].
-	list:= OrderedCollection new.
-	"list := currentCart list. do"
-	currentCart  list do:[:itemName| list add: itemName. list add: (currentCart occurrencesOf: itemName)].
-	
-	^list.! !
+	|currentsession| 
+	currentsession := cartsSessions   at:  aCartID ifAbsent:[^self error: self class cannotListsInvalidCartErrorMessage ].
+	^currentsession  listCart
+! !
 
-!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 01:57:21'!
-listPurchases: anClientId with: aPassword 
+!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 21:46:30'!
+listPurchases2: anClientId with: aPassword 
 
 	|list cartIDs cartWithCheckOut salesTotal cartsIDofCheckoutCarts|
 	self autentify: anClientId  with: aPassword.	
-	cartIDs:= cartsUsers keys select:[:users| (cartsUsers at: users) = anClientId ].
+	cartIDs:= cartsSessions keys select:[:users| (cartsSessions at: users) = anClientId ].
 	cartsIDofCheckoutCarts :=checkedOutCarts select:[:ids| cartIDs includes: ids ]. 
-	cartWithCheckOut := carts values select:[:elem|  cartsIDofCheckoutCarts  includes: elem ].
+	cartWithCheckOut := cartsSessions values select:[:elem|  cartsIDofCheckoutCarts  includes: elem ].
 	
 	list:= OrderedCollection new.
 	
@@ -883,6 +1119,22 @@ listPurchases: anClientId with: aPassword
 	].
 
 	^list.! !
+
+!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 04:56:52'!
+listPurchases: anClientId with: aPassword 
+
+	| saleOfClient|
+	
+	self autentify: anClientId  with: aPassword.	
+	
+	saleOfClient:= sales detect:[:sale| sale isCustomer: anClientId ] ifNone:[^OrderedCollection  new].
+	
+	^saleOfClient ticket.
+	
+
+
+	
+ ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -904,6 +1156,10 @@ cannotListsInvalidCartErrorMessage
 
 ^'Cannot list a cart not  created by this interface'! !
 
+!RestInternalInterface class methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 00:52:31'!
+cannotUseCartsOfOthersErrorMessage
+^'The user did not create the cart'! !
+
 !RestInternalInterface class methodsFor: 'as yet unclassified' stamp: 'AAAM 11/26/2018 04:49:23'!
 cannotUseCheckedOutCartErrorMessage
 ^'already checked out that cart'! !
@@ -915,28 +1171,34 @@ newWithUsers: anListofUsersAndPassword andProducts: aCatalog
 
 !classDefinition: #Sale category: #TusLibrosPrueba!
 Object subclass: #Sale
-	instanceVariableNames: 'total saleCart'
+	instanceVariableNames: 'customer ticket'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!Sale methodsFor: 'total' stamp: 'HernanWilkinson 6/17/2013 18:48'!
-total
+!Sale methodsFor: 'total' stamp: 'AAAM 12/2/2018 03:48:14'!
+ticket
 	
-	^ total! !
+	^ ticket! !
 
 
-!Sale methodsFor: 'initialization' stamp: 'AAAM 11/26/2018 03:30:15'!
-initializeTotal: aTotal and: aCart
+!Sale methodsFor: 'initialization' stamp: 'AAAM 12/2/2018 01:53:10'!
+initializeTotal: anOwner and: aTicket
 
-	total := aTotal .
-	saleCart := aCart .
+	ticket := aTicket .
+	customer := anOwner .
 	! !
 
 
-!Sale methodsFor: 'as yet unclassified' stamp: 'AAAM 11/26/2018 03:24:31'!
-showCart
-	^saleCart! !
+!Sale methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 04:11:48'!
+addToTicket: cart
+
+ticket addToTicket: cart! !
+
+!Sale methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 04:03:51'!
+isCustomer: anClientId 
+
+^(customer  = anClientId )! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -944,12 +1206,12 @@ showCart
 Sale class
 	instanceVariableNames: ''!
 
-!Sale class methodsFor: 'instance creation' stamp: 'AAAM 11/26/2018 03:29:32'!
-of: aTotal and: aCart
+!Sale class methodsFor: 'instance creation' stamp: 'AAAM 12/2/2018 01:52:17'!
+of: anOwner and: aTicket
 
 	"should assert total is not negative or 0!!"
 	"message de arriba creo que es de la catedra. El metodo original era of: solo, cambie para que funcione"
-	^self new initializeTotal: aTotal and: aCart .! !
+	^self new initializeTotal: anOwner and: aTicket .! !
 
 
 !classDefinition: #StoreTestObjectsFactory category: #TusLibrosPrueba!
@@ -994,20 +1256,20 @@ defaultCatalog
 		yourself ! !
 
 
-!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'AAAM 12/1/2018 04:28:13'!
+!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'AAAM 12/2/2018 05:29:33'!
 expiredCreditCard
 	
-	^CreditCard expiringOn: self expiredDate withOwner: 'Bob' andID: 50.! !
+	^CreditCard expiringOn: self expiredDate withOwner: 'Bob' andID: '5000000000000000'.! !
 
 !StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'AAAM 12/1/2018 02:55:20'!
 expiredDate
 	
 	^Month month: today monthIndex year: today yearNumber - 1! !
 
-!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'AAAM 12/1/2018 04:27:59'!
+!StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'AAAM 12/2/2018 05:27:40'!
 notExpiredCreditCard
 	
-	^CreditCard expiringOn: self notExpiredDate withOwner: 'Bob' andID: 50.! !
+	^CreditCard expiringOn: self notExpiredDate withOwner: 'Bob' andID: '5000000000000000'.! !
 
 !StoreTestObjectsFactory methodsFor: 'credit card' stamp: 'AAAM 12/1/2018 04:01:00'!
 notExpiredDate
@@ -1030,3 +1292,77 @@ itemSellByTheStore2
 today
 	
 	^ today! !
+
+
+!classDefinition: #Ticket category: #TusLibrosPrueba!
+Object subclass: #Ticket
+	instanceVariableNames: 'total elements'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'TusLibrosPrueba'!
+
+!Ticket methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 04:57:54'!
+addToTicket: cart
+
+cart list do:[:item| elements add: item  withOccurrences: (cart  occurrencesOf: item)].
+total := total + cart total.! !
+
+!Ticket methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:51:29'!
+createOf: aCart 
+
+
+elements:= Bag new.
+total :=0.
+self addToTicket: aCart.
+
+! !
+
+!Ticket methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 04:34:19'!
+elements
+
+^elements contents keys copy.
+! !
+
+!Ticket methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:00:30'!
+isEmpty
+
+^self elements isEmpty ! !
+
+!Ticket methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 04:33:19'!
+ocurrencesOf: anItem
+
+^ elements occurrencesOf:  anItem .
+
+! !
+
+!Ticket methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 04:42:58'!
+purchases
+
+|list|
+	list:= Dictionary new.
+	
+	self elements  do:[:item| list at: item put: (self  ocurrencesOf: item )].
+	
+	^list
+	
+
+
+
+
+! !
+
+!Ticket methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 04:27:44'!
+total
+
+^total! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Ticket class' category: #TusLibrosPrueba!
+Ticket class
+	instanceVariableNames: ''!
+
+!Ticket class methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 01:51:03'!
+of: aCart
+
+^self new createOf: aCart ! !
