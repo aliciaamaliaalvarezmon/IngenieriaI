@@ -1,9 +1,9 @@
-!classDefinition: #CartTest category: #TusLibrosPrueba2!
+!classDefinition: #CartTest category: #TusLibros!
 TestCase subclass: #CartTest
 	instanceVariableNames: 'testObjectsFactory'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !CartTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:10'!
 test01NewCartsAreCreatedEmpty
@@ -98,12 +98,12 @@ setUp
 	testObjectsFactory := StoreTestObjectsFactory new.! !
 
 
-!classDefinition: #CashierTest category: #TusLibrosPrueba2!
+!classDefinition: #CashierTest category: #TusLibros!
 TestCase subclass: #CashierTest
 	instanceVariableNames: 'testObjectsFactory debitBehavior'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !CashierTest methodsFor: 'tests' stamp: 'HernanWilkinson 6/17/2013 18:50'!
 test01CanNotCheckoutAnEmptyCart
@@ -247,12 +247,12 @@ debit: anAmount from: aCreditCard
 	! !
 
 
-!classDefinition: #RestInternalInterfaceTest category: #TusLibrosPrueba2!
+!classDefinition: #RestInternalInterfaceTest category: #TusLibros!
 TestCase subclass: #RestInternalInterfaceTest
 	instanceVariableNames: 'testObjectsFactory debitBehavior rest'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 02:23:07'!
 test01CannotCreateCartIfTheUserIDIsInvalid
@@ -387,7 +387,7 @@ test08AddingBooksToCartAddsToTheLists
 
 	self assert:( (rest listCart: cartID ) at: 1) equals: (testObjectsFactory itemSellByTheStore asString) .! !
 
-!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 02:24:35'!
+!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 12:53:49'!
 test08bAddingMoreThanOneBookToCartAddsToTheLists
 	
 	| cartID |
@@ -627,7 +627,7 @@ test20AdvancingClockAdvancesTheClockInRest
 	self assert: rest now = startHour .
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'n 12/3/2018 10:42:16'!
+!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 12:45:39'!
 test21CannotCheckoutCartAfter30MinutesHavePassed
 	| rest cartID clock |
 	clock := ManualClock initialization: DateAndTime now.
@@ -643,18 +643,19 @@ test21CannotCheckoutCartAfter30MinutesHavePassed
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = RestInternalInterface expiredCartSessionErrorMessage.
+			self assert: (rest listPurchases: testObjectsFactory defaultUser with: testObjectsFactory defaultPassword )isEmpty
 	]. 
 
 	! !
 
-!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 01:20:28'!
+!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 12:56:58'!
 test22CannotAddToCartAfter30MinutesHavePassed
 	| rest cartID clock |
 	clock := ManualClock initialization: DateAndTime now.
 	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 		
 	cartID:= rest createCart: testObjectsFactory defaultUser  withPassword: testObjectsFactory defaultPassword.
-	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	
 	
 	clock advanceTime:  31 minutes.
 	
@@ -663,11 +664,14 @@ test22CannotAddToCartAfter30MinutesHavePassed
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = RestInternalInterface expiredCartSessionErrorMessage.
+			clock reverseTime:  31 minutes.
+			self assert: (rest listCart: cartID )isEmpty .
+			
 	]. 
 
 	! !
 
-!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 01:25:03'!
+!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 12:58:29'!
 test23CannotListsCartAfter30MinutesHavePassed
 	| rest cartID clock |
 	clock := ManualClock initialization: DateAndTime now.
@@ -683,6 +687,10 @@ test23CannotListsCartAfter30MinutesHavePassed
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = RestInternalInterface expiredCartSessionErrorMessage.
+			clock reverseTime:  31 minutes.
+			self assert: ((rest listCart: cartID ) at: 1) equals: (testObjectsFactory itemSellByTheStore asString).
+			self assert: ((rest listCart: cartID ) at: 2) equals: 2.
+			self assert: ((rest listCart: cartID ) size) equals: 2.
 	]. 
 
 	! !
@@ -734,12 +742,12 @@ dic at:  'Caro' put: 2.
 ! !
 
 
-!classDefinition: #Cart category: #TusLibrosPrueba2!
+!classDefinition: #Cart category: #TusLibros!
 Object subclass: #Cart
 	instanceVariableNames: 'catalog items'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !Cart methodsFor: 'assertions' stamp: 'AAAM 11/25/2018 04:07:39'!
 assertIsValidItem: anItem
@@ -804,7 +812,7 @@ add: aQuantity of: anItem
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Cart class' category: #TusLibrosPrueba2!
+!classDefinition: 'Cart class' category: #TusLibros!
 Cart class
 	instanceVariableNames: ''!
 
@@ -824,12 +832,12 @@ invalidQuantityErrorMessage
 	^'Invalid number of items'! !
 
 
-!classDefinition: #CartSession category: #TusLibrosPrueba2!
+!classDefinition: #CartSession category: #TusLibros!
 Object subclass: #CartSession
 	instanceVariableNames: 'cart cartID sessionOwner checkedOut restInterface timeOfLastOperation state'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !CartSession methodsFor: 'sessionOperations' stamp: 'AAAM 12/3/2018 04:30:19'!
 addtoCartThisNumberOfCopies: aNumber ofThisBook: aBook.
@@ -938,7 +946,7 @@ sessionHasNotExpired
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'CartSession class' category: #TusLibrosPrueba2!
+!classDefinition: 'CartSession class' category: #TusLibros!
 CartSession class
 	instanceVariableNames: ''!
 
@@ -964,12 +972,12 @@ createCartSession: aCart withID: anCartID andOwner: anOwnerID byInterface: aRest
 ^self new initializeCartSession: aCart with: anCartID andOwner: anOwnerID by: aRest .! !
 
 
-!classDefinition: #CartSessionState category: #TusLibrosPrueba2!
+!classDefinition: #CartSessionState category: #TusLibros!
 Object subclass: #CartSessionState
 	instanceVariableNames: 'cartSession'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !CartSessionState methodsFor: 'operations' stamp: 'AAAM 12/3/2018 04:07:21'!
 addToCartCopies: aNumber ofThisBook: aBook.
@@ -993,7 +1001,7 @@ initializeFor: aCartSession
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'CartSessionState class' category: #TusLibrosPrueba2!
+!classDefinition: 'CartSessionState class' category: #TusLibros!
 CartSessionState class
 	instanceVariableNames: ''!
 
@@ -1011,12 +1019,12 @@ isFor: aCartSession
 ! !
 
 
-!classDefinition: #CheckedOutCartState category: #TusLibrosPrueba2!
+!classDefinition: #CheckedOutCartState category: #TusLibros!
 CartSessionState subclass: #CheckedOutCartState
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !CheckedOutCartState methodsFor: 'operations' stamp: 'AAAM 12/3/2018 04:36:44'!
 addToCartCopies: aNumber ofThisBook: aBook.
@@ -1037,7 +1045,7 @@ cartSession  operateCheckedOutCart! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'CheckedOutCartState class' category: #TusLibrosPrueba2!
+!classDefinition: 'CheckedOutCartState class' category: #TusLibros!
 CheckedOutCartState class
 	instanceVariableNames: ''!
 
@@ -1048,12 +1056,12 @@ isFor: aCartSession
 ! !
 
 
-!classDefinition: #ExpiredCartSessionState category: #TusLibrosPrueba2!
+!classDefinition: #ExpiredCartSessionState category: #TusLibros!
 CartSessionState subclass: #ExpiredCartSessionState
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !ExpiredCartSessionState methodsFor: 'operations' stamp: 'AAAM 12/3/2018 04:38:48'!
 addToCartCopies: aNumber ofThisBook: aBook.
@@ -1077,7 +1085,7 @@ cartSession  operateOnExpiredSessionCart.
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'ExpiredCartSessionState class' category: #TusLibrosPrueba2!
+!classDefinition: 'ExpiredCartSessionState class' category: #TusLibros!
 ExpiredCartSessionState class
 	instanceVariableNames: ''!
 
@@ -1087,12 +1095,12 @@ isFor: aCartSession
 ^aCartSession  sessionHasNotExpired not! !
 
 
-!classDefinition: #NotExpiredCartSessionState category: #TusLibrosPrueba2!
+!classDefinition: #NotExpiredCartSessionState category: #TusLibros!
 CartSessionState subclass: #NotExpiredCartSessionState
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !NotExpiredCartSessionState methodsFor: 'operations' stamp: 'AAAM 12/3/2018 04:55:37'!
 addToCartCopies: aNumber ofThisBook: aBook.
@@ -1112,7 +1120,7 @@ stateCheckOut: aCartID withCreditCard: aCreditCardID  thatExpires: aMonthAndYear
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'NotExpiredCartSessionState class' category: #TusLibrosPrueba2!
+!classDefinition: 'NotExpiredCartSessionState class' category: #TusLibros!
 NotExpiredCartSessionState class
 	instanceVariableNames: ''!
 
@@ -1122,12 +1130,12 @@ isFor: aCartSession
 ^(aCartSession cartHasBeenCheckedOut not) and: (aCartSession  sessionHasNotExpired )! !
 
 
-!classDefinition: #Cashier category: #TusLibrosPrueba2!
+!classDefinition: #Cashier category: #TusLibros!
 Object subclass: #Cashier
 	instanceVariableNames: 'cart salesBook merchantProcessor creditCard total'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !Cashier methodsFor: 'checkout - private' stamp: 'HernanWilkinson 6/17/2013 19:08'!
 calculateTotal
@@ -1176,7 +1184,7 @@ initializeToCheckout: aCart charging: aCreditCard throught: aMerchantProcessor r
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Cashier class' category: #TusLibrosPrueba2!
+!classDefinition: 'Cashier class' category: #TusLibros!
 Cashier class
 	instanceVariableNames: ''!
 
@@ -1216,12 +1224,12 @@ creditCardHasNoCreditErrorMessage
 	^'Credit card has no credit'! !
 
 
-!classDefinition: #CreditCard category: #TusLibrosPrueba2!
+!classDefinition: #CreditCard category: #TusLibros!
 Object subclass: #CreditCard
 	instanceVariableNames: 'expiration owner identification'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !CreditCard methodsFor: 'testing' stamp: 'AAAM 12/3/2018 01:42:00'!
 expirationDate
@@ -1266,7 +1274,7 @@ owner
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'CreditCard class' category: #TusLibrosPrueba2!
+!classDefinition: 'CreditCard class' category: #TusLibros!
 CreditCard class
 	instanceVariableNames: ''!
 
@@ -1281,12 +1289,12 @@ expiringOn: aMonth withOwner: anOwner andID: anID
 	^self new initializeExpiringOn: aMonth withOwner: anOwner andID: anID .! !
 
 
-!classDefinition: #ManualClock category: #TusLibrosPrueba2!
+!classDefinition: #ManualClock category: #TusLibros!
 Object subclass: #ManualClock
 	instanceVariableNames: 'time'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !ManualClock methodsFor: 'manageTime' stamp: 'AAAM 12/2/2018 20:45:51'!
 advanceTime: aDuration
@@ -1313,7 +1321,7 @@ time:= anStartDateAndTime .! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'ManualClock class' category: #TusLibrosPrueba2!
+!classDefinition: 'ManualClock class' category: #TusLibros!
 ManualClock class
 	instanceVariableNames: ''!
 
@@ -1323,12 +1331,12 @@ initialization: anStartMoment
 ^self new initializeClock: anStartMoment .! !
 
 
-!classDefinition: #RestInternalInterface category: #TusLibrosPrueba2!
+!classDefinition: #RestInternalInterface category: #TusLibros!
 Object subclass: #RestInternalInterface
 	instanceVariableNames: 'authentification cartsSessions lastCartID catalog sales clock'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !RestInternalInterface methodsFor: 'creating' stamp: 'AAAM 12/2/2018 20:03:17'!
 initializeWith: anListofUsersAndPassword and: aCatalog usingClock: aclock.
@@ -1418,7 +1426,7 @@ autentify: aClientID with: aPassword
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'RestInternalInterface class' category: #TusLibrosPrueba2!
+!classDefinition: 'RestInternalInterface class' category: #TusLibros!
 RestInternalInterface class
 	instanceVariableNames: ''!
 
@@ -1493,12 +1501,12 @@ newWithUsers: anListofUsersAndPassword andProducts: aCatalog usingClock: clock.
 ^self new initializeWith: anListofUsersAndPassword and: aCatalog usingClock: clock.! !
 
 
-!classDefinition: #Sale category: #TusLibrosPrueba2!
+!classDefinition: #Sale category: #TusLibros!
 Object subclass: #Sale
 	instanceVariableNames: 'customer ticket'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !Sale methodsFor: 'total' stamp: 'AAAM 12/2/2018 03:48:14'!
 ticket
@@ -1532,7 +1540,7 @@ ticket addToTicket: cart! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Sale class' category: #TusLibrosPrueba2!
+!classDefinition: 'Sale class' category: #TusLibros!
 Sale class
 	instanceVariableNames: ''!
 
@@ -1544,12 +1552,12 @@ of: anOwner and: aTicket
 	^self new initializeTotal: anOwner and: aTicket .! !
 
 
-!classDefinition: #StoreTestObjectsFactory category: #TusLibrosPrueba2!
+!classDefinition: #StoreTestObjectsFactory category: #TusLibros!
 Object subclass: #StoreTestObjectsFactory
 	instanceVariableNames: 'today'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !StoreTestObjectsFactory methodsFor: 'items' stamp: 'AAAM 12/3/2018 01:13:13'!
 defaultPassword
@@ -1648,12 +1656,12 @@ validCreditCartID
 	^'0000000000000001'! !
 
 
-!classDefinition: #Ticket category: #TusLibrosPrueba2!
+!classDefinition: #Ticket category: #TusLibros!
 Object subclass: #Ticket
 	instanceVariableNames: 'total elements'
 	classVariableNames: ''
 	poolDictionaries: ''
-	category: 'TusLibrosPrueba2'!
+	category: 'TusLibros'!
 
 !Ticket methodsFor: 'operations' stamp: 'AAAM 12/2/2018 04:57:54'!
 addToTicket: cart
@@ -1714,7 +1722,7 @@ isEmpty
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
-!classDefinition: 'Ticket class' category: #TusLibrosPrueba2!
+!classDefinition: 'Ticket class' category: #TusLibros!
 Ticket class
 	instanceVariableNames: ''!
 
