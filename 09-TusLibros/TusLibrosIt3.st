@@ -474,8 +474,8 @@ test12DoingCheckOutRegistersTheSell
 	self assert: debitedAmout = total.
 	self deny: (rest listPurchases: testObjectsFactory defaultUser with: testObjectsFactory defaultPassword )isEmpty .! !
 
-!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 02:25:47'!
-test13CannotAddTOCartAfterDoingCheckOut
+!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'n 12/3/2018 10:38:06'!
+test13CannotAddToCartAfterDoingCheckOut
 
 	|  cartID |
 
@@ -534,28 +534,8 @@ test15CannotCheckoutCartTwice
 			self assert: anError messageText = RestInternalInterface cannotUseCheckedOutCartErrorMessage.
 	]. ! !
 
-!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 02:26:17'!
-test16CannotCheckoutCartAfter30MinutesHavePassed
-	| rest cartID clock |
-	clock := ManualClock initialization: DateAndTime now.
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
-		
-	cartID:= rest createCart: testObjectsFactory defaultUser  withPassword: testObjectsFactory defaultPassword.
-	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
-	
-	clock advanceTime:  31 minutes.
-	
-	self
-		should: [ rest checkout: cartID withCreditCart: testObjectsFactory validCreditCartID thatExpires: testObjectsFactory  notExpiredDate throught: self andIsOwnedBy: testObjectsFactory defaultUser ]
-		raise: Error - MessageNotUnderstood
-		withExceptionDo: [ :anError | 
-			self assert: anError messageText = RestInternalInterface expiredCartSessionErrorMessage.
-	]. 
-
-	! !
-
-!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 05:45:20'!
-test17CannotCheckoutCartNotCreatedByUser
+!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'n 12/3/2018 10:41:10'!
+test16CannotCheckoutCartNotCreatedByUser
 	|  cartID |
 
 	cartID:= rest createCart: testObjectsFactory defaultUser  withPassword: testObjectsFactory defaultPassword .
@@ -567,6 +547,22 @@ self
 		raise: Error - MessageNotUnderstood
 		withExceptionDo: [ :anError | 
 			self assert: anError messageText = RestInternalInterface cartHasNotBeenCreatedByOwner.
+	]. ! !
+
+!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'n 12/3/2018 10:41:24'!
+test17CannotCheckOutWithInvalidId
+	
+	|  cartID |
+
+	cartID:= rest createCart: testObjectsFactory defaultUser  withPassword: testObjectsFactory defaultPassword .
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	
+	
+	self
+		should: [ rest checkout: cartID withCreditCart: testObjectsFactory invalidCreditCartID thatExpires: testObjectsFactory notExpiredDate  throught: self andIsOwnedBy: testObjectsFactory defaultUser ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError | 
+			self assert: anError messageText = RestInternalInterface cannotCreateWithInvalidTargetIDErrorMessage.
 	]. ! !
 
 !RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 02:26:40'!
@@ -587,24 +583,8 @@ self assert: purchases elements size = 1.
 self assert: (purchases ocurrencesOf: testObjectsFactory itemSellByTheStore ) =4.
 self assert: purchases total = (testObjectsFactory itemSellByTheStorePrice *4) .! !
 
-!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 05:03:02'!
-test19CannotCheckOutWithInvalidId
-	
-	|  cartID |
-
-	cartID:= rest createCart: testObjectsFactory defaultUser  withPassword: testObjectsFactory defaultPassword .
-	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
-	
-	
-	self
-		should: [ rest checkout: cartID withCreditCart: testObjectsFactory invalidCreditCartID thatExpires: testObjectsFactory notExpiredDate  throught: self andIsOwnedBy: testObjectsFactory defaultUser ]
-		raise: Error - MessageNotUnderstood
-		withExceptionDo: [ :anError | 
-			self assert: anError messageText = RestInternalInterface cannotCreateWithInvalidTargetIDErrorMessage.
-	]. ! !
-
-!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 02:27:04'!
-test20ShowPurchasesCollectsSalesOfMultipleCarts
+!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'n 12/3/2018 10:41:46'!
+test19ShowPurchasesCollectsSalesOfMultipleCarts
 	
 	|purchases  cartID cartID2 |
 
@@ -631,8 +611,8 @@ self assert: purchases elements size = 1.
 self assert: (purchases ocurrencesOf: testObjectsFactory itemSellByTheStore ) =6.
 self assert: purchases total = (testObjectsFactory itemSellByTheStorePrice *6) .! !
 
-!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/2/2018 21:08:10'!
-test21AdvancingClockAdvancesTheClockInRest
+!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'n 12/3/2018 10:42:04'!
+test20AdvancingClockAdvancesTheClockInRest
 	|startHour rest clock |
 	clock := ManualClock initialization: DateAndTime now.
 	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
@@ -646,6 +626,26 @@ test21AdvancingClockAdvancesTheClockInRest
 	self assert: rest now = clock now.
 	self assert: rest now = startHour .
 ! !
+
+!RestInternalInterfaceTest methodsFor: 'tests' stamp: 'n 12/3/2018 10:42:16'!
+test21CannotCheckoutCartAfter30MinutesHavePassed
+	| rest cartID clock |
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
+		
+	cartID:= rest createCart: testObjectsFactory defaultUser  withPassword: testObjectsFactory defaultPassword.
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	
+	clock advanceTime:  31 minutes.
+	
+	self
+		should: [ rest checkout: cartID withCreditCart: testObjectsFactory validCreditCartID thatExpires: testObjectsFactory  notExpiredDate throught: self andIsOwnedBy: testObjectsFactory defaultUser ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError | 
+			self assert: anError messageText = RestInternalInterface expiredCartSessionErrorMessage.
+	]. 
+
+	! !
 
 !RestInternalInterfaceTest methodsFor: 'tests' stamp: 'AAAM 12/3/2018 01:20:28'!
 test22CannotAddToCartAfter30MinutesHavePassed
