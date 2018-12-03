@@ -296,12 +296,13 @@ setUp
 	
 	! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'z 11/26/2018 18:03:41'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:09:16'!
 test01CannotCreateCartIfTheUserIDIsInvalid
 
-|rest |
+|rest clock|
+clock := ManualClock initialization: DateAndTime now.
 
-rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog.
+rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 
 	self
 		should: [ rest createCart: 'Trudis' withPassword: self defaultPassword. ]
@@ -314,11 +315,12 @@ rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProduc
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'z 11/26/2018 18:11:41'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:09:10'!
 test02CannotCreateCartIfThePasswordIsInvalid
 
-	|rest |
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog.
+	|rest clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 
 	self
 		should: [ rest createCart:  self defaultUser withPassword: 0. ]
@@ -332,11 +334,12 @@ test02CannotCreateCartIfThePasswordIsInvalid
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'z 11/26/2018 18:03:41'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:09:06'!
 test03CreateCartIfBothUserAndPasswordAreCorrect
 
-	|rest cartID|
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog.
+	|rest cartID clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:=rest createCart: self defaultUser  withPassword: self defaultPassword .
 	
 	self assert: cartID isInteger.
@@ -345,12 +348,13 @@ test03CreateCartIfBothUserAndPasswordAreCorrect
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 21:13:43'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:09:03'!
 test04CannotAddToCartNotCreatedByThisInterface
 
-	|rest |
+	|rest clock|
+	clock := ManualClock initialization: DateAndTime now.
 
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	
 	self
 		should: [  rest addtoCart: 1 thisNumberOfCopies: 1 ofThisBook: testObjectsFactory itemSellByTheStore .]
@@ -363,12 +367,13 @@ test04CannotAddToCartNotCreatedByThisInterface
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 21:13:32'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:08:58'!
 test04bCannotListCartNotCreatedByThisInterface
 
-	|rest |
+	|rest clock|
+	clock := ManualClock initialization: DateAndTime now.
 
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	
 	self
 		should: [  rest listCart: 1]
@@ -381,11 +386,12 @@ test04bCannotListCartNotCreatedByThisInterface
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'z 11/26/2018 18:03:41'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:08:54'!
 test05CartsCreatedShouldHaveDifferentIDs
 
-	|rest cartID cartID2|
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog.
+	|rest cartID cartID2 clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	cartID2:= rest createCart: 'Caro'  withPassword: 2 .
@@ -396,11 +402,12 @@ test05CartsCreatedShouldHaveDifferentIDs
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'z 11/26/2018 18:27:00'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:08:50'!
 test06CannotAddToCartABookNotSoldByTheEditorial
 	
-	|rest cartID|
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog.
+	|rest cartID clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	
 	self
@@ -414,10 +421,11 @@ test06CannotAddToCartABookNotSoldByTheEditorial
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'z 11/26/2018 18:05:38'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:08:46'!
 test07CannotAddToCartNonPositiveNumberOfBooks
-	|rest cartID|
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	|rest cartID clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	
 	self
@@ -431,24 +439,23 @@ test07CannotAddToCartNonPositiveNumberOfBooks
 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'z 11/26/2018 18:07:33'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:08:40'!
 test08AddingBooksToCartAddsToTheLists
-	|rest cartID|
-
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	|rest cartID clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 
 	rest addtoCart: cartID thisNumberOfCopies: 1 ofThisBook: testObjectsFactory itemSellByTheStore.
 
-	self assert:( (rest listCart: cartID ) at: 1) equals: (testObjectsFactory itemSellByTheStore asString) ."Vamos a tener que agregar un assert de totalPurchases luego"
+	self assert:( (rest listCart: cartID ) at: 1) equals: (testObjectsFactory itemSellByTheStore asString) .! !
 
-! !
-
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 22:12:24'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:08:36'!
 test08bAddingMoreThanOneBookToCartAddsToTheLists
 	
-	|rest cartID|
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	|rest cartID clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
@@ -461,11 +468,12 @@ test08bAddingMoreThanOneBookToCartAddsToTheLists
 	
 	self assert: (rest listPurchases: self defaultUser with: self defaultPassword )isEmpty .! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:17:03'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:08:31'!
 test09CannotCheckOutEmptyCart
 
-	|rest cartID|
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	|rest cartID clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 
 	self
@@ -477,11 +485,12 @@ test09CannotCheckOutEmptyCart
 	]. 
 	 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:16:53'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:08:28'!
 test10CanNotCheckoutWithAnExpiredCreditCart
 
-	|rest cartID|
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	|rest cartID clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
 
@@ -494,11 +503,12 @@ test10CanNotCheckoutWithAnExpiredCreditCart
 	]. 
 	 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:16:44'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:08:22'!
 test11CashierDoesNotSaleWhenTheCreditCardHasNoCredit
 
-	|rest cartID |
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	|rest cartID clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 
 	debitBehavior := [ :anAmount :aCreditCard | self error: Cashier creditCardHasNoCreditErrorMessage].
@@ -513,11 +523,12 @@ test11CashierDoesNotSaleWhenTheCreditCardHasNoCredit
 	]. 
 ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:16:28'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:08:02'!
 test12DoingCheckOutRegistersTheSell
 
-	|creditCard rest cartID debitedAmout debitedCreditCard total |
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	|creditCard rest cartID debitedAmout debitedCreditCard total  clock |
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.	
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
 	creditCard:=  testObjectsFactory notExpiredCreditCard .
@@ -530,11 +541,12 @@ test12DoingCheckOutRegistersTheSell
 	self assert: debitedAmout = total.
 	self deny: (rest listPurchases: self defaultUser with: self defaultPassword )isEmpty .! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:16:15'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:07:51'!
 test13CannotAddTOCartAfterDoingCheckOut
 "Estos tests son necesarios dependiendo si el carrito puede ser reutilizado luego de hacer checkOut, Si son reutilizables hay que reever lo que hace listPurchases"
-	| rest cartID |
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	| rest cartID clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
 .	
@@ -547,11 +559,12 @@ test13CannotAddTOCartAfterDoingCheckOut
 			self assert: anError messageText = RestInternalInterface cannotUseCheckedOutCartErrorMessage.
 	]. ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:16:08'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:07:46'!
 test14CannotShowPurchasesWIthUSerOfPasswordInvalid
 
-	| rest cartID |
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	| rest cartID clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock .
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
 	
@@ -573,11 +586,12 @@ test14CannotShowPurchasesWIthUSerOfPasswordInvalid
 	].
 	self deny: (rest listPurchases: self defaultUser with: self defaultPassword )isEmpty .! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:30:17'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:07:41'!
 test15CannotCheckoutCartTwice
 
-	| rest cartID |
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	| rest cartID clock |
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
 		
@@ -590,20 +604,31 @@ test15CannotCheckoutCartTwice
 			self assert: anError messageText = RestInternalInterface cannotUseCheckedOutCartErrorMessage.
 	]. ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:15:15'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 21:41:34'!
 test16CannotCheckoutCartAfter30MinutesHavePassed
-	| rest cartID |
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
-	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
-	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	| rest cartID clock |
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 		
-	rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory notExpiredDate throught: self andIsOwnedBy: self defaultUser .
-! !
+	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword.
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	
+	clock advanceTime:  31 minutes.
+	
+	self
+		should: [ rest checkout: cartID withCreditCart: self validCreditCartID thatExpires: testObjectsFactory  notExpiredDate throught: self andIsOwnedBy: self defaultUser ]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError | 
+			self assert: anError messageText = RestInternalInterface expiredCartSessionErrorMessage.
+	]. 
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:15:06'!
+	! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:07:34'!
 test17CannotCheckoutCartNotCreatedByUser
-	| rest cartID |
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	| rest cartID clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
 	.	
@@ -615,11 +640,13 @@ self
 			self assert: anError messageText = RestInternalInterface cannotUseCartsOfOthersErrorMessage.
 	]. ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:52:56'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:07:29'!
 test18ShowPurchasesShowsCorrectValues
 	
-	|purchases rest cartID |
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	|purchases rest cartID clock |
+	clock := ManualClock initialization: DateAndTime now.
+	
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock .
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
@@ -633,11 +660,12 @@ self assert: purchases elements size = 1.
 self assert: (purchases ocurrencesOf: testObjectsFactory itemSellByTheStore ) =4.
 self assert: purchases total = (testObjectsFactory itemSellByTheStorePrice *4) .! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:22:17'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:07:25'!
 test19CannotCheckOutWithInvalidId
 	
-	| rest cartID |
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	| rest cartID clock|
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
 	
@@ -649,11 +677,11 @@ test19CannotCheckOutWithInvalidId
 			self assert: anError messageText = CreditCard cannotCreateWithInvalidTargetIDErrorMessage.
 	]. ! !
 
-!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:58:22'!
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:07:21'!
 test20ShowPurchasesCollectsSalesOfMultipleCarts
 	
-	|purchases rest cartID cartID2|
-	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog .
+	|purchases rest cartID cartID2 clock|	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
 	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword .
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
 	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
@@ -676,6 +704,79 @@ self deny: purchases  isEmpty .
 self assert: purchases elements size = 1.
 self assert: (purchases ocurrencesOf: testObjectsFactory itemSellByTheStore ) =6.
 self assert: purchases total = (testObjectsFactory itemSellByTheStorePrice *6) .! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 21:08:10'!
+test21AdvancingClockAdvancesTheClockInRest
+	|startHour rest clock |
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
+	
+	startHour:= clock now.
+	clock advanceTime: 2 minutes.
+		
+	self assert: rest now = clock now.
+	
+	clock reverseTime: 2 minutes.
+	self assert: rest now = clock now.
+	self assert: rest now = startHour .
+! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:06:09'!
+test22CannotAddToCartAfter30MinutesHavePassed
+	| rest cartID clock |
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
+		
+	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword.
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	
+	clock advanceTime:  31 minutes.
+	
+	self
+		should: [ rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError | 
+			self assert: anError messageText = RestInternalInterface expiredCartSessionErrorMessage.
+	]. 
+
+	! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:10:36'!
+test23CannotListsCartAfter30MinutesHavePassed
+	| rest cartID clock |
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
+		
+	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword.
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	
+	clock advanceTime:  31 minutes.
+	
+	self
+		should: [ rest listCart: cartID]
+		raise: Error - MessageNotUnderstood
+		withExceptionDo: [ :anError | 
+			self assert: anError messageText = RestInternalInterface expiredCartSessionErrorMessage.
+	]. 
+
+	! !
+
+!RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 23:07:56'!
+test24CartActualizesClockAfterOperation
+	| rest cartID clock |
+	clock := ManualClock initialization: DateAndTime now.
+	rest:= RestInternalInterface newWithUsers: self registeredUsersDefault andProducts: testObjectsFactory defaultCatalog usingClock: clock.
+		
+	cartID:= rest createCart: self defaultUser  withPassword: self defaultPassword.
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	
+	clock advanceTime:  10 minutes.
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.
+	clock advanceTime:  20 minutes.
+	
+	self deny: (rest listCart: cartID)isEmpty .
+	clock advanceTime:  30 minutes.
+	rest addtoCart: cartID thisNumberOfCopies: 2 ofThisBook: testObjectsFactory itemSellByTheStore.	! !
 
 !RestInternalInterfaceTest methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 05:13:50'!
 validCreditCartID
@@ -778,63 +879,74 @@ invalidQuantityErrorMessage
 
 !classDefinition: #CartSession category: #TusLibrosPrueba!
 Object subclass: #CartSession
-	instanceVariableNames: 'cart cartID sessionOwner checkedOut restInterface'
+	instanceVariableNames: 'cart cartID sessionOwner checkedOut restInterface timeOfLastOperation'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 23:11:20'!
+!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:58:02'!
 addtoCartThisNumberOfCopies: aNumber ofThisBook: aBook.
 
 self assertCartHasNotBeenCheckedOut: sessionOwner .
+self assertSessionHasNotExpired.
 
-cart add: aNumber of: aBook .! !
+cart add: aNumber of: aBook .
+
+timeOfLastOperation := restInterface now.! !
 
 !CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 23:02:44'!
 assertCartHasNotBeenCheckedOut: aCartID.
 
 checkedOut  ifTrue:[^restInterface cartHasAlreadyBeenCheckedOut ]! !
 
+!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 23:08:58'!
+assertSessionHasNotExpired
+
+(timeOfLastOperation  + 30 minutes) >= restInterface  now ifFalse:[^self error: self class expiredCartSessionErrorMessage ]! !
+
 !CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 00:51:20'!
 assertTheClientOwnsTheCart: aUserID .
 
 (sessionOwner  = aUserID )ifFalse:[^restInterface cartHasNotBeenCreatedByOwner]! !
 
-!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 01:32:09'!
+!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:58:15'!
 checkOut: aCartID withCreditCard: aCreditCardID  thatExpires: aDateAndTime throught: aMerchantProcessor andIsOwnedBy:aUserID registeringOn: sales
 
-	|creditCard cashier total sale|
+	|creditCard cashier total |
 	self assertCartHasNotBeenCheckedOut: aCartID.
 	self assertTheClientOwnsTheCart: aUserID .
+	self assertSessionHasNotExpired.
 	
-	sale:= OrderedCollection  new.
+	
 	creditCard:= CreditCard expiringOn: aDateAndTime withOwner: aUserID andID: aCreditCardID .
 	cashier:= Cashier toCheckout: cart charging: creditCard throught: aMerchantProcessor on: DateAndTime now registeringOn: sales.
 	
 	
 	total:=cashier checkOut.  
 	checkedOut:= true.
+	timeOfLastOperation  := restInterface now.
 	^total.
 	! !
 
-!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 00:45:04'!
+!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 21:55:30'!
 initializeCartSession: aCart with: anCartID andOwner: anOwnerID by:aRestInterface
 
 cart := aCart .
 cartID := anCartID .
 sessionOwner := anOwnerID.
 checkedOut := false .
-restInterface := aRestInterface .! !
+restInterface := aRestInterface.
+timeOfLastOperation := aRestInterface  now.! !
 
-!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 22:00:09'!
+!CartSession methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 22:58:22'!
 listCart
 
 |itemlist|
-
+	self assertSessionHasNotExpired. 
 	itemlist:= OrderedCollection new.
 	
 	cart list do:[:itemName| itemlist add: itemName. itemlist add: (cart occurrencesOf: itemName)].
-	
+	timeOfLastOperation  := restInterface now.
 	^itemlist.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
@@ -847,6 +959,11 @@ CartSession class
 createCartSession: aCart withID: anCartID andOwner: anOwnerID byInterface: aRest
 
 ^self new initializeCartSession: aCart with: anCartID andOwner: anOwnerID by: aRest .! !
+
+!CartSession class methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 21:42:54'!
+expiredCartSessionErrorMessage
+
+^'The session has expired'! !
 
 
 !classDefinition: #Cashier category: #TusLibrosPrueba!
@@ -1000,15 +1117,32 @@ expiringOn: aMonth withOwner: anOwner andID: anID
 
 !classDefinition: #ManualClock category: #TusLibrosPrueba!
 Object subclass: #ManualClock
-	instanceVariableNames: 'clock'
+	instanceVariableNames: 'time'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
 
-!ManualClock methodsFor: 'as yet unclassified' stamp: 'AAAM 12/1/2018 19:35:48'!
+!ManualClock methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 20:45:51'!
+advanceTime: aDuration
+
+time := time + aDuration .
+
+! !
+
+!ManualClock methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 20:45:36'!
 initializeClock: anStartDateAndTime
 
-clock:= anStartDateAndTime .! !
+time:= anStartDateAndTime .! !
+
+!ManualClock methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 20:46:45'!
+now
+
+^time! !
+
+!ManualClock methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 21:07:51'!
+reverseTime: aDuration 
+	
+	time := time - aDuration.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1024,7 +1158,7 @@ initialization: anStartMoment
 
 !classDefinition: #RestInternalInterface category: #TusLibrosPrueba!
 Object subclass: #RestInternalInterface
-	instanceVariableNames: 'authentification cartsSessions lastCartID catalog sales'
+	instanceVariableNames: 'authentification cartsSessions lastCartID catalog sales clock'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'TusLibrosPrueba'!
@@ -1046,8 +1180,8 @@ createCart: aClientID withPassword: aPassword
 	cartsSessions at: lastCartID  put:(CartSession createCartSession: (Cart acceptingItemsOf: catalog) withID: lastCartID andOwner: aClientID byInterface: self ).
 	^lastCartID .! !
 
-!RestInternalInterface methodsFor: 'creating' stamp: 'AAAM 12/1/2018 23:40:04'!
-initializeWith: anListofUsersAndPassword and: aCatalog
+!RestInternalInterface methodsFor: 'creating' stamp: 'AAAM 12/2/2018 20:03:17'!
+initializeWith: anListofUsersAndPassword and: aCatalog usingClock: aclock.
 
 	authentification := anListofUsersAndPassword .
 	catalog := aCatalog.
@@ -1057,6 +1191,8 @@ initializeWith: anListofUsersAndPassword and: aCatalog
 	cartsSessions:= Dictionary  new.
 	
 	lastCartID:= 0.
+	
+	clock:= aclock.
 	
 
 ! !
@@ -1116,6 +1252,11 @@ listPurchases: anClientId with: aPassword
 	
  ! !
 
+!RestInternalInterface methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 20:47:03'!
+now
+
+^clock now! !
+
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'RestInternalInterface class' category: #TusLibrosPrueba!
@@ -1144,9 +1285,15 @@ cannotUseCartsOfOthersErrorMessage
 cannotUseCheckedOutCartErrorMessage
 ^'already checked out that cart'! !
 
-!RestInternalInterface class methodsFor: 'as yet unclassified' stamp: 'z 11/26/2018 18:03:41'!
-newWithUsers: anListofUsersAndPassword andProducts: aCatalog
-^self new initializeWith: anListofUsersAndPassword and: aCatalog.! !
+!RestInternalInterface class methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 21:42:27'!
+expiredCartSessionErrorMessage
+
+^CartSession  expiredCartSessionErrorMessage! !
+
+!RestInternalInterface class methodsFor: 'as yet unclassified' stamp: 'AAAM 12/2/2018 20:02:38'!
+newWithUsers: anListofUsersAndPassword andProducts: aCatalog usingClock: clock.
+
+^self new initializeWith: anListofUsersAndPassword and: aCatalog usingClock: clock.! !
 
 
 !classDefinition: #Sale category: #TusLibrosPrueba!
@@ -1160,6 +1307,11 @@ Object subclass: #Sale
 ticket
 	
 	^ ticket! !
+
+!Sale methodsFor: 'total' stamp: 'AAAM 12/2/2018 22:51:59'!
+total
+	
+	^ ticket total! !
 
 
 !Sale methodsFor: 'initialization' stamp: 'AAAM 12/2/2018 01:53:10'!
